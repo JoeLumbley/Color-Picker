@@ -55,18 +55,25 @@ Public Class Form1
 
         End Sub
         Public Sub GetColorAtPoint(point As Point)
+
             If Bitmap Is Nothing Then Return
+
             Dim centerX As Integer = Radius + Padding
             Dim centerY As Integer = Radius + Padding
-            Dim dx As Integer = point.X - centerX
-            Dim dy As Integer = point.Y - centerY
+            Dim dx As Integer = point.X - Location.X - centerX
+            Dim dy As Integer = point.Y - Location.Y - centerY
             Dim dist As Double = Math.Sqrt(dx * dx + dy * dy)
+
             If dist <= Radius Then
+                ' Calculate the angle and set the color based on the position
                 Dim angle As Double = (Math.Atan2(dy, dx) * 180.0 / Math.PI + 360) Mod 360
+
                 Color = ColorFromHSV(angle, 1, 1)
+
             Else
                 Color = BackColor ' Outside the wheel, return background color
             End If
+
         End Sub
 
         ' Function to convert HSV to RGB
@@ -128,6 +135,10 @@ Public Class Form1
         ' Set the form's text
         Me.Text = "Color Picker"
 
+        ColorWheel.Location.X = 400
+        ColorWheel.Location.Y = 50
+
+
         ColorWheel.Draw(360, 10, BackColor)
 
         Invalidate()
@@ -138,7 +149,12 @@ Public Class Form1
     Protected Overrides Sub OnPaint(e As PaintEventArgs)
         MyBase.OnPaint(e)
 
-        e.Graphics.DrawImage(ColorWheel.Bitmap, 400, 50, ColorWheel.Bitmap.Width, ColorWheel.Bitmap.Height)
+
+        e.Graphics.DrawImage(ColorWheel.Bitmap,
+                             ColorWheel.Location.X,
+                             ColorWheel.Location.Y,
+                             ColorWheel.Bitmap.Width,
+                             ColorWheel.Bitmap.Height)
 
 
         ' Draw the selected color rectangle
@@ -155,7 +171,8 @@ Public Class Form1
 
     Private Sub Form1_MouseDown(sender As Object, e As MouseEventArgs) Handles Me.MouseDown
 
-        ColorWheel.GetColorAtPoint(New Point(e.X - 400, e.Y - 50))
+        'ColorWheel.GetColorAtPoint(New Point(e.X - ColorWheel.Location.X, e.Y - ColorWheel.Location.Y))
+        ColorWheel.GetColorAtPoint(New Point(e.X, e.Y))
 
 
         Invalidate()
