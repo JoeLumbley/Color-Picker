@@ -54,6 +54,20 @@ Public Class Form1
             End Using
 
         End Sub
+        Public Sub GetColorAtPoint(point As Point)
+            If Bitmap Is Nothing Then Return
+            Dim centerX As Integer = Radius + Padding
+            Dim centerY As Integer = Radius + Padding
+            Dim dx As Integer = point.X - centerX
+            Dim dy As Integer = point.Y - centerY
+            Dim dist As Double = Math.Sqrt(dx * dx + dy * dy)
+            If dist <= Radius Then
+                Dim angle As Double = (Math.Atan2(dy, dx) * 180.0 / Math.PI + 360) Mod 360
+                Color = ColorFromHSV(angle, 1, 1)
+            Else
+                Color = BackColor ' Outside the wheel, return background color
+            End If
+        End Sub
 
         ' Function to convert HSV to RGB
         Private Function ColorFromHSV(hue As Double, saturation As Double, brightness As Double) As Color
@@ -126,6 +140,29 @@ Public Class Form1
 
         e.Graphics.DrawImage(ColorWheel.Bitmap, 400, 50, ColorWheel.Bitmap.Width, ColorWheel.Bitmap.Height)
 
+
+        ' Draw the selected color rectangle
+        Dim selectedColorRect As New Rectangle(10, 10, 100, 100)
+        Using brush As New SolidBrush(ColorWheel.Color)
+            e.Graphics.FillRectangle(brush, selectedColorRect)
+        End Using
+        Using pen As New Pen(Color.Black, 2)
+            e.Graphics.DrawRectangle(pen, selectedColorRect)
+        End Using
+
+
     End Sub
+
+    Private Sub Form1_MouseDown(sender As Object, e As MouseEventArgs) Handles Me.MouseDown
+
+        ColorWheel.GetColorAtPoint(New Point(e.X - 400, e.Y - 50))
+
+
+        Invalidate()
+
+
+
+    End Sub
+
 
 End Class
