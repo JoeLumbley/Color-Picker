@@ -70,8 +70,6 @@ Public Class Form1
 
                 Color = ColorFromHSV(angle, 1, 1)
 
-            Else
-                Color = BackColor ' Outside the wheel, return background color
             End If
 
         End Sub
@@ -138,7 +136,6 @@ Public Class Form1
         ColorWheel.Location.X = 400
         ColorWheel.Location.Y = 50
 
-
         ColorWheel.Draw(360, 10, BackColor)
 
         Invalidate()
@@ -149,13 +146,11 @@ Public Class Form1
     Protected Overrides Sub OnPaint(e As PaintEventArgs)
         MyBase.OnPaint(e)
 
-
         e.Graphics.DrawImage(ColorWheel.Bitmap,
                              ColorWheel.Location.X,
                              ColorWheel.Location.Y,
                              ColorWheel.Bitmap.Width,
                              ColorWheel.Bitmap.Height)
-
 
         ' Draw the selected color rectangle
         Dim selectedColorRect As New Rectangle(10, 10, 100, 100)
@@ -166,20 +161,24 @@ Public Class Form1
             e.Graphics.DrawRectangle(pen, selectedColorRect)
         End Using
 
-
     End Sub
 
     Private Sub Form1_MouseDown(sender As Object, e As MouseEventArgs) Handles Me.MouseDown
 
-        'ColorWheel.GetColorAtPoint(New Point(e.X - ColorWheel.Location.X, e.Y - ColorWheel.Location.Y))
-        ColorWheel.GetColorAtPoint(New Point(e.X, e.Y))
-
-
-        Invalidate()
-
-
+        If e.Button = MouseButtons.Left Then
+            ColorWheel.GetColorAtPoint(New Point(e.X, e.Y))
+            Invalidate()
+        End If
 
     End Sub
 
+    Private Sub Form1_MouseMove(sender As Object, e As MouseEventArgs) Handles Me.MouseMove
+
+        If e.Button = MouseButtons.Left Then
+            ColorWheel.GetColorAtPoint(New Point(e.X, e.Y))
+            Invalidate()
+        End If
+
+    End Sub
 
 End Class
