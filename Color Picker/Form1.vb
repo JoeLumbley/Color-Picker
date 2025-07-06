@@ -76,6 +76,7 @@ Public Class Form1
 
         ' Function to convert HSV to RGB
         Private Function ColorFromHSV(hue As Double, saturation As Double, brightness As Double) As Color
+
             Dim r As Double = 0, g As Double = 0, b As Double = 0
 
             If saturation = 0 Then
@@ -134,7 +135,7 @@ Public Class Form1
         Me.Text = "Color Picker"
 
         ColorWheel.Location.X = 400
-        ColorWheel.Location.Y = 50
+        ColorWheel.Location.Y = 20
 
         ColorWheel.Draw(360, 10, BackColor)
 
