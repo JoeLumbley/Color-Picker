@@ -1,4 +1,6 @@
-﻿Public Class Form1
+﻿Imports System.Drawing.Drawing2D
+
+Public Class Form1
 
     Private Structure ColorWheelStruct
 
@@ -177,6 +179,30 @@
 
         e.Graphics.DrawString("Brightness: " & (ColorWheel.Color.GetBrightness() * 100).ToString("0.#") & "%",
                                   Me.Font, Brushes.Black, 525, 390)
+
+        ' Draw the vertical gradient bar on the right side
+
+        Dim rect As New Rectangle(750, 20, 50, 300)
+        Using brush As New System.Drawing.Drawing2D.LinearGradientBrush(
+            rect,
+            Color.White,        ' Start color (overridden by blend)
+            Color.Black,        ' End color (overridden by blend)
+            LinearGradientMode.Vertical
+        )
+            ' Define the custom blend with three stops: white → ColorWheel.Color → black
+            Dim blend As New Drawing2D.ColorBlend(3)
+            blend.Colors = {
+                Color.White,
+                ColorWheel.Color,
+                Color.Black
+            }
+            blend.Positions = {0.0F, 0.5F, 1.0F} ' Blend at start, middle, and end
+
+            brush.InterpolationColors = blend
+
+            e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
+            e.Graphics.FillRectangle(brush, rect)
+        End Using
 
     End Sub
 
