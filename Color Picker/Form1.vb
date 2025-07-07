@@ -1,5 +1,4 @@
-﻿
-Public Class Form1
+﻿Public Class Form1
 
     Private Structure ColorWheelStruct
 
@@ -145,7 +144,7 @@ Public Class Form1
         ' Set the form's start position to center screen
         Me.StartPosition = FormStartPosition.CenterScreen
         ' Set the form's text
-        Me.Text = "Color Picker"
+        Me.Text = "Color Picker - Code with Joe"
 
         ColorWheel.Color = Color.White ' Default color
 
@@ -186,52 +185,52 @@ Public Class Form1
                              Me.Font, Brushes.Black, 525, 350)
 
 
-        ' Draw the pointer
+        e.Graphics.DrawString("Saturation: " & (ColorWheel.Color.GetSaturation() * 100).ToString("0.#") & "%",
+                             Me.Font, Brushes.Black, 525, 370)
+
+        e.Graphics.DrawString("Brightness: " & (ColorWheel.Color.GetBrightness() * 100).ToString("0.#") & "%",
+                                  Me.Font, Brushes.Black, 525, 390)
+
+        ' Draw the pointer triangle
         If ColorWheel.Bitmap IsNot Nothing Then
-            ' Calculate the center of the color wheel
-            Dim centerX As Integer = ColorWheel.Location.X + ColorWheel.Radius + ColorWheel.Padding
-            Dim centerY As Integer = ColorWheel.Location.Y + ColorWheel.Radius + ColorWheel.Padding
+            Dim centerX = ColorWheel.Location.X + ColorWheel.Radius + ColorWheel.Padding
+            Dim centerY = ColorWheel.Location.Y + ColorWheel.Radius + ColorWheel.Padding
+            Dim angleRad = ColorWheel.SelectedHueAngle * Math.PI / 180
 
-            ' Get the selected hue angle
-            Dim angle As Double = ColorWheel.SelectedHueAngle ' Ensure this is in degrees
+            ' Tip of the pointer
+            Dim pointerLength = ColorWheel.Radius + 6 'Pointer gap from the edge
+            Dim tip = New Point(
+                CInt(centerX + pointerLength * Math.Cos(angleRad)),
+                CInt(centerY + pointerLength * Math.Sin(angleRad)))
 
-            ' Calculate the pointer position based on the angle
-            Dim pointerLength As Integer = ColorWheel.Radius + 5  ' Length of the pointer
-            Dim pointerX As Integer = centerX + pointerLength * Math.Cos(angle * Math.PI / 180)
-            Dim pointerY As Integer = centerY + pointerLength * Math.Sin(angle * Math.PI / 180)
+            ' Base angles
+            Dim baseOffset = 150 * Math.PI / 180
+            Dim triangleSize = 15
 
-            ' Define the size of the triangle base
-            Dim triangleSize As Integer = 15
+            ' Base points before reflection
+            Dim leftBase = New Point(
+                CInt(tip.X + triangleSize * Math.Cos(angleRad + baseOffset)),
+                CInt(tip.Y + triangleSize * Math.Sin(angleRad + baseOffset)))
+            Dim rightBase = New Point(
+                CInt(tip.X + triangleSize * Math.Cos(angleRad - baseOffset)),
+                CInt(tip.Y + triangleSize * Math.Sin(angleRad - baseOffset)))
 
-            ' Calculate the base points of the triangle
-            Dim leftBaseAngle As Double = angle + 150 ' Left base angle (angle + 150 degrees)
-            Dim rightBaseAngle As Double = angle - 150 ' Right base angle (angle - 150 degrees)
-
-            Dim bottomLeftX As Integer = pointerX + triangleSize * Math.Cos(leftBaseAngle * Math.PI / 180)
-            Dim bottomLeftY As Integer = pointerY + triangleSize * Math.Sin(leftBaseAngle * Math.PI / 180)
-            Dim bottomRightX As Integer = pointerX + triangleSize * Math.Cos(rightBaseAngle * Math.PI / 180)
-            Dim bottomRightY As Integer = pointerY + triangleSize * Math.Sin(rightBaseAngle * Math.PI / 180)
-
-            ' Reflect the base points across the tip to rotate the triangle 180°
-            Dim newBottomLeftX As Integer = 2 * pointerX - bottomLeftX
-            Dim newBottomLeftY As Integer = 2 * pointerY - bottomLeftY
-            Dim newBottomRightX As Integer = 2 * pointerX - bottomRightX
-            Dim newBottomRightY As Integer = 2 * pointerY - bottomRightY
-
-            Dim trianglePoints As Point() = {
-                New Point(pointerX, pointerY), ' Tip of the triangle
-                New Point(newBottomRightX, newBottomRightY),  ' Now becomes bottom left
-                New Point(newBottomLeftX, newBottomLeftY)     ' Now becomes bottom right
-            }
+            ' Reflect base to position triangle tip-forward
+            Dim points = {
+                tip,
+                New Point(2 * tip.X - rightBase.X, 2 * tip.Y - rightBase.Y),
+                New Point(2 * tip.X - leftBase.X, 2 * tip.Y - leftBase.Y)}
 
             e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
 
-            ' Draw the triangular pointer
-            Using brush As New SolidBrush(ColorWheel.Color)
-                e.Graphics.FillPolygon(brush, trianglePoints)
-            End Using
-            Using pen As New Pen(Color.Black, 3)
-                e.Graphics.DrawPolygon(pen, trianglePoints)
+            ' Draw triangle with theme-adaptive outline
+            Dim fillColor = ColorWheel.Color
+            Dim outlineColor = If(fillColor.GetBrightness() < 0.5, Color.White, Color.Black)
+
+            Using brush As New SolidBrush(fillColor),
+                  pen As New Pen(outlineColor, 3)
+                e.Graphics.FillPolygon(brush, points)
+                e.Graphics.DrawPolygon(pen, points)
             End Using
 
         End If
