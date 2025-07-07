@@ -135,14 +135,13 @@ Public Class Form1
         Me.Text = "Color Picker"
 
         ColorWheel.Location.X = 400
-        ColorWheel.Location.Y = 20
+        ColorWheel.Location.Y = 10
 
         ColorWheel.Draw(360, 10, BackColor)
 
         Invalidate()
 
     End Sub
-
 
     Protected Overrides Sub OnPaint(e As PaintEventArgs)
         MyBase.OnPaint(e)
@@ -154,13 +153,22 @@ Public Class Form1
                              ColorWheel.Bitmap.Height)
 
         ' Draw the selected color rectangle
-        Dim selectedColorRect As New Rectangle(10, 10, 100, 100)
+        Dim selectedColorRect As New Rectangle(20, 20, 100, 100)
         Using brush As New SolidBrush(ColorWheel.Color)
             e.Graphics.FillRectangle(brush, selectedColorRect)
         End Using
-        Using pen As New Pen(Color.Black, 2)
+        Using pen As New Pen(Color.Black, 3)
             e.Graphics.DrawRectangle(pen, selectedColorRect)
         End Using
+
+        e.Graphics.DrawString("Name: " & GetColorName(ColorWheel.Color),
+                             Me.Font, Brushes.Black, 130, 20)
+
+        e.Graphics.DrawString("Name: " & ColorToHex(ColorWheel.Color),
+                             Me.Font, Brushes.Black, 130, 40)
+
+
+
 
     End Sub
 
@@ -181,5 +189,34 @@ Public Class Form1
         End If
 
     End Sub
+
+
+    ' Method to get the color name
+    Public Shared Function GetColorName(color As Color) As String
+        ' Check if the color is a known color
+        Dim knownColorName As String = GetKnownColorName(color)
+        If knownColorName IsNot Nothing Then
+            Return knownColorName
+        End If
+
+        ' If not known, return a custom message
+        Return ""
+    End Function
+
+    ' Method to check for known colors
+    Private Shared Function GetKnownColorName(color As Color) As String
+        For Each knownColor As KnownColor In [Enum].GetValues(GetType(KnownColor))
+            Dim knownColorValue As Color = Color.FromKnownColor(knownColor)
+            If knownColorValue.ToArgb() = color.ToArgb() Then
+                Return knownColor.ToString()
+            End If
+        Next
+        Return Nothing
+    End Function
+
+    ' Method to convert Color to HEX
+    Private Shared Function ColorToHex(color As Color) As String
+        Return $"#{color.R:X2}{color.G:X2}{color.B:X2}"
+    End Function
 
 End Class
