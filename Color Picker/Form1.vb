@@ -181,8 +181,6 @@ Public Class Form1
                              Me.Font, Brushes.Black, 130, 40)
 
 
-
-
         ' Draw the pointer
         If ColorWheel.Bitmap IsNot Nothing Then
             ' Calculate the center of the color wheel
@@ -193,17 +191,35 @@ Public Class Form1
             Dim angle As Double = ColorWheel.SelectedHueAngle ' Ensure this is in degrees
 
             ' Calculate the pointer position based on the angle
-            Dim pointerLength As Integer = ColorWheel.Radius + 15 ' Length of the pointer
+            Dim pointerLength As Integer = ColorWheel.Radius + 4  ' Length of the pointer
             Dim pointerX As Integer = centerX + pointerLength * Math.Cos(angle * Math.PI / 180)
             Dim pointerY As Integer = centerY + pointerLength * Math.Sin(angle * Math.PI / 180)
 
             ' Define the size of the triangle base
-            Dim triangleSize As Integer = 10
+            Dim triangleSize As Integer = 15
+
+            ' Calculate the base points of the triangle
+            Dim leftBaseAngle As Double = angle + 150 ' Left base angle (angle + 150 degrees)
+            Dim rightBaseAngle As Double = angle - 150 ' Right base angle (angle - 150 degrees)
+
+            Dim bottomLeftX As Integer = pointerX + triangleSize * Math.Cos(leftBaseAngle * Math.PI / 180)
+            Dim bottomLeftY As Integer = pointerY + triangleSize * Math.Sin(leftBaseAngle * Math.PI / 180)
+            Dim bottomRightX As Integer = pointerX + triangleSize * Math.Cos(rightBaseAngle * Math.PI / 180)
+            Dim bottomRightY As Integer = pointerY + triangleSize * Math.Sin(rightBaseAngle * Math.PI / 180)
+
+            ' Reflect the base points across the tip to rotate the triangle 180°
+            Dim newBottomLeftX As Integer = 2 * pointerX - bottomLeftX
+            Dim newBottomLeftY As Integer = 2 * pointerY - bottomLeftY
+            Dim newBottomRightX As Integer = 2 * pointerX - bottomRightX
+            Dim newBottomRightY As Integer = 2 * pointerY - bottomRightY
+
             Dim trianglePoints As Point() = {
-        New Point(pointerX, pointerY), ' Tip of the triangle
-        New Point(pointerX - triangleSize, pointerY + triangleSize), ' Bottom left
-        New Point(pointerX + triangleSize, pointerY + triangleSize)  ' Bottom right
-    }
+                New Point(pointerX, pointerY), ' Tip of the triangle
+                New Point(newBottomRightX, newBottomRightY),  ' Now becomes bottom left
+                New Point(newBottomLeftX, newBottomLeftY)     ' Now becomes bottom right
+            }
+
+            e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
 
             ' Draw the triangular pointer
             Using brush As New SolidBrush(ColorWheel.Color)
@@ -212,6 +228,7 @@ Public Class Form1
             Using pen As New Pen(Color.Black, 2)
                 e.Graphics.DrawPolygon(pen, trianglePoints)
             End Using
+
         End If
 
 
