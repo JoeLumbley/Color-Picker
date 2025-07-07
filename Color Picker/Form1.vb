@@ -85,53 +85,82 @@ Public Class Form1
 
         End Sub
 
-        ' Function to convert HSV to RGB
-        Private Function ColorFromHSV(hue As Double, saturation As Double, brightness As Double) As Color
+        '' Function to convert HSV to RGB
+        'Public Function ColorFromHSV(hue As Double, saturation As Double, brightness As Double) As Color
 
-            Dim r As Double = 0, g As Double = 0, b As Double = 0
+        '    Dim r As Double = 0, g As Double = 0, b As Double = 0
+
+        '    If saturation = 0 Then
+        '        r = brightness
+        '        g = brightness
+        '        b = brightness
+        '    Else
+        '        Dim sector As Integer = CInt(Math.Floor(hue / 60)) Mod 6
+        '        Dim fractional As Double = (hue / 60) - Math.Floor(hue / 60)
+
+        '        Dim p As Double = brightness * (1 - saturation)
+        '        Dim q As Double = brightness * (1 - saturation * fractional)
+        '        Dim t As Double = brightness * (1 - saturation * (1 - fractional))
+
+        '        Select Case sector
+        '            Case 0
+        '                r = brightness
+        '                g = t
+        '                b = p
+        '            Case 1
+        '                r = q
+        '                g = brightness
+        '                b = p
+        '            Case 2
+        '                r = p
+        '                g = brightness
+        '                b = t
+        '            Case 3
+        '                r = p
+        '                g = q
+        '                b = brightness
+        '            Case 4
+        '                r = t
+        '                g = p
+        '                b = brightness
+        '            Case 5
+        '                r = brightness
+        '                g = p
+        '                b = q
+        '        End Select
+        '    End If
+
+        '    Return Color.FromArgb(CInt(r * 255), CInt(g * 255), CInt(b * 255))
+        'End Function
+
+        Public Function ColorFromHSV(hue As Double, saturation As Double, brightness As Double) As Color
+            Dim r As Double, g As Double, b As Double
 
             If saturation = 0 Then
-                r = brightness
-                g = brightness
-                b = brightness
+                r = brightness : g = brightness : b = brightness
             Else
+                hue = hue Mod 360
                 Dim sector As Integer = CInt(Math.Floor(hue / 60)) Mod 6
                 Dim fractional As Double = (hue / 60) - Math.Floor(hue / 60)
 
-                Dim p As Double = brightness * (1 - saturation)
-                Dim q As Double = brightness * (1 - saturation * fractional)
-                Dim t As Double = brightness * (1 - saturation * (1 - fractional))
+                Dim p = brightness * (1 - saturation)
+                Dim q = brightness * (1 - saturation * fractional)
+                Dim t = brightness * (1 - saturation * (1 - fractional))
 
                 Select Case sector
-                    Case 0
-                        r = brightness
-                        g = t
-                        b = p
-                    Case 1
-                        r = q
-                        g = brightness
-                        b = p
-                    Case 2
-                        r = p
-                        g = brightness
-                        b = t
-                    Case 3
-                        r = p
-                        g = q
-                        b = brightness
-                    Case 4
-                        r = t
-                        g = p
-                        b = brightness
-                    Case 5
-                        r = brightness
-                        g = p
-                        b = q
+                    Case 0 : r = brightness : g = t : b = p
+                    Case 1 : r = q : g = brightness : b = p
+                    Case 2 : r = p : g = brightness : b = t
+                    Case 3 : r = p : g = q : b = brightness
+                    Case 4 : r = t : g = p : b = brightness
+                    Case 5 : r = brightness : g = p : b = q
                 End Select
             End If
 
             Return Color.FromArgb(CInt(r * 255), CInt(g * 255), CInt(b * 255))
         End Function
+
+
 
     End Structure
 
@@ -209,7 +238,35 @@ Public Class Form1
     Private Sub Form1_MouseDown(sender As Object, e As MouseEventArgs) Handles Me.MouseDown
 
         If e.Button = MouseButtons.Left Then
+            ' Check if the click is within the color wheel bounds
             ColorWheel.GetColorAtPoint(New Point(e.X, e.Y))
+
+            '' if the click is within the vertical gradient bar 
+            'If e.X >= 750 AndAlso e.X <= 800 AndAlso e.Y >= 20 AndAlso e.Y <= 320 Then
+            '    ' Calculate the brightness based on the Y position
+            '    Dim brightness As Double = 1 - (e.Y - 20) / 300.0 ' Invert Y for brightness
+
+            '    'ColorWheel.Color = Color.FromArgb(ColorWheel.Color.A, ColorWheel.Color.R, ColorWheel.Color.G, CInt(brightness * 255))
+            '    ColorWheel.Color = ColorWheel.ColorFromHSV(ColorWheel.Color.GetHue(), ColorWheel.Color.GetSaturation(), brightness)
+
+            'End If
+
+            ' Check if the mouse click is inside the brightness slider bounds
+            Dim brightnessBar As New Rectangle(750, 20, 50, 300)
+            If brightnessBar.Contains(e.Location) Then
+                ' Normalize and clamp brightness
+                Dim normalizedY As Double = Math.Min(Math.Max(e.Y - brightnessBar.Top, 0), brightnessBar.Height)
+                Dim brightness As Double = 1 - (normalizedY / brightnessBar.Height)
+
+                ' Apply brightness using HSV model
+                ColorWheel.Color = ColorWheel.ColorFromHSV(
+        ColorWheel.Color.GetHue(),
+        ColorWheel.Color.GetSaturation(),
+        brightness
+    )
+            End If
+
+
             Invalidate()
         End If
 
