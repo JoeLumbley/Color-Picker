@@ -147,10 +147,12 @@ Public Class Form1
         ' Set the form's text
         Me.Text = "Color Picker"
 
+        ColorWheel.Color = Color.White ' Default color
+
         ColorWheel.Location.X = 400
         ColorWheel.Location.Y = 10
 
-        ColorWheel.Draw(360, 10, BackColor)
+        ColorWheel.Draw(300, 10, BackColor)
 
         Invalidate()
 
@@ -177,8 +179,11 @@ Public Class Form1
         e.Graphics.DrawString("Name: " & GetColorName(ColorWheel.Color),
                              Me.Font, Brushes.Black, 130, 20)
 
-        e.Graphics.DrawString("Name: " & ColorToHex(ColorWheel.Color),
+        e.Graphics.DrawString("Hex: " & ColorToHex(ColorWheel.Color),
                              Me.Font, Brushes.Black, 130, 40)
+
+        e.Graphics.DrawString("Hue: " & ColorWheel.Color.GetHue,
+                             Me.Font, Brushes.Black, 130, 60)
 
 
         ' Draw the pointer
