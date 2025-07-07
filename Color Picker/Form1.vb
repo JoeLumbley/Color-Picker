@@ -12,6 +12,7 @@ Public Class Form1
         Public BackColor As Color
         Public Color As Color
         Public Padding As Integer
+        Public SelectedHueAngle As Double
 
         Public Sub Draw(size As Integer, padding As Integer, backcolor As Color)
 
@@ -64,13 +65,22 @@ Public Class Form1
             Dim dy As Integer = point.Y - Location.Y - centerY
             Dim dist As Double = Math.Sqrt(dx * dx + dy * dy)
 
+
+
             If dist <= Radius Then
-                ' Calculate the angle and set the color based on the position
                 Dim angle As Double = (Math.Atan2(dy, dx) * 180.0 / Math.PI + 360) Mod 360
-
                 Color = ColorFromHSV(angle, 1, 1)
-
+                SelectedHueAngle = angle ' Save angle for rendering pointer
             End If
+
+
+            'If dist <= Radius Then
+            '    ' Calculate the angle and set the color based on the position
+            '    Dim angle As Double = (Math.Atan2(dy, dx) * 180.0 / Math.PI + 360) Mod 360
+
+            '    Color = ColorFromHSV(angle, 1, 1)
+
+            'End If
 
         End Sub
 
@@ -126,6 +136,9 @@ Public Class Form1
 
     Private ColorWheel As ColorWheelStruct
 
+
+
+
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Me.DoubleBuffered = True ' Reduce flickering
 
@@ -168,6 +181,38 @@ Public Class Form1
                              Me.Font, Brushes.Black, 130, 40)
 
 
+
+
+        ' Draw the pointer
+        If ColorWheel.Bitmap IsNot Nothing Then
+            ' Calculate the center of the color wheel
+            Dim centerX As Integer = ColorWheel.Location.X + ColorWheel.Radius + ColorWheel.Padding
+            Dim centerY As Integer = ColorWheel.Location.Y + ColorWheel.Radius + ColorWheel.Padding
+
+            ' Get the selected hue angle
+            Dim angle As Double = ColorWheel.SelectedHueAngle ' Ensure this is in degrees
+
+            ' Calculate the pointer position based on the angle
+            Dim pointerLength As Integer = ColorWheel.Radius + 15 ' Length of the pointer
+            Dim pointerX As Integer = centerX + pointerLength * Math.Cos(angle * Math.PI / 180)
+            Dim pointerY As Integer = centerY + pointerLength * Math.Sin(angle * Math.PI / 180)
+
+            ' Define the size of the triangle base
+            Dim triangleSize As Integer = 10
+            Dim trianglePoints As Point() = {
+        New Point(pointerX, pointerY), ' Tip of the triangle
+        New Point(pointerX - triangleSize, pointerY + triangleSize), ' Bottom left
+        New Point(pointerX + triangleSize, pointerY + triangleSize)  ' Bottom right
+    }
+
+            ' Draw the triangular pointer
+            Using brush As New SolidBrush(ColorWheel.Color)
+                e.Graphics.FillPolygon(brush, trianglePoints)
+            End Using
+            Using pen As New Pen(Color.Black, 2)
+                e.Graphics.DrawPolygon(pen, trianglePoints)
+            End Using
+        End If
 
 
     End Sub
