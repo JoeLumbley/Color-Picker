@@ -135,9 +135,6 @@
 
     Private ColorWheel As ColorWheelStruct
 
-
-
-
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Me.DoubleBuffered = True ' Reduce flickering
 
@@ -160,20 +157,11 @@
     Protected Overrides Sub OnPaint(e As PaintEventArgs)
         MyBase.OnPaint(e)
 
-        e.Graphics.DrawImage(ColorWheel.Bitmap,
-                             ColorWheel.Location.X,
-                             ColorWheel.Location.Y,
-                             ColorWheel.Bitmap.Width,
-                             ColorWheel.Bitmap.Height)
+        DrawColorWheel(e)
 
-        ' Draw the selected color rectangle
-        Dim selectedColorRect As New Rectangle(20, 20, 100, 100)
-        Using brush As New SolidBrush(ColorWheel.Color)
-            e.Graphics.FillRectangle(brush, selectedColorRect)
-        End Using
-        Using pen As New Pen(Color.Black, 3)
-            e.Graphics.DrawRectangle(pen, selectedColorRect)
-        End Using
+        DrawHuePointer(e)
+
+        DrawSelectedColor(e)
 
         e.Graphics.DrawString("Name: " & GetColorName(ColorWheel.Color),
                              Me.Font, Brushes.Black, 130, 20)
@@ -184,15 +172,56 @@
         e.Graphics.DrawString("Hue: " & ColorWheel.Color.GetHue.ToString("0.#"),
                              Me.Font, Brushes.Black, 525, 350)
 
-
         e.Graphics.DrawString("Saturation: " & (ColorWheel.Color.GetSaturation() * 100).ToString("0.#") & "%",
                              Me.Font, Brushes.Black, 525, 370)
 
         e.Graphics.DrawString("Brightness: " & (ColorWheel.Color.GetBrightness() * 100).ToString("0.#") & "%",
                                   Me.Font, Brushes.Black, 525, 390)
 
+    End Sub
+
+    Private Sub Form1_MouseDown(sender As Object, e As MouseEventArgs) Handles Me.MouseDown
+
+        If e.Button = MouseButtons.Left Then
+            ColorWheel.GetColorAtPoint(New Point(e.X, e.Y))
+            Invalidate()
+        End If
+
+    End Sub
+
+    Private Sub Form1_MouseMove(sender As Object, e As MouseEventArgs) Handles Me.MouseMove
+
+        If e.Button = MouseButtons.Left Then
+            ColorWheel.GetColorAtPoint(New Point(e.X, e.Y))
+            Invalidate()
+        End If
+
+    End Sub
+
+    Private Sub DrawColorWheel(e As PaintEventArgs)
+        e.Graphics.DrawImage(ColorWheel.Bitmap,
+                             ColorWheel.Location.X,
+                             ColorWheel.Location.Y,
+                             ColorWheel.Bitmap.Width,
+                             ColorWheel.Bitmap.Height)
+    End Sub
+
+    Private Sub DrawSelectedColor(e As PaintEventArgs)
+        ' Draw the selected color rectangle
+        Dim selectedColorRect As New Rectangle(20, 20, 100, 100)
+        Using brush As New SolidBrush(ColorWheel.Color)
+            e.Graphics.FillRectangle(brush, selectedColorRect)
+        End Using
+        Using pen As New Pen(Color.Black, 3)
+            e.Graphics.DrawRectangle(pen, selectedColorRect)
+        End Using
+    End Sub
+
+    Private Sub DrawHuePointer(e As PaintEventArgs)
+
         ' Draw the pointer triangle
         If ColorWheel.Bitmap IsNot Nothing Then
+
             Dim centerX = ColorWheel.Location.X + ColorWheel.Radius + ColorWheel.Padding
             Dim centerY = ColorWheel.Location.Y + ColorWheel.Radius + ColorWheel.Padding
             Dim angleRad = ColorWheel.SelectedHueAngle * Math.PI / 180
@@ -236,25 +265,6 @@
         End If
 
     End Sub
-
-    Private Sub Form1_MouseDown(sender As Object, e As MouseEventArgs) Handles Me.MouseDown
-
-        If e.Button = MouseButtons.Left Then
-            ColorWheel.GetColorAtPoint(New Point(e.X, e.Y))
-            Invalidate()
-        End If
-
-    End Sub
-
-    Private Sub Form1_MouseMove(sender As Object, e As MouseEventArgs) Handles Me.MouseMove
-
-        If e.Button = MouseButtons.Left Then
-            ColorWheel.GetColorAtPoint(New Point(e.X, e.Y))
-            Invalidate()
-        End If
-
-    End Sub
-
 
     ' Method to get the color name
     Public Shared Function GetColorName(color As Color) As String
