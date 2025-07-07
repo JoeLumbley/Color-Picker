@@ -152,7 +152,7 @@ Public Class Form1
         ColorWheel.Location.X = 400
         ColorWheel.Location.Y = 10
 
-        ColorWheel.Draw(300, 10, BackColor)
+        ColorWheel.Draw(300, 20, BackColor)
 
         Invalidate()
 
@@ -182,8 +182,8 @@ Public Class Form1
         e.Graphics.DrawString("Hex: " & ColorToHex(ColorWheel.Color),
                              Me.Font, Brushes.Black, 130, 40)
 
-        e.Graphics.DrawString("Hue: " & ColorWheel.Color.GetHue,
-                             Me.Font, Brushes.Black, 130, 60)
+        e.Graphics.DrawString("Hue: " & ColorWheel.Color.GetHue.ToString("0.#"),
+                             Me.Font, Brushes.Black, 525, 350)
 
 
         ' Draw the pointer
