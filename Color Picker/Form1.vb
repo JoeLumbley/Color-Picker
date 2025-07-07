@@ -191,7 +191,7 @@ Public Class Form1
             Dim angle As Double = ColorWheel.SelectedHueAngle ' Ensure this is in degrees
 
             ' Calculate the pointer position based on the angle
-            Dim pointerLength As Integer = ColorWheel.Radius + 4  ' Length of the pointer
+            Dim pointerLength As Integer = ColorWheel.Radius + 5  ' Length of the pointer
             Dim pointerX As Integer = centerX + pointerLength * Math.Cos(angle * Math.PI / 180)
             Dim pointerY As Integer = centerY + pointerLength * Math.Sin(angle * Math.PI / 180)
 
@@ -225,12 +225,11 @@ Public Class Form1
             Using brush As New SolidBrush(ColorWheel.Color)
                 e.Graphics.FillPolygon(brush, trianglePoints)
             End Using
-            Using pen As New Pen(Color.Black, 2)
+            Using pen As New Pen(Color.Black, 3)
                 e.Graphics.DrawPolygon(pen, trianglePoints)
             End Using
 
         End If
-
 
     End Sub
 
