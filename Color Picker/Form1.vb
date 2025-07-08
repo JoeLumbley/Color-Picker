@@ -73,16 +73,8 @@ Public Class Form1
 
                 Color = ColorFromHSV(angle, RGBtoHSV(Color).Saturation, RGBtoHSV(Color).Value)
                 SelectedHueAngle = angle ' Save angle for rendering pointer
+
             End If
-
-
-            'If dist <= Radius Then
-            '    ' Calculate the angle and set the color based on the position
-            '    Dim angle As Double = (Math.Atan2(dy, dx) * 180.0 / Math.PI + 360) Mod 360
-
-            '    Color = ColorFromHSV(angle, 1, 1)
-
-            'End If
 
         End Sub
 
@@ -134,33 +126,6 @@ Public Class Form1
             Return Color.FromArgb(CInt(r * 255), CInt(g * 255), CInt(b * 255))
         End Function
 
-        'Public Function ColorFromHSV(hue As Double, saturation As Double, brightness As Double) As Color
-        '    Dim r As Double, g As Double, b As Double
-
-        '    If saturation = 0 Then
-        '        r = brightness : g = brightness : b = brightness
-        '    Else
-        '        hue = hue Mod 360
-        '        Dim sector As Integer = CInt(Math.Floor(hue / 60)) Mod 6
-        '        Dim fractional As Double = (hue / 60) - Math.Floor(hue / 60)
-
-        '        Dim p = brightness * (1 - saturation)
-        '        Dim q = brightness * (1 - saturation * fractional)
-        '        Dim t = brightness * (1 - saturation * (1 - fractional))
-
-        '        Select Case sector
-        '            Case 0 : r = brightness : g = t : b = p
-        '            Case 1 : r = q : g = brightness : b = p
-        '            Case 2 : r = p : g = brightness : b = t
-        '            Case 3 : r = p : g = q : b = brightness
-        '            Case 4 : r = t : g = p : b = brightness
-        '            Case 5 : r = brightness : g = p : b = q
-        '        End Select
-        '    End If
-
-        '    Return Color.FromArgb(CInt(r * 255), CInt(g * 255), CInt(b * 255))
-        'End Function
-
         Public Function RGBtoHSV(color As Color) As (Hue As Double, Saturation As Double, Value As Double)
             Dim r As Double = color.R / 255.0
             Dim g As Double = color.G / 255.0
@@ -195,17 +160,11 @@ Public Class Form1
 
     Private TheColor As Color = Color.Chartreuse ' Default color for the color wheel
 
-    Private TheHue As Double = HueWheel.RGBtoHSV(TheColor).Hue
+    Private TheHue As Double = RGBtoHSV(TheColor).Hue
 
-    Private TheSat As Double = HueWheel.RGBtoHSV(TheColor).Saturation
+    Private TheSat As Double = RGBtoHSV(TheColor).Saturation
 
-    Private TheVal As Double = HueWheel.RGBtoHSV(TheColor).Value
-
-
-
-    Private HueB40 As Double = 0.0
-    Private SatB40 As Double = 0.0
-
+    Private TheVal As Double = RGBtoHSV(TheColor).Value
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
@@ -219,20 +178,16 @@ Public Class Form1
 
         TrackBar1.Value = TheVal * 100 ' Set initial value for the trackbar
         TrackBar2.Value = TheSat * 100 ' Set initial saturation for the trackbar
+
+        HueWheel.Color = TheColor
         HueWheel.SelectedHueAngle = TheHue  ' Set initial hue angle based on the value
 
-
-
-
-        'ColorWheel.Color = Color.Chartreuse ' Default color
 
         HueWheel.Location.X = 400
         HueWheel.Location.Y = 10
 
         HueWheel.Draw(300, 20, BackColor)
 
-
-        'TrackBar1.Value = ColorWheel.RGBtoHSV(ColorWheel.Color).Value * 100
 
         Invalidate()
 
@@ -241,13 +196,10 @@ Public Class Form1
     Protected Overrides Sub OnPaint(e As PaintEventArgs)
         MyBase.OnPaint(e)
 
-
-
-
-
         DrawColorWheel(e)
 
-        HueWheel.Color = HueWheel.ColorFromHSV(TheHue, TheSat, TheVal)
+        'HueWheel.Color = ColorFromHSV(TheHue, TheSat, TheVal)
+
         DrawHuePointer(e)
 
         DrawSelectedColor(e)
@@ -262,13 +214,13 @@ Public Class Form1
         '                     Me.Font, Brushes.Black, 525, 350)
 
 
-        e.Graphics.DrawString("Hue: " & HueWheel.ColorFromHSV(TheHue, TheSat, TheVal).GetHue.ToString("0.#"),
+        e.Graphics.DrawString("Hue: " & ColorFromHSV(TheHue, TheSat, TheVal).GetHue.ToString("0.#"),
                              Me.Font, Brushes.Black, 525, 350)
 
 
 
 
-        e.Graphics.DrawString("Saturation: " & (HueWheel.RGBtoHSV(HueWheel.ColorFromHSV(TheHue, TheSat, TheVal)).Saturation * 100).ToString("0.#") & "%",
+        e.Graphics.DrawString("Saturation: " & (RGBtoHSV(ColorFromHSV(TheHue, TheSat, TheVal)).Saturation * 100).ToString("0.#") & "%",
                              Me.Font, Brushes.Black, 525, 370)
 
         'e.Graphics.DrawString("Brightness: " & (ColorWheel.Color.GetBrightness() * 100).ToString("0.#") & "%",
@@ -294,6 +246,8 @@ Public Class Form1
 
             If TheHue <> HueWheel.SelectedHueAngle Then TheHue = HueWheel.SelectedHueAngle
 
+            'HueWheel.Color = ColorFromHSV(TheHue, TheSat, TheVal)
+
             Invalidate()
 
         End If
@@ -318,6 +272,9 @@ Public Class Form1
 
         TheVal = TrackBar1.Value / 100.0
 
+        HueWheel.Color = ColorFromHSV(TheHue, TheSat, TheVal)
+
+
         Invalidate()
 
     End Sub
@@ -333,7 +290,7 @@ Public Class Form1
     Private Sub DrawSelectedColor(e As PaintEventArgs)
         ' Draw the selected color rectangle
         Dim selectedColorRect As New Rectangle(20, 20, 100, 100)
-        Using brush As New SolidBrush(HueWheel.ColorFromHSV(TheHue, TheSat, TheVal))
+        Using brush As New SolidBrush(ColorFromHSV(TheHue, TheSat, TheVal))
             e.Graphics.FillRectangle(brush, selectedColorRect)
         End Using
         Using pen As New Pen(Color.Black, 3)
@@ -423,11 +380,87 @@ Public Class Form1
         ' Update the saturation based on the trackbar value
         TheSat = TrackBar2.Value / 100.0
         ' Update the color based on the new saturation
-        HueWheel.Color = HueWheel.ColorFromHSV(TheHue, TheSat, TheVal)
+        HueWheel.Color = ColorFromHSV(TheHue, TheSat, TheVal)
         ' Redraw the form to reflect the changes
         Invalidate()
     End Sub
 
+    ' Function to convert HSV to RGB
+    Public Function ColorFromHSV(hue As Double, saturation As Double, brightness As Double) As Color
+
+        Dim r As Double = 0, g As Double = 0, b As Double = 0
+
+        If saturation = 0 Then
+            r = brightness
+            g = brightness
+            b = brightness
+        Else
+            Dim sector As Integer = CInt(Math.Floor(hue / 60)) Mod 6
+            Dim fractional As Double = (hue / 60) - Math.Floor(hue / 60)
+
+            Dim p As Double = brightness * (1 - saturation)
+            Dim q As Double = brightness * (1 - saturation * fractional)
+            Dim t As Double = brightness * (1 - saturation * (1 - fractional))
+
+            Select Case sector
+                Case 0
+                    r = brightness
+                    g = t
+                    b = p
+                Case 1
+                    r = q
+                    g = brightness
+                    b = p
+                Case 2
+                    r = p
+                    g = brightness
+                    b = t
+                Case 3
+                    r = p
+                    g = q
+                    b = brightness
+                Case 4
+                    r = t
+                    g = p
+                    b = brightness
+                Case 5
+                    r = brightness
+                    g = p
+                    b = q
+            End Select
+        End If
+
+        Return Color.FromArgb(CInt(r * 255), CInt(g * 255), CInt(b * 255))
+    End Function
+
+
+    Public Function RGBtoHSV(color As Color) As (Hue As Double, Saturation As Double, Value As Double)
+        Dim r As Double = color.R / 255.0
+        Dim g As Double = color.G / 255.0
+        Dim b As Double = color.B / 255.0
+
+        Dim max As Double = Math.Max(r, Math.Max(g, b))
+        Dim min As Double = Math.Min(r, Math.Min(g, b))
+        Dim delta As Double = max - min
+
+        Dim h As Double
+        If delta = 0 Then
+            h = 0
+        ElseIf max = r Then
+            h = 60 * (((g - b) / delta) Mod 6)
+        ElseIf max = g Then
+            h = 60 * (((b - r) / delta) + 2)
+        Else
+            h = 60 * (((r - g) / delta) + 4)
+        End If
+
+        If h < 0 Then h += 360
+
+        Dim s As Double = If(max = 0, 0, delta / max)
+        Dim v As Double = max
+
+        Return (h, s, v)
+    End Function
 
 
 End Class
