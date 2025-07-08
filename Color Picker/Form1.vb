@@ -70,7 +70,8 @@ Public Class Form1
 
             If dist <= Radius Then
                 Dim angle As Double = (Math.Atan2(dy, dx) * 180.0 / Math.PI + 360) Mod 360
-                Color = ColorFromHSV(angle, 1, 1)
+
+                Color = ColorFromHSV(angle, RGBtoHSV(Color).Saturation, RGBtoHSV(Color).Value)
                 SelectedHueAngle = angle ' Save angle for rendering pointer
             End If
 
@@ -85,88 +86,129 @@ Public Class Form1
 
         End Sub
 
-        '' Function to convert HSV to RGB
-        'Public Function ColorFromHSV(hue As Double, saturation As Double, brightness As Double) As Color
-
-        '    Dim r As Double = 0, g As Double = 0, b As Double = 0
-
-        '    If saturation = 0 Then
-        '        r = brightness
-        '        g = brightness
-        '        b = brightness
-        '    Else
-        '        Dim sector As Integer = CInt(Math.Floor(hue / 60)) Mod 6
-        '        Dim fractional As Double = (hue / 60) - Math.Floor(hue / 60)
-
-        '        Dim p As Double = brightness * (1 - saturation)
-        '        Dim q As Double = brightness * (1 - saturation * fractional)
-        '        Dim t As Double = brightness * (1 - saturation * (1 - fractional))
-
-        '        Select Case sector
-        '            Case 0
-        '                r = brightness
-        '                g = t
-        '                b = p
-        '            Case 1
-        '                r = q
-        '                g = brightness
-        '                b = p
-        '            Case 2
-        '                r = p
-        '                g = brightness
-        '                b = t
-        '            Case 3
-        '                r = p
-        '                g = q
-        '                b = brightness
-        '            Case 4
-        '                r = t
-        '                g = p
-        '                b = brightness
-        '            Case 5
-        '                r = brightness
-        '                g = p
-        '                b = q
-        '        End Select
-        '    End If
-
-        '    Return Color.FromArgb(CInt(r * 255), CInt(g * 255), CInt(b * 255))
-        'End Function
-
+        ' Function to convert HSV to RGB
         Public Function ColorFromHSV(hue As Double, saturation As Double, brightness As Double) As Color
-            Dim r As Double, g As Double, b As Double
+
+            Dim r As Double = 0, g As Double = 0, b As Double = 0
 
             If saturation = 0 Then
-                r = brightness : g = brightness : b = brightness
+                r = brightness
+                g = brightness
+                b = brightness
             Else
-                hue = hue Mod 360
                 Dim sector As Integer = CInt(Math.Floor(hue / 60)) Mod 6
                 Dim fractional As Double = (hue / 60) - Math.Floor(hue / 60)
 
-                Dim p = brightness * (1 - saturation)
-                Dim q = brightness * (1 - saturation * fractional)
-                Dim t = brightness * (1 - saturation * (1 - fractional))
+                Dim p As Double = brightness * (1 - saturation)
+                Dim q As Double = brightness * (1 - saturation * fractional)
+                Dim t As Double = brightness * (1 - saturation * (1 - fractional))
 
                 Select Case sector
-                    Case 0 : r = brightness : g = t : b = p
-                    Case 1 : r = q : g = brightness : b = p
-                    Case 2 : r = p : g = brightness : b = t
-                    Case 3 : r = p : g = q : b = brightness
-                    Case 4 : r = t : g = p : b = brightness
-                    Case 5 : r = brightness : g = p : b = q
+                    Case 0
+                        r = brightness
+                        g = t
+                        b = p
+                    Case 1
+                        r = q
+                        g = brightness
+                        b = p
+                    Case 2
+                        r = p
+                        g = brightness
+                        b = t
+                    Case 3
+                        r = p
+                        g = q
+                        b = brightness
+                    Case 4
+                        r = t
+                        g = p
+                        b = brightness
+                    Case 5
+                        r = brightness
+                        g = p
+                        b = q
                 End Select
             End If
 
             Return Color.FromArgb(CInt(r * 255), CInt(g * 255), CInt(b * 255))
         End Function
 
+        'Public Function ColorFromHSV(hue As Double, saturation As Double, brightness As Double) As Color
+        '    Dim r As Double, g As Double, b As Double
 
+        '    If saturation = 0 Then
+        '        r = brightness : g = brightness : b = brightness
+        '    Else
+        '        hue = hue Mod 360
+        '        Dim sector As Integer = CInt(Math.Floor(hue / 60)) Mod 6
+        '        Dim fractional As Double = (hue / 60) - Math.Floor(hue / 60)
+
+        '        Dim p = brightness * (1 - saturation)
+        '        Dim q = brightness * (1 - saturation * fractional)
+        '        Dim t = brightness * (1 - saturation * (1 - fractional))
+
+        '        Select Case sector
+        '            Case 0 : r = brightness : g = t : b = p
+        '            Case 1 : r = q : g = brightness : b = p
+        '            Case 2 : r = p : g = brightness : b = t
+        '            Case 3 : r = p : g = q : b = brightness
+        '            Case 4 : r = t : g = p : b = brightness
+        '            Case 5 : r = brightness : g = p : b = q
+        '        End Select
+        '    End If
+
+        '    Return Color.FromArgb(CInt(r * 255), CInt(g * 255), CInt(b * 255))
+        'End Function
+
+        Public Function RGBtoHSV(color As Color) As (Hue As Double, Saturation As Double, Value As Double)
+            Dim r As Double = color.R / 255.0
+            Dim g As Double = color.G / 255.0
+            Dim b As Double = color.B / 255.0
+
+            Dim max As Double = Math.Max(r, Math.Max(g, b))
+            Dim min As Double = Math.Min(r, Math.Min(g, b))
+            Dim delta As Double = max - min
+
+            Dim h As Double
+            If delta = 0 Then
+                h = 0
+            ElseIf max = r Then
+                h = 60 * (((g - b) / delta) Mod 6)
+            ElseIf max = g Then
+                h = 60 * (((b - r) / delta) + 2)
+            Else
+                h = 60 * (((r - g) / delta) + 4)
+            End If
+
+            If h < 0 Then h += 360
+
+            Dim s As Double = If(max = 0, 0, delta / max)
+            Dim v As Double = max
+
+            Return (h, s, v)
+        End Function
 
     End Structure
 
-    Private ColorWheel As ColorWheelStruct
+    Private HueWheel As ColorWheelStruct
+
+    Private TheColor As Color = Color.Chartreuse ' Default color for the color wheel
+
+    Private TheHue As Double = HueWheel.RGBtoHSV(TheColor).Hue
+
+    Private TheSat As Double = HueWheel.RGBtoHSV(TheColor).Saturation
+
+    Private TheVal As Double = HueWheel.RGBtoHSV(TheColor).Value
+
+
+
+    Private HueB40 As Double = 0.0
+    Private SatB40 As Double = 0.0
+
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
         Me.DoubleBuffered = True ' Reduce flickering
 
         ' Set the form's start position to center screen
@@ -174,12 +216,23 @@ Public Class Form1
         ' Set the form's text
         Me.Text = "Color Picker - Code with Joe"
 
-        ColorWheel.Color = Color.White ' Default color
 
-        ColorWheel.Location.X = 400
-        ColorWheel.Location.Y = 10
+        TrackBar1.Value = TheVal * 100 ' Set initial value for the trackbar
+        TrackBar2.Value = TheSat * 100 ' Set initial saturation for the trackbar
+        HueWheel.SelectedHueAngle = TheHue  ' Set initial hue angle based on the value
 
-        ColorWheel.Draw(300, 20, BackColor)
+
+
+
+        'ColorWheel.Color = Color.Chartreuse ' Default color
+
+        HueWheel.Location.X = 400
+        HueWheel.Location.Y = 10
+
+        HueWheel.Draw(300, 20, BackColor)
+
+
+        'TrackBar1.Value = ColorWheel.RGBtoHSV(ColorWheel.Color).Value * 100
 
         Invalidate()
 
@@ -188,86 +241,61 @@ Public Class Form1
     Protected Overrides Sub OnPaint(e As PaintEventArgs)
         MyBase.OnPaint(e)
 
+
+
+
+
         DrawColorWheel(e)
 
+        HueWheel.Color = HueWheel.ColorFromHSV(TheHue, TheSat, TheVal)
         DrawHuePointer(e)
 
         DrawSelectedColor(e)
 
-        e.Graphics.DrawString("Name: " & GetColorName(ColorWheel.Color),
+        e.Graphics.DrawString("Name: " & GetColorName(HueWheel.Color),
                              Me.Font, Brushes.Black, 130, 20)
 
-        e.Graphics.DrawString("Hex: " & ColorToHex(ColorWheel.Color),
+        e.Graphics.DrawString("Hex: " & ColorToHex(HueWheel.Color),
                              Me.Font, Brushes.Black, 130, 40)
 
-        e.Graphics.DrawString("Hue: " & ColorWheel.Color.GetHue.ToString("0.#"),
+        'e.Graphics.DrawString("Hue: " & TheHue.ToString("0.#"),
+        '                     Me.Font, Brushes.Black, 525, 350)
+
+
+        e.Graphics.DrawString("Hue: " & HueWheel.ColorFromHSV(TheHue, TheSat, TheVal).GetHue.ToString("0.#"),
                              Me.Font, Brushes.Black, 525, 350)
 
-        e.Graphics.DrawString("Saturation: " & (ColorWheel.Color.GetSaturation() * 100).ToString("0.#") & "%",
+
+
+
+        e.Graphics.DrawString("Saturation: " & (HueWheel.RGBtoHSV(HueWheel.ColorFromHSV(TheHue, TheSat, TheVal)).Saturation * 100).ToString("0.#") & "%",
                              Me.Font, Brushes.Black, 525, 370)
 
-        e.Graphics.DrawString("Brightness: " & (ColorWheel.Color.GetBrightness() * 100).ToString("0.#") & "%",
-                                  Me.Font, Brushes.Black, 525, 390)
+        'e.Graphics.DrawString("Brightness: " & (ColorWheel.Color.GetBrightness() * 100).ToString("0.#") & "%",
+        '                          Me.Font, Brushes.Black, 525, 390)
 
-        ' Draw the vertical gradient bar on the right side
 
-        Dim rect As New Rectangle(750, 20, 50, 300)
-        Using brush As New System.Drawing.Drawing2D.LinearGradientBrush(
-            rect,
-            Color.White,        ' Start color (overridden by blend)
-            Color.Black,        ' End color (overridden by blend)
-            LinearGradientMode.Vertical
-        )
-            ' Define the custom blend with three stops: white → ColorWheel.Color → black
-            Dim blend As New Drawing2D.ColorBlend(3)
-            blend.Colors = {
-                Color.White,
-                ColorWheel.Color,
-                Color.Black
-            }
-            blend.Positions = {0.0F, 0.5F, 1.0F} ' Blend at start, middle, and end
+        'e.Graphics.DrawString("Brightness: " & TheVal * 100.ToString("0.0") & "%",
+        '                          Me.Font, Brushes.Black, 525, 390)
 
-            brush.InterpolationColors = blend
 
-            e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
-            e.Graphics.FillRectangle(brush, rect)
-        End Using
+
+        e.Graphics.DrawString("Brightness: " & (TheVal * 100).ToString("0.#") & "%",
+                      Me.Font, Brushes.Black, 525, 390)
+
 
     End Sub
 
     Private Sub Form1_MouseDown(sender As Object, e As MouseEventArgs) Handles Me.MouseDown
 
         If e.Button = MouseButtons.Left Then
-            ' Check if the click is within the color wheel bounds
-            ColorWheel.GetColorAtPoint(New Point(e.X, e.Y))
 
-            '' if the click is within the vertical gradient bar 
-            'If e.X >= 750 AndAlso e.X <= 800 AndAlso e.Y >= 20 AndAlso e.Y <= 320 Then
-            '    ' Calculate the brightness based on the Y position
-            '    Dim brightness As Double = 1 - (e.Y - 20) / 300.0 ' Invert Y for brightness
+            HueWheel.GetColorAtPoint(New Point(e.X, e.Y))
 
-            '    'ColorWheel.Color = Color.FromArgb(ColorWheel.Color.A, ColorWheel.Color.R, ColorWheel.Color.G, CInt(brightness * 255))
-            '    ColorWheel.Color = ColorWheel.ColorFromHSV(ColorWheel.Color.GetHue(), ColorWheel.Color.GetSaturation(), brightness)
-
-            'End If
-
-            ' Check if the mouse click is inside the brightness slider bounds
-            Dim brightnessBar As New Rectangle(750, 20, 50, 300)
-            If brightnessBar.Contains(e.Location) Then
-                ' Normalize and clamp brightness
-                Dim normalizedY As Double = Math.Min(Math.Max(e.Y - brightnessBar.Top, 0), brightnessBar.Height)
-                Dim brightness As Double = 1 - (normalizedY / brightnessBar.Height)
-
-                ' Apply brightness using HSV model
-                ColorWheel.Color = ColorWheel.ColorFromHSV(
-        ColorWheel.Color.GetHue(),
-        ColorWheel.Color.GetSaturation(),
-        brightness
-    )
-            End If
-
+            If TheHue <> HueWheel.SelectedHueAngle Then TheHue = HueWheel.SelectedHueAngle
 
             Invalidate()
+
         End If
 
     End Sub
@@ -275,24 +303,37 @@ Public Class Form1
     Private Sub Form1_MouseMove(sender As Object, e As MouseEventArgs) Handles Me.MouseMove
 
         If e.Button = MouseButtons.Left Then
-            ColorWheel.GetColorAtPoint(New Point(e.X, e.Y))
+
+            HueWheel.GetColorAtPoint(New Point(e.X, e.Y))
+
+            If TheHue <> HueWheel.SelectedHueAngle Then TheHue = HueWheel.SelectedHueAngle
+
             Invalidate()
+
         End If
 
     End Sub
 
+    Private Sub TrackBar1_Scroll(sender As Object, e As EventArgs) Handles TrackBar1.Scroll
+
+        TheVal = TrackBar1.Value / 100.0
+
+        Invalidate()
+
+    End Sub
+
     Private Sub DrawColorWheel(e As PaintEventArgs)
-        e.Graphics.DrawImage(ColorWheel.Bitmap,
-                             ColorWheel.Location.X,
-                             ColorWheel.Location.Y,
-                             ColorWheel.Bitmap.Width,
-                             ColorWheel.Bitmap.Height)
+        e.Graphics.DrawImage(HueWheel.Bitmap,
+                             HueWheel.Location.X,
+                             HueWheel.Location.Y,
+                             HueWheel.Bitmap.Width,
+                             HueWheel.Bitmap.Height)
     End Sub
 
     Private Sub DrawSelectedColor(e As PaintEventArgs)
         ' Draw the selected color rectangle
         Dim selectedColorRect As New Rectangle(20, 20, 100, 100)
-        Using brush As New SolidBrush(ColorWheel.Color)
+        Using brush As New SolidBrush(HueWheel.ColorFromHSV(TheHue, TheSat, TheVal))
             e.Graphics.FillRectangle(brush, selectedColorRect)
         End Using
         Using pen As New Pen(Color.Black, 3)
@@ -303,14 +344,14 @@ Public Class Form1
     Private Sub DrawHuePointer(e As PaintEventArgs)
 
         ' Draw the pointer triangle
-        If ColorWheel.Bitmap IsNot Nothing Then
+        If HueWheel.Bitmap IsNot Nothing Then
 
-            Dim centerX = ColorWheel.Location.X + ColorWheel.Radius + ColorWheel.Padding
-            Dim centerY = ColorWheel.Location.Y + ColorWheel.Radius + ColorWheel.Padding
-            Dim angleRad = ColorWheel.SelectedHueAngle * Math.PI / 180
+            Dim centerX = HueWheel.Location.X + HueWheel.Radius + HueWheel.Padding
+            Dim centerY = HueWheel.Location.Y + HueWheel.Radius + HueWheel.Padding
+            Dim angleRad = HueWheel.SelectedHueAngle * Math.PI / 180
 
             ' Tip of the pointer
-            Dim pointerLength = ColorWheel.Radius + 6 'Pointer gap from the edge
+            Dim pointerLength = HueWheel.Radius + 6 'Pointer gap from the edge
             Dim tip = New Point(
                 CInt(centerX + pointerLength * Math.Cos(angleRad)),
                 CInt(centerY + pointerLength * Math.Sin(angleRad)))
@@ -336,11 +377,11 @@ Public Class Form1
             e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
 
             ' Draw triangle with theme-adaptive outline
-            Dim fillColor = ColorWheel.Color
-            Dim outlineColor = If(fillColor.GetBrightness() < 0.5, Color.White, Color.Black)
+            Dim fillColor = HueWheel.Color
+            'Dim outlineColor = If(fillColor.GetBrightness() < 0.5, Color.White, Color.Black)
 
             Using brush As New SolidBrush(fillColor),
-                  pen As New Pen(outlineColor, 3)
+                  pen As New Pen(Color.Black, 3)
                 e.Graphics.FillPolygon(brush, points)
                 e.Graphics.DrawPolygon(pen, points)
             End Using
@@ -376,5 +417,17 @@ Public Class Form1
     Private Shared Function ColorToHex(color As Color) As String
         Return $"#{color.R:X2}{color.G:X2}{color.B:X2}"
     End Function
+
+    Private Sub TrackBar2_Scroll(sender As Object, e As EventArgs) Handles TrackBar2.Scroll
+
+        ' Update the saturation based on the trackbar value
+        TheSat = TrackBar2.Value / 100.0
+        ' Update the color based on the new saturation
+        HueWheel.Color = HueWheel.ColorFromHSV(TheHue, TheSat, TheVal)
+        ' Redraw the form to reflect the changes
+        Invalidate()
+    End Sub
+
+
 
 End Class
