@@ -176,8 +176,9 @@ Public Class Form1
         Me.Text = "Color Picker - Code with Joe"
 
 
-        TrackBar1.Value = TheVal * 100 ' Set initial value for the trackbar
+        BrightnessTrackBar.Value = TheVal * 100 ' Set initial value for the trackbar
         TrackBar2.Value = TheSat * 100 ' Set initial saturation for the trackbar
+        BrightnessNumericUpDown.Value = TheVal * 100
 
         HueWheel.Color = TheColor
         HueWheel.SelectedHueAngle = TheHue  ' Set initial hue angle based on the value
@@ -204,10 +205,10 @@ Public Class Form1
 
         DrawSelectedColor(e)
 
-        e.Graphics.DrawString("Name: " & GetColorName(HueWheel.Color),
+        e.Graphics.DrawString("Name: " & GetColorName(ColorFromHSV(TheHue, TheSat, TheVal)),
                              Me.Font, Brushes.Black, 130, 20)
 
-        e.Graphics.DrawString("Hex: " & ColorToHex(HueWheel.Color),
+        e.Graphics.DrawString("Hex: " & ColorToHex(ColorFromHSV(TheHue, TheSat, TheVal)),
                              Me.Font, Brushes.Black, 130, 40)
 
         'e.Graphics.DrawString("Hue: " & TheHue.ToString("0.#"),
@@ -268,12 +269,13 @@ Public Class Form1
 
     End Sub
 
-    Private Sub TrackBar1_Scroll(sender As Object, e As EventArgs) Handles TrackBar1.Scroll
+    Private Sub TrackBar1_Scroll(sender As Object, e As EventArgs) Handles BrightnessTrackBar.Scroll
 
-        TheVal = TrackBar1.Value / 100.0
+        TheVal = BrightnessTrackBar.Value / 100.0
 
         HueWheel.Color = ColorFromHSV(TheHue, TheSat, TheVal)
 
+        BrightnessNumericUpDown.Value = TheVal * 100
 
         Invalidate()
 

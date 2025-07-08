@@ -22,44 +22,56 @@ Partial Class Form1
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        TrackBar1 = New TrackBar()
+        BrightnessTrackBar = New TrackBar()
         TrackBar2 = New TrackBar()
-        CType(TrackBar1, ComponentModel.ISupportInitialize).BeginInit()
+        BrightnessNumericUpDown = New NumericUpDown()
+        CType(BrightnessTrackBar, ComponentModel.ISupportInitialize).BeginInit()
         CType(TrackBar2, ComponentModel.ISupportInitialize).BeginInit()
+        CType(BrightnessNumericUpDown, ComponentModel.ISupportInitialize).BeginInit()
         SuspendLayout()
         ' 
-        ' TrackBar1
+        ' BrightnessTrackBar
         ' 
-        TrackBar1.Location = New Point(155, 161)
-        TrackBar1.Maximum = 100
-        TrackBar1.Name = "TrackBar1"
-        TrackBar1.Size = New Size(156, 69)
-        TrackBar1.TabIndex = 0
+        BrightnessTrackBar.Location = New Point(12, 172)
+        BrightnessTrackBar.Maximum = 100
+        BrightnessTrackBar.Name = "BrightnessTrackBar"
+        BrightnessTrackBar.Size = New Size(335, 69)
+        BrightnessTrackBar.TabIndex = 0
         ' 
         ' TrackBar2
         ' 
-        TrackBar2.Location = New Point(155, 211)
+        TrackBar2.Location = New Point(12, 257)
         TrackBar2.Maximum = 100
         TrackBar2.Name = "TrackBar2"
-        TrackBar2.Size = New Size(156, 69)
+        TrackBar2.Size = New Size(335, 69)
         TrackBar2.TabIndex = 1
+        ' 
+        ' BrightnessNumericUpDown
+        ' 
+        BrightnessNumericUpDown.Location = New Point(262, 135)
+        BrightnessNumericUpDown.Name = "BrightnessNumericUpDown"
+        BrightnessNumericUpDown.Size = New Size(75, 31)
+        BrightnessNumericUpDown.TabIndex = 2
         ' 
         ' Form1
         ' 
         AutoScaleDimensions = New SizeF(10F, 25F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(800, 450)
+        Controls.Add(BrightnessNumericUpDown)
         Controls.Add(TrackBar2)
-        Controls.Add(TrackBar1)
+        Controls.Add(BrightnessTrackBar)
         Name = "Form1"
         Text = "Form1"
-        CType(TrackBar1, ComponentModel.ISupportInitialize).EndInit()
+        CType(BrightnessTrackBar, ComponentModel.ISupportInitialize).EndInit()
         CType(TrackBar2, ComponentModel.ISupportInitialize).EndInit()
+        CType(BrightnessNumericUpDown, ComponentModel.ISupportInitialize).EndInit()
         ResumeLayout(False)
         PerformLayout()
     End Sub
 
-    Friend WithEvents TrackBar1 As TrackBar
+    Friend WithEvents BrightnessTrackBar As TrackBar
     Friend WithEvents TrackBar2 As TrackBar
+    Friend WithEvents BrightnessNumericUpDown As NumericUpDown
 
 End Class
