@@ -188,6 +188,7 @@ Public Class Form1
 
         BrightnessNumericUpDown.Value = TheVal * 100
         SaturationNumericUpDown.Value = TheSat * 100
+
         AppHueChange = True ' Reset the flag
 
         HueNumericUpDown.Value = TheHue
