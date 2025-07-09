@@ -177,8 +177,9 @@ Public Class Form1
 
 
         BrightnessTrackBar.Value = TheVal * 100 ' Set initial value for the trackbar
-        TrackBar2.Value = TheSat * 100 ' Set initial saturation for the trackbar
+        SaturationTrackBar.Value = TheSat * 100 ' Set initial saturation for the trackbar
         BrightnessNumericUpDown.Value = TheVal * 100
+        SaturationNumericUpDown.Value = TheSat * 100
 
         HueWheel.Color = TheColor
         HueWheel.SelectedHueAngle = TheHue  ' Set initial hue angle based on the value
@@ -269,7 +270,7 @@ Public Class Form1
 
     End Sub
 
-    Private Sub TrackBar1_Scroll(sender As Object, e As EventArgs) Handles BrightnessTrackBar.Scroll
+    Private Sub BrightnessTrackBar_Scroll(sender As Object, e As EventArgs) Handles BrightnessTrackBar.Scroll
 
         TheVal = BrightnessTrackBar.Value / 100.0
 
@@ -280,6 +281,49 @@ Public Class Form1
         Invalidate()
 
     End Sub
+
+    Private Sub SaturationTrackBar_Scroll(sender As Object, e As EventArgs) Handles SaturationTrackBar.Scroll
+
+        ' Update the saturation based on the trackbar value
+        TheSat = SaturationTrackBar.Value / 100.0
+        ' Update the color based on the new saturation
+        HueWheel.Color = ColorFromHSV(TheHue, TheSat, TheVal)
+
+
+        ' Update the saturation numeric up-down value
+        SaturationNumericUpDown.Value = TheSat * 100
+
+        ' Redraw the form to reflect the changes
+        Invalidate()
+    End Sub
+
+    Private Sub BrightnessNumericUpDown_TextChanged(sender As Object, e As EventArgs) Handles BrightnessNumericUpDown.TextChanged
+
+        ' Update the brightness based on the numeric up-down value
+        TheVal = BrightnessNumericUpDown.Value / 100.0
+
+        BrightnessTrackBar.Value = TheVal * 100
+
+        ' Update the color based on the new brightness
+        HueWheel.Color = ColorFromHSV(TheHue, TheSat, TheVal)
+        ' Redraw the form to reflect the changes
+        Invalidate()
+    End Sub
+
+    Private Sub SaturationNumericUpDown_TextChanged(sender As Object, e As EventArgs) Handles SaturationNumericUpDown.TextChanged
+
+
+
+        ' Update the saturation based on the numeric up-down value
+        TheSat = SaturationNumericUpDown.Value / 100.0
+        SaturationTrackBar.Value = TheSat * 100
+        ' Update the color based on the new saturation
+        HueWheel.Color = ColorFromHSV(TheHue, TheSat, TheVal)
+        ' Redraw the form to reflect the changes
+        Invalidate()
+
+    End Sub
+
 
     Private Sub DrawColorWheel(e As PaintEventArgs)
         e.Graphics.DrawImage(HueWheel.Bitmap,
@@ -377,15 +421,6 @@ Public Class Form1
         Return $"#{color.R:X2}{color.G:X2}{color.B:X2}"
     End Function
 
-    Private Sub TrackBar2_Scroll(sender As Object, e As EventArgs) Handles TrackBar2.Scroll
-
-        ' Update the saturation based on the trackbar value
-        TheSat = TrackBar2.Value / 100.0
-        ' Update the color based on the new saturation
-        HueWheel.Color = ColorFromHSV(TheHue, TheSat, TheVal)
-        ' Redraw the form to reflect the changes
-        Invalidate()
-    End Sub
 
     ' Function to convert HSV to RGB
     Public Function ColorFromHSV(hue As Double, saturation As Double, brightness As Double) As Color
@@ -468,16 +503,4 @@ Public Class Form1
 
 
 
-    Private Sub BrightnessNumericUpDown_TextChanged(sender As Object, e As EventArgs) Handles BrightnessNumericUpDown.TextChanged
-
-        ' Update the brightness based on the numeric up-down value
-        TheVal = BrightnessNumericUpDown.Value / 100.0
-
-        BrightnessTrackBar.Value = TheVal * 100
-
-        ' Update the color based on the new brightness
-        HueWheel.Color = ColorFromHSV(TheHue, TheSat, TheVal)
-        ' Redraw the form to reflect the changes
-        Invalidate()
-    End Sub
 End Class

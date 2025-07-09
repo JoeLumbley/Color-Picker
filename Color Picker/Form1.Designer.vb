@@ -23,11 +23,13 @@ Partial Class Form1
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         BrightnessTrackBar = New TrackBar()
-        TrackBar2 = New TrackBar()
+        SaturationTrackBar = New TrackBar()
         BrightnessNumericUpDown = New NumericUpDown()
+        SaturationNumericUpDown = New NumericUpDown()
         CType(BrightnessTrackBar, ComponentModel.ISupportInitialize).BeginInit()
-        CType(TrackBar2, ComponentModel.ISupportInitialize).BeginInit()
+        CType(SaturationTrackBar, ComponentModel.ISupportInitialize).BeginInit()
         CType(BrightnessNumericUpDown, ComponentModel.ISupportInitialize).BeginInit()
+        CType(SaturationNumericUpDown, ComponentModel.ISupportInitialize).BeginInit()
         SuspendLayout()
         ' 
         ' BrightnessTrackBar
@@ -38,13 +40,13 @@ Partial Class Form1
         BrightnessTrackBar.Size = New Size(335, 69)
         BrightnessTrackBar.TabIndex = 0
         ' 
-        ' TrackBar2
+        ' SaturationTrackBar
         ' 
-        TrackBar2.Location = New Point(12, 257)
-        TrackBar2.Maximum = 100
-        TrackBar2.Name = "TrackBar2"
-        TrackBar2.Size = New Size(335, 69)
-        TrackBar2.TabIndex = 1
+        SaturationTrackBar.Location = New Point(12, 284)
+        SaturationTrackBar.Maximum = 100
+        SaturationTrackBar.Name = "SaturationTrackBar"
+        SaturationTrackBar.Size = New Size(335, 69)
+        SaturationTrackBar.TabIndex = 1
         ' 
         ' BrightnessNumericUpDown
         ' 
@@ -53,25 +55,35 @@ Partial Class Form1
         BrightnessNumericUpDown.Size = New Size(75, 31)
         BrightnessNumericUpDown.TabIndex = 2
         ' 
+        ' SaturationNumericUpDown
+        ' 
+        SaturationNumericUpDown.Location = New Point(262, 247)
+        SaturationNumericUpDown.Name = "SaturationNumericUpDown"
+        SaturationNumericUpDown.Size = New Size(75, 31)
+        SaturationNumericUpDown.TabIndex = 3
+        ' 
         ' Form1
         ' 
         AutoScaleDimensions = New SizeF(10F, 25F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(800, 450)
+        Controls.Add(SaturationNumericUpDown)
         Controls.Add(BrightnessNumericUpDown)
-        Controls.Add(TrackBar2)
+        Controls.Add(SaturationTrackBar)
         Controls.Add(BrightnessTrackBar)
         Name = "Form1"
         Text = "Form1"
         CType(BrightnessTrackBar, ComponentModel.ISupportInitialize).EndInit()
-        CType(TrackBar2, ComponentModel.ISupportInitialize).EndInit()
+        CType(SaturationTrackBar, ComponentModel.ISupportInitialize).EndInit()
         CType(BrightnessNumericUpDown, ComponentModel.ISupportInitialize).EndInit()
+        CType(SaturationNumericUpDown, ComponentModel.ISupportInitialize).EndInit()
         ResumeLayout(False)
         PerformLayout()
     End Sub
 
     Friend WithEvents BrightnessTrackBar As TrackBar
-    Friend WithEvents TrackBar2 As TrackBar
+    Friend WithEvents SaturationTrackBar As TrackBar
     Friend WithEvents BrightnessNumericUpDown As NumericUpDown
+    Friend WithEvents SaturationNumericUpDown As NumericUpDown
 
 End Class
