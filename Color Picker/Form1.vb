@@ -174,7 +174,7 @@ Public Class Form1
         Me.DoubleBuffered = True ' Reduce flickering
 
         ' Set the form's start position to center screen
-        Me.StartPosition = FormStartPosition.CenterScreen
+        'Me.StartPosition = FormStartPosition.CenterScreen
         ' Set the form's text
         Me.Text = "Color Picker - Code with Joe"
 
@@ -198,7 +198,7 @@ Public Class Form1
 
 
         HueWheel.Location.X = 400
-        HueWheel.Location.Y = 10
+        HueWheel.Location.Y = 20
 
         HueWheel.Draw(300, 20, BackColor)
 
@@ -286,6 +286,40 @@ Public Class Form1
         End If
 
     End Sub
+
+    Private Sub Form1_MouseWheel(sender As Object, e As MouseEventArgs) Handles Me.MouseWheel
+
+        ' Is the mouse over the Hue wheel?
+        Dim centerX As Integer = HueWheel.Radius + HueWheel.Padding
+        Dim centerY As Integer = HueWheel.Radius + HueWheel.Padding
+        Dim dx As Integer = e.X - HueWheel.Location.X - centerX
+        Dim dy As Integer = e.Y - HueWheel.Location.Y - centerY
+        Dim dist As Double = Math.Sqrt(dx * dx + dy * dy)
+
+        If dist <= HueWheel.Radius Then
+
+            ' Check if the mouse wheel is scrolled
+            If e.Delta <> 0 Then
+                ' Adjust the hue based on the mouse wheel scroll direction
+                TheHue += If(e.Delta > 0, 10, -10) ' Increase or decrease hue by 10 degrees
+                ' Ensure the hue value wraps around within 0-360 degrees
+                If TheHue < 0 Then TheHue += 360
+                If TheHue >= 360 Then TheHue -= 360
+                ' Update the color based on the new hue
+                HueWheel.Color = ColorFromHSV(TheHue, TheSat, TheVal)
+                ' Update the trackbar and numeric up-down values
+                HueTrackBar.Value = CInt(TheHue)
+                HueNumericUpDown.Value = CInt(TheHue)
+                Invalidate() ' Redraw the form to reflect changes
+            End If
+
+        End If
+
+    End Sub
+
+
+
+
     Private Sub HueTrackBar_Scroll(sender As Object, e As EventArgs) Handles HueTrackBar.Scroll
 
         ' Is the app changing the hue value?
