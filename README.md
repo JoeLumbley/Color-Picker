@@ -1,1 +1,5 @@
-# Color Picker![001](https://github.com/user-attachments/assets/854c3ecb-d3b4-4307-a6ce-66adc5ad837b)
+# Color Picker
+
+
+![002](https://github.com/user-attachments/assets/4cf2b3eb-58d3-4b67-804d-84105ba003b9)
+
