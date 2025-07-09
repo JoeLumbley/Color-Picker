@@ -240,9 +240,6 @@ Public Class Form1
         '                          Me.Font, Brushes.Black, 525, 390)
 
 
-        'e.Graphics.DrawString("Brightness: " & TheVal * 100.ToString("0.0") & "%",
-        '                          Me.Font, Brushes.Black, 525, 390)
-
 
 
         e.Graphics.DrawString("Brightness: " & (TheVal * 100).ToString("0.#") & "%",
@@ -253,11 +250,7 @@ Public Class Form1
 
     Private Sub Form1_MouseDown(sender As Object, e As MouseEventArgs) Handles Me.MouseDown
 
-
-
         If e.Button = MouseButtons.Left Then
-
-
 
             HueWheel.GetColorAtPoint(New Point(e.X, e.Y))
 
@@ -267,8 +260,6 @@ Public Class Form1
 
             ' Update the numeric up-down value for hue
             HueNumericUpDown.Value = TheHue
-
-            'HueWheel.Color = ColorFromHSV(TheHue, TheSat, TheVal)
 
             Invalidate()
 
@@ -288,8 +279,6 @@ Public Class Form1
 
             ' Update the numeric up-down value for hue
             HueNumericUpDown.Value = CInt(TheHue)
-
-
 
             Invalidate()
 
@@ -340,12 +329,12 @@ Public Class Form1
         ' Update the color based on the new saturation
         HueWheel.Color = ColorFromHSV(TheHue, TheSat, TheVal)
 
-
         ' Update the saturation numeric up-down value
         SaturationNumericUpDown.Value = TheSat * 100
 
         ' Redraw the form to reflect the changes
         Invalidate()
+
     End Sub
 
     Private Sub BrightnessNumericUpDown_TextChanged(sender As Object, e As EventArgs) Handles BrightnessNumericUpDown.TextChanged
