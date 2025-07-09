@@ -228,7 +228,7 @@ Public Class Form1
         '                     Me.Font, Brushes.Black, 525, 350)
 
 
-        e.Graphics.DrawString("Hue: " & ColorFromHSV(TheHue, TheSat, TheVal).GetHue.ToString("0.#"),
+        e.Graphics.DrawString("Hue: " & ColorFromHSV(TheHue, TheSat, TheVal).GetHue.ToString("0.#") & "°",
                              Me.Font, Brushes.Black, HueTrackBar.Left, HueTrackBar.Top - HueNumericUpDown.Height)
 
 
@@ -295,8 +295,8 @@ Public Class Form1
         Dim dx As Integer = e.X - HueWheel.Location.X - centerX
         Dim dy As Integer = e.Y - HueWheel.Location.Y - centerY
         Dim dist As Double = Math.Sqrt(dx * dx + dy * dy)
-
         If dist <= HueWheel.Radius Then
+            ' Yes, the mouse is over the Hue wheel.
 
             ' Check if the mouse wheel is scrolled
             If e.Delta <> 0 Then
@@ -316,9 +316,6 @@ Public Class Form1
         End If
 
     End Sub
-
-
-
 
     Private Sub HueTrackBar_Scroll(sender As Object, e As EventArgs) Handles HueTrackBar.Scroll
 
