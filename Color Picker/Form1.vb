@@ -160,7 +160,10 @@ Public Class Form1
 
     Private TheColor As Color = Color.Chartreuse ' Default color for the color wheel
 
+    Private AppHueChange As Boolean = True ' Flag to indicate if the app is changing the hue value
+
     Private TheHue As Double = RGBtoHSV(TheColor).Hue
+
 
     Private TheSat As Double = RGBtoHSV(TheColor).Saturation
 
@@ -178,8 +181,16 @@ Public Class Form1
 
         BrightnessTrackBar.Value = TheVal * 100 ' Set initial value for the trackbar
         SaturationTrackBar.Value = TheSat * 100 ' Set initial saturation for the trackbar
+        AppHueChange = True ' Reset the flag
+
+        HueTrackBar.Value = TheHue ' Set initial hue for the trackbar
+
+
         BrightnessNumericUpDown.Value = TheVal * 100
         SaturationNumericUpDown.Value = TheSat * 100
+        AppHueChange = True ' Reset the flag
+
+        HueNumericUpDown.Value = TheHue
 
         HueWheel.Color = TheColor
         HueWheel.SelectedHueAngle = TheHue  ' Set initial hue angle based on the value
@@ -217,13 +228,13 @@ Public Class Form1
 
 
         e.Graphics.DrawString("Hue: " & ColorFromHSV(TheHue, TheSat, TheVal).GetHue.ToString("0.#"),
-                             Me.Font, Brushes.Black, 525, 350)
+                             Me.Font, Brushes.Black, HueTrackBar.Left, HueTrackBar.Top - HueNumericUpDown.Height)
 
 
 
 
         e.Graphics.DrawString("Saturation: " & (RGBtoHSV(ColorFromHSV(TheHue, TheSat, TheVal)).Saturation * 100).ToString("0.#") & "%",
-                             Me.Font, Brushes.Black, 525, 370)
+                             Me.Font, Brushes.Black, SaturationTrackBar.Left, SaturationTrackBar.Top - SaturationNumericUpDown.Height)
 
         'e.Graphics.DrawString("Brightness: " & (ColorWheel.Color.GetBrightness() * 100).ToString("0.#") & "%",
         '                          Me.Font, Brushes.Black, 525, 390)
@@ -235,18 +246,27 @@ Public Class Form1
 
 
         e.Graphics.DrawString("Brightness: " & (TheVal * 100).ToString("0.#") & "%",
-                      Me.Font, Brushes.Black, 525, 390)
+                      Me.Font, Brushes.Black, BrightnessTrackBar.Left, BrightnessTrackBar.Top - BrightnessNumericUpDown.Height)
 
 
     End Sub
 
     Private Sub Form1_MouseDown(sender As Object, e As MouseEventArgs) Handles Me.MouseDown
 
+
+
         If e.Button = MouseButtons.Left Then
+
+
 
             HueWheel.GetColorAtPoint(New Point(e.X, e.Y))
 
             If TheHue <> HueWheel.SelectedHueAngle Then TheHue = HueWheel.SelectedHueAngle
+
+            HueTrackBar.Value = TheHue
+
+            ' Update the numeric up-down value for hue
+            HueNumericUpDown.Value = TheHue
 
             'HueWheel.Color = ColorFromHSV(TheHue, TheSat, TheVal)
 
@@ -264,9 +284,40 @@ Public Class Form1
 
             If TheHue <> HueWheel.SelectedHueAngle Then TheHue = HueWheel.SelectedHueAngle
 
+            HueTrackBar.Value = CInt(TheHue)
+
+            ' Update the numeric up-down value for hue
+            HueNumericUpDown.Value = CInt(TheHue)
+
+
+
             Invalidate()
 
         End If
+
+    End Sub
+    Private Sub HueTrackBar_Scroll(sender As Object, e As EventArgs) Handles HueTrackBar.Scroll
+
+        ' Is the app changing the hue value?
+        If AppHueChange Then
+            AppHueChange = False ' Reset the flag
+            ' If so, do not update the hue value
+            Return
+        End If
+
+        ' Update the hue based on the trackbar value
+        TheHue = HueTrackBar.Value
+
+        ' Update the color based on the new hue
+        HueWheel.Color = ColorFromHSV(TheHue, TheSat, TheVal)
+
+        ' Update the numeric up-down value for hue
+        HueNumericUpDown.Value = TheHue
+
+        HueWheel.SelectedHueAngle = TheHue
+
+        ' Redraw the form to reflect the changes
+        Invalidate()
 
     End Sub
 
@@ -323,6 +374,35 @@ Public Class Form1
         Invalidate()
 
     End Sub
+
+    Private Sub HueNumericUpDown_TextChanged(sender As Object, e As EventArgs) Handles HueNumericUpDown.TextChanged
+
+        ' Is the app changing the hue value?
+        If AppHueChange Then
+            AppHueChange = False ' Reset the flag
+            ' If so, do not update the hue value
+            Return
+        End If
+
+        ' Ensure the hue value is within the valid range (0-360)
+        If HueNumericUpDown.Value < 0 Then
+            HueNumericUpDown.Value = 0
+        ElseIf HueNumericUpDown.Value > 360 Then
+            HueNumericUpDown.Value = 360
+        End If
+
+
+        ' Update the hue based on the numeric up-down value
+        TheHue = HueNumericUpDown.Value
+        HueTrackBar.Value = TheHue
+        ' Update the color based on the new hue
+        HueWheel.Color = ColorFromHSV(TheHue, TheSat, TheVal)
+        HueWheel.SelectedHueAngle = TheHue
+        ' Redraw the form to reflect the changes
+        Invalidate()
+
+    End Sub
+
 
 
     Private Sub DrawColorWheel(e As PaintEventArgs)
@@ -498,9 +578,5 @@ Public Class Form1
 
         Return (h, s, v)
     End Function
-
-
-
-
 
 End Class
