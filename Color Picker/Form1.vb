@@ -465,4 +465,19 @@ Public Class Form1
     End Function
 
 
+
+
+
+    Private Sub BrightnessNumericUpDown_TextChanged(sender As Object, e As EventArgs) Handles BrightnessNumericUpDown.TextChanged
+
+        ' Update the brightness based on the numeric up-down value
+        TheVal = BrightnessNumericUpDown.Value / 100.0
+
+        BrightnessTrackBar.Value = TheVal * 100
+
+        ' Update the color based on the new brightness
+        HueWheel.Color = ColorFromHSV(TheHue, TheSat, TheVal)
+        ' Redraw the form to reflect the changes
+        Invalidate()
+    End Sub
 End Class
