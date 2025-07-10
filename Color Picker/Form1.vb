@@ -172,29 +172,33 @@ Public Class Form1
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
-        UpDatingColor = True
+        InitializeApplication()
 
+    End Sub
+
+    Private Sub InitializeApplication()
+
+        ' Set the form properties
         Me.DoubleBuffered = True ' Reduce flickering
-
         Me.Text = "Color Picker - Code with Joe"
 
-        BrightnessTrackBar.Value = TheVal * 100 ' Set initial value for the trackbar
-        SaturationTrackBar.Value = TheSat * 100 ' Set initial saturation for the trackbar
+        UpDatingColor = True
 
-        HueTrackBar.Value = TheHue ' Set initial hue for the trackbar
-
-        BrightnessNumericUpDown.Value = TheVal * 100
-        SaturationNumericUpDown.Value = TheSat * 100
-
-        HueNumericUpDown.Value = TheHue
-
+        ' Initialize the HueWheel with default values
         HueWheel.Color = TheColor
-        HueWheel.SelectedHueAngle = TheHue  ' Set initial hue angle based on the value
-
+        HueWheel.SelectedHueAngle = TheHue
         HueWheel.Location.X = 400
         HueWheel.Location.Y = 20
-
         HueWheel.Draw(300, 20, BackColor)
+
+        HueTrackBar.Value = TheHue
+        HueNumericUpDown.Value = TheHue
+
+        SaturationTrackBar.Value = TheSat * 100
+        SaturationNumericUpDown.Value = TheSat * 100
+
+        BrightnessTrackBar.Value = TheVal * 100
+        BrightnessNumericUpDown.Value = TheVal * 100
 
         HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
 
