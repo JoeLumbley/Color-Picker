@@ -71,12 +71,14 @@ Partial Class Form1
         ' 
         ' HueTrackBar
         ' 
+        HueTrackBar.LargeChange = 500
         HueTrackBar.Location = New Point(15, 174)
-        HueTrackBar.Maximum = 360
+        HueTrackBar.Maximum = 36000
         HueTrackBar.Name = "HueTrackBar"
         HueTrackBar.Size = New Size(352, 69)
+        HueTrackBar.SmallChange = 100
         HueTrackBar.TabIndex = 1
-        HueTrackBar.TickFrequency = 2
+        HueTrackBar.TickFrequency = 5
         ' 
         ' HueNumericUpDown
         ' 
