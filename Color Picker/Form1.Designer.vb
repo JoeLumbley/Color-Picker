@@ -89,7 +89,7 @@ Partial Class Form1
         ' 
         ' HexTextBox
         ' 
-        HexTextBox.Location = New Point(257, 87)
+        HexTextBox.Location = New Point(257, 70)
         HexTextBox.Name = "HexTextBox"
         HexTextBox.Size = New Size(101, 31)
         HexTextBox.TabIndex = 6
