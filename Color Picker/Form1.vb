@@ -1,9 +1,7 @@
-﻿Imports System.Drawing.Drawing2D
-Imports System.Windows.Forms.VisualStyles.VisualStyleElement
-
+﻿
 Public Class Form1
 
-    Private Structure ColorWheelStruct
+    Private Structure HueWheelStruct
 
         Public Location As Point
         Public Size As Size
@@ -124,9 +122,11 @@ Public Class Form1
             End If
 
             Return Color.FromArgb(CInt(r * 255), CInt(g * 255), CInt(b * 255))
+
         End Function
 
         Public Function RGBtoHSV(color As Color) As (Hue As Double, Saturation As Double, Value As Double)
+
             Dim r As Double = color.R / 255.0
             Dim g As Double = color.G / 255.0
             Dim b As Double = color.B / 255.0
@@ -136,6 +136,7 @@ Public Class Form1
             Dim delta As Double = max - min
 
             Dim h As Double
+
             If delta = 0 Then
                 h = 0
             ElseIf max = r Then
@@ -152,11 +153,12 @@ Public Class Form1
             Dim v As Double = max
 
             Return (h, s, v)
+
         End Function
 
     End Structure
 
-    Private HueWheel As ColorWheelStruct
+    Private HueWheel As HueWheelStruct
 
     Private TheColor As Color = Color.Chartreuse ' Default color for the color wheel
 
