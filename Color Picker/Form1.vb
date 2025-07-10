@@ -176,37 +176,6 @@ Public Class Form1
 
     End Sub
 
-    Private Sub InitializeApplication()
-
-        ' Set the form properties
-        Me.DoubleBuffered = True ' Reduce flickering
-        Me.Text = "Color Picker - Code with Joe"
-
-        UpDatingColor = True
-
-        ' Initialize the HueWheel with default values
-        HueWheel.Color = TheColor
-        HueWheel.SelectedHueAngle = TheHue
-        HueWheel.Location.X = 400
-        HueWheel.Location.Y = 20
-        HueWheel.Draw(300, 20, BackColor)
-
-        HueTrackBar.Value = TheHue
-        HueNumericUpDown.Value = TheHue
-
-        SaturationTrackBar.Value = TheSat * 100
-        SaturationNumericUpDown.Value = TheSat * 100
-
-        BrightnessTrackBar.Value = TheVal * 100
-        BrightnessNumericUpDown.Value = TheVal * 100
-
-        HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
-
-        Invalidate()
-
-        UpDatingColor = False
-
-    End Sub
 
     Protected Overrides Sub OnPaint(e As PaintEventArgs)
         MyBase.OnPaint(e)
@@ -758,5 +727,37 @@ Public Class Form1
         ' such as real-time graphics rendering or physics simulations.
 
     End Function
+
+    Private Sub InitializeApplication()
+
+        ' Set the form properties
+        DoubleBuffered = True ' Reduce flickering
+        Text = "Color Picker - Code with Joe"
+
+        UpDatingColor = True
+
+        ' Initialize the HueWheel with default values
+        HueWheel.Color = TheColor
+        HueWheel.SelectedHueAngle = TheHue
+        HueWheel.Location.X = 400
+        HueWheel.Location.Y = 20
+        HueWheel.Draw(300, 20, BackColor)
+
+        HueTrackBar.Value = TheHue
+        HueNumericUpDown.Value = TheHue
+
+        SaturationTrackBar.Value = TheSat * 100
+        SaturationNumericUpDown.Value = TheSat * 100
+
+        BrightnessTrackBar.Value = TheVal * 100
+        BrightnessNumericUpDown.Value = TheVal * 100
+
+        HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
+
+        Invalidate()
+
+        UpDatingColor = False
+
+    End Sub
 
 End Class
