@@ -57,6 +57,7 @@ Public Class Form1
             End Using
 
         End Sub
+
         Public Sub GetColorAtPoint(point As Point)
 
             If Bitmap Is Nothing Then Return
@@ -66,8 +67,6 @@ Public Class Form1
             Dim dx As Integer = point.X - Location.X - centerX
             Dim dy As Integer = point.Y - Location.Y - centerY
             Dim dist As Double = Math.Sqrt(dx * dx + dy * dy)
-
-
 
             If dist <= Radius Then
                 Dim angle As Double = (Math.Atan2(dy, dx) * 180.0 / Math.PI + 360) Mod 360
@@ -198,54 +197,10 @@ Public Class Form1
         HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
 
         Invalidate()
+
         UpDatingColor = False
 
     End Sub
-
-    Public Function HsvToHex(hue As Double, saturation As Double, value As Double) As String
-        Dim r As Integer, g As Integer, b As Integer
-
-        If saturation = 0 Then
-            ' If saturation is 0, the color is a shade of gray
-            r = CInt(value * 255)
-            g = r
-            b = r
-        Else
-            Dim c As Double = value * saturation
-            Dim x As Double = c * (1 - Math.Abs((hue / 60) Mod 2 - 1))
-            Dim m As Double = value - c
-
-            Select Case hue
-                Case 0 To 60
-                    r = CInt((c + m) * 255)
-                    g = CInt((x + m) * 255)
-                    b = CInt(m * 255)
-                Case 60 To 120
-                    r = CInt((x + m) * 255)
-                    g = CInt((c + m) * 255)
-                    b = CInt(m * 255)
-                Case 120 To 180
-                    r = CInt(m * 255)
-                    g = CInt((c + m) * 255)
-                    b = CInt((x + m) * 255)
-                Case 180 To 240
-                    r = CInt(m * 255)
-                    g = CInt((x + m) * 255)
-                    b = CInt((c + m) * 255)
-                Case 240 To 300
-                    r = CInt((x + m) * 255)
-                    g = CInt(m * 255)
-                    b = CInt((c + m) * 255)
-                Case 300 To 360
-                    r = CInt((c + m) * 255)
-                    g = CInt(m * 255)
-                    b = CInt((x + m) * 255)
-            End Select
-        End If
-
-        ' Return the hex color string
-        Return String.Format("{0:X2}{1:X2}{2:X2}", r, g, b)
-    End Function
 
     Protected Overrides Sub OnPaint(e As PaintEventArgs)
         MyBase.OnPaint(e)
@@ -310,10 +265,8 @@ Public Class Form1
 
             HueTrackBar.Value = CInt(TheHue)
 
-            ' Update the numeric up-down value for hue
             HueNumericUpDown.Value = CInt(TheHue)
 
-            'HexTextBox =
             HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
 
             Invalidate()
@@ -621,9 +574,20 @@ Public Class Form1
 
     End Sub
 
+    ' Method to get the color name
+    Public Shared Function GetColorName(color As Color) As String
+        ' Check if the color is a known color
+        Dim knownColorName As String = GetKnownColorName(color)
+        If knownColorName IsNot Nothing Then
+            Return knownColorName
+        End If
+
+        ' If not known, return a custom message
+        Return ""
+
+    End Function
 
     Private Shared Function GetKnownColorName(color As Color) As String
-
 
         ' First check base known colors (skipping system ones)
         For Each knownColor As KnownColor In [Enum].GetValues(GetType(KnownColor))
@@ -644,34 +608,7 @@ Public Class Form1
         Next
 
         Return Nothing
-    End Function
 
-    ' Method to get the color name
-    Public Shared Function GetColorName(color As Color) As String
-        ' Check if the color is a known color
-        Dim knownColorName As String = GetKnownColorName(color)
-        If knownColorName IsNot Nothing Then
-            Return knownColorName
-        End If
-
-        ' If not known, return a custom message
-        Return ""
-    End Function
-
-    '' Method to check for known colors
-    'Private Shared Function GetKnownColorName(color As Color) As String
-    '    For Each knownColor As KnownColor In [Enum].GetValues(GetType(KnownColor))
-    '        Dim knownColorValue As Color = Color.FromKnownColor(knownColor)
-    '        If knownColorValue.ToArgb() = color.ToArgb() Then
-    '            Return knownColor.ToString()
-    '        End If
-    '    Next
-    '    Return Nothing
-    'End Function
-
-    ' Method to convert Color to HEX
-    Private Shared Function ColorToHex(color As Color) As String
-        Return $"#{color.R:X2}{color.G:X2}{color.B:X2}"
     End Function
 
     ' Function to convert HSV to RGB
@@ -748,6 +685,52 @@ Public Class Form1
         Dim v As Double = max
 
         Return (h, s, v)
+    End Function
+
+    Public Function HsvToHex(hue As Double, saturation As Double, value As Double) As String
+        Dim r As Integer, g As Integer, b As Integer
+
+        If saturation = 0 Then
+            ' If saturation is 0, the color is a shade of gray
+            r = CInt(value * 255)
+            g = r
+            b = r
+        Else
+            Dim c As Double = value * saturation
+            Dim x As Double = c * (1 - Math.Abs((hue / 60) Mod 2 - 1))
+            Dim m As Double = value - c
+
+            Select Case hue
+                Case 0 To 60
+                    r = CInt((c + m) * 255)
+                    g = CInt((x + m) * 255)
+                    b = CInt(m * 255)
+                Case 60 To 120
+                    r = CInt((x + m) * 255)
+                    g = CInt((c + m) * 255)
+                    b = CInt(m * 255)
+                Case 120 To 180
+                    r = CInt(m * 255)
+                    g = CInt((c + m) * 255)
+                    b = CInt((x + m) * 255)
+                Case 180 To 240
+                    r = CInt(m * 255)
+                    g = CInt((x + m) * 255)
+                    b = CInt((c + m) * 255)
+                Case 240 To 300
+                    r = CInt((x + m) * 255)
+                    g = CInt(m * 255)
+                    b = CInt((c + m) * 255)
+                Case 300 To 360
+                    r = CInt((c + m) * 255)
+                    g = CInt(m * 255)
+                    b = CInt((x + m) * 255)
+            End Select
+        End If
+
+        ' Return the hex color string
+        Return String.Format("{0:X2}{1:X2}{2:X2}", r, g, b)
+
     End Function
 
     Function IsPointInsideCircle(pointX As Double, pointY As Double,
