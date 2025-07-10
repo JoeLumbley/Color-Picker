@@ -621,6 +621,31 @@ Public Class Form1
 
     End Sub
 
+
+    Private Shared Function GetKnownColorName(color As Color) As String
+
+
+        ' First check base known colors (skipping system ones)
+        For Each knownColor As KnownColor In [Enum].GetValues(GetType(KnownColor))
+            If knownColor <= KnownColor.YellowGreen And knownColor >= KnownColor.AliceBlue Then ' Excludes system-defined colors
+                Dim knownColorValue As Color = Color.FromKnownColor(knownColor)
+                If knownColorValue.ToArgb() = color.ToArgb() Then
+                    Return knownColor.ToString()
+                End If
+            End If
+        Next
+
+        ' Fallback: check all known colors
+        For Each knownColor As KnownColor In [Enum].GetValues(GetType(KnownColor))
+            Dim knownColorValue As Color = Color.FromKnownColor(knownColor)
+            If knownColorValue.ToArgb() = color.ToArgb() Then
+                Return knownColor.ToString()
+            End If
+        Next
+
+        Return Nothing
+    End Function
+
     ' Method to get the color name
     Public Shared Function GetColorName(color As Color) As String
         ' Check if the color is a known color
@@ -633,16 +658,16 @@ Public Class Form1
         Return ""
     End Function
 
-    ' Method to check for known colors
-    Private Shared Function GetKnownColorName(color As Color) As String
-        For Each knownColor As KnownColor In [Enum].GetValues(GetType(KnownColor))
-            Dim knownColorValue As Color = Color.FromKnownColor(knownColor)
-            If knownColorValue.ToArgb() = color.ToArgb() Then
-                Return knownColor.ToString()
-            End If
-        Next
-        Return Nothing
-    End Function
+    '' Method to check for known colors
+    'Private Shared Function GetKnownColorName(color As Color) As String
+    '    For Each knownColor As KnownColor In [Enum].GetValues(GetType(KnownColor))
+    '        Dim knownColorValue As Color = Color.FromKnownColor(knownColor)
+    '        If knownColorValue.ToArgb() = color.ToArgb() Then
+    '            Return knownColor.ToString()
+    '        End If
+    '    Next
+    '    Return Nothing
+    'End Function
 
     ' Method to convert Color to HEX
     Private Shared Function ColorToHex(color As Color) As String
