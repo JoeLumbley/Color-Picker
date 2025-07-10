@@ -28,6 +28,7 @@ Partial Class Form1
         SaturationNumericUpDown = New NumericUpDown()
         HueTrackBar = New TrackBar()
         HueNumericUpDown = New NumericUpDown()
+        HexTextBox = New TextBox()
         CType(BrightnessTrackBar, ComponentModel.ISupportInitialize).BeginInit()
         CType(SaturationTrackBar, ComponentModel.ISupportInitialize).BeginInit()
         CType(BrightnessNumericUpDown, ComponentModel.ISupportInitialize).BeginInit()
@@ -38,57 +39,67 @@ Partial Class Form1
         ' 
         ' BrightnessTrackBar
         ' 
-        BrightnessTrackBar.Location = New Point(20, 408)
+        BrightnessTrackBar.Location = New Point(15, 398)
         BrightnessTrackBar.Maximum = 100
         BrightnessTrackBar.Name = "BrightnessTrackBar"
-        BrightnessTrackBar.Size = New Size(335, 69)
+        BrightnessTrackBar.Size = New Size(352, 69)
         BrightnessTrackBar.TabIndex = 5
         ' 
         ' SaturationTrackBar
         ' 
-        SaturationTrackBar.Location = New Point(20, 296)
+        SaturationTrackBar.Location = New Point(15, 286)
         SaturationTrackBar.Maximum = 100
         SaturationTrackBar.Name = "SaturationTrackBar"
-        SaturationTrackBar.Size = New Size(335, 69)
+        SaturationTrackBar.Size = New Size(352, 69)
         SaturationTrackBar.TabIndex = 3
         ' 
         ' BrightnessNumericUpDown
         ' 
-        BrightnessNumericUpDown.Location = New Point(244, 371)
+        BrightnessNumericUpDown.DecimalPlaces = 2
+        BrightnessNumericUpDown.Location = New Point(257, 361)
         BrightnessNumericUpDown.Name = "BrightnessNumericUpDown"
         BrightnessNumericUpDown.Size = New Size(101, 31)
         BrightnessNumericUpDown.TabIndex = 4
         ' 
         ' SaturationNumericUpDown
         ' 
-        SaturationNumericUpDown.Location = New Point(244, 259)
+        SaturationNumericUpDown.DecimalPlaces = 2
+        SaturationNumericUpDown.Location = New Point(257, 249)
         SaturationNumericUpDown.Name = "SaturationNumericUpDown"
         SaturationNumericUpDown.Size = New Size(101, 31)
         SaturationNumericUpDown.TabIndex = 2
         ' 
         ' HueTrackBar
         ' 
-        HueTrackBar.Location = New Point(20, 184)
+        HueTrackBar.Location = New Point(15, 174)
         HueTrackBar.Maximum = 360
         HueTrackBar.Name = "HueTrackBar"
-        HueTrackBar.Size = New Size(335, 69)
+        HueTrackBar.Size = New Size(352, 69)
         HueTrackBar.TabIndex = 1
         HueTrackBar.TickFrequency = 2
         ' 
         ' HueNumericUpDown
         ' 
         HueNumericUpDown.DecimalPlaces = 2
-        HueNumericUpDown.Location = New Point(244, 147)
+        HueNumericUpDown.Location = New Point(257, 137)
         HueNumericUpDown.Maximum = New Decimal(New Integer() {360, 0, 0, 0})
         HueNumericUpDown.Name = "HueNumericUpDown"
         HueNumericUpDown.Size = New Size(101, 31)
         HueNumericUpDown.TabIndex = 0
+        ' 
+        ' HexTextBox
+        ' 
+        HexTextBox.Location = New Point(257, 87)
+        HexTextBox.Name = "HexTextBox"
+        HexTextBox.Size = New Size(101, 31)
+        HexTextBox.TabIndex = 6
         ' 
         ' Form1
         ' 
         AutoScaleDimensions = New SizeF(10F, 25F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(800, 560)
+        Controls.Add(HexTextBox)
         Controls.Add(HueNumericUpDown)
         Controls.Add(HueTrackBar)
         Controls.Add(SaturationNumericUpDown)
@@ -114,5 +125,6 @@ Partial Class Form1
     Friend WithEvents SaturationNumericUpDown As NumericUpDown
     Friend WithEvents HueTrackBar As TrackBar
     Friend WithEvents HueNumericUpDown As NumericUpDown
+    Friend WithEvents HexTextBox As TextBox
 
 End Class
