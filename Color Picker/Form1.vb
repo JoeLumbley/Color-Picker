@@ -1,4 +1,5 @@
 ﻿Imports System.Drawing.Drawing2D
+Imports System.Windows.Forms.VisualStyles.VisualStyleElement
 
 Public Class Form1
 
@@ -385,13 +386,37 @@ Public Class Form1
 
     Private Sub Form1_MouseWheel(sender As Object, e As MouseEventArgs) Handles Me.MouseWheel
 
+        '' Is the mouse over the Hue wheel?
+        'Dim centerX As Integer = HueWheel.Radius + HueWheel.Padding
+        'Dim centerY As Integer = HueWheel.Radius + HueWheel.Padding
+        'Dim dx As Integer = e.X - HueWheel.Location.X - centerX
+        'Dim dy As Integer = e.Y - HueWheel.Location.Y - centerY
+        'Dim dist As Double = Math.Sqrt(dx * dx + dy * dy)
+        'If dist <= HueWheel.Radius Then
+        '    ' Yes, the mouse is over the Hue wheel.
+
+        '    ' Check if the mouse wheel is scrolled
+        '    If e.Delta <> 0 Then
+        '        ' Adjust the hue based on the mouse wheel scroll direction
+        '        TheHue += If(e.Delta > 0, 10, -10) ' Increase or decrease hue by 10 degrees
+        '        ' Ensure the hue value wraps around within 0-360 degrees
+        '        If TheHue < 0 Then TheHue += 360
+        '        If TheHue >= 360 Then TheHue -= 360
+        '        ' Update the color based on the new hue
+        '        HueWheel.Color = ColorFromHSV(TheHue, TheSat, TheVal)
+        '        ' Update the trackbar and numeric up-down values
+        '        HueTrackBar.Value = CInt(TheHue)
+        '        HueNumericUpDown.Value = CInt(TheHue)
+        '        Invalidate() ' Redraw the form to reflect changes
+        '    End If
+
+        'End If
+
+
         ' Is the mouse over the Hue wheel?
-        Dim centerX As Integer = HueWheel.Radius + HueWheel.Padding
-        Dim centerY As Integer = HueWheel.Radius + HueWheel.Padding
-        Dim dx As Integer = e.X - HueWheel.Location.X - centerX
-        Dim dy As Integer = e.Y - HueWheel.Location.Y - centerY
-        Dim dist As Double = Math.Sqrt(dx * dx + dy * dy)
-        If dist <= HueWheel.Radius Then
+        If IsPointInsideCircle(
+                e.X, e.Y, HueWheel.Location.X + HueWheel.Radius + HueWheel.Padding,
+                HueWheel.Location.Y + HueWheel.Radius + HueWheel.Padding, HueWheel.Radius) Then
             ' Yes, the mouse is over the Hue wheel.
 
             ' Check if the mouse wheel is scrolled
@@ -412,6 +437,38 @@ Public Class Form1
         End If
 
     End Sub
+
+    Function IsPointInsideCircle(pointX As Double, pointY As Double,
+             centerX As Double, centerY As Double, radius As Double) As Boolean
+        ' You can determine whether a point lies inside a circle by checking if
+        ' the distance between the point and the circle’s center is less than
+        ' or equal to the radius:
+
+        Dim dx As Double = pointX - centerX
+        Dim dy As Double = pointY - centerY
+        Dim distanceSquared As Double = dx * dx + dy * dy
+        Return distanceSquared <= radius * radius
+
+        ' The function is a direct application of the distance formula from
+        ' analytic geometry—streamlined for performance.
+
+        ' Distance Between Two Points
+        ' To find the distance between a point (x_1, y_1) and another point
+        ' (x_2, y_2), we use distance = sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}
+        ' In our case:
+        '  (x_1, y_1) Is the center of the circle.
+        '  (x_2, y_2) Is the test point.
+
+        ' Optimization: Squared Distance
+        ' To avoid calculating the square root (which Is relatively slow), we compare squared distances instead:
+        '  If (dx)^2 + (dy)^2 ≤ r^2, the point is inside or on the edge of the circle.
+        '  If greater, it's outside.
+        'This means
+        'distanceSquared = (pointX - centerX) ^ 2 + (pointY - centerY) ^ 2
+        'And we compare
+        'distanceSquared <= radius ^ 2
+
+    End Function
 
     Private Sub HueTrackBar_Scroll(sender As Object, e As EventArgs) Handles HueTrackBar.Scroll
 
