@@ -80,7 +80,7 @@ Partial Class Form1
         ' 
         ' HueNumericUpDown
         ' 
-        HueNumericUpDown.DecimalPlaces = 2
+        HueNumericUpDown.DecimalPlaces = 3
         HueNumericUpDown.Location = New Point(257, 137)
         HueNumericUpDown.Maximum = New Decimal(New Integer() {360, 0, 0, 0})
         HueNumericUpDown.Name = "HueNumericUpDown"

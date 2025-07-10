@@ -165,7 +165,6 @@ Public Class Form1
 
     Private TheHue As Double = RGBtoHSV(TheColor).Hue
 
-
     Private TheSat As Double = RGBtoHSV(TheColor).Saturation
 
     Private TheVal As Double = RGBtoHSV(TheColor).Value
@@ -208,7 +207,7 @@ Public Class Form1
         'HexNumericUpDown.Value = CDec(Color.ToArgb(ColorFromHSV(TheHue, TheSat, TheVal)))
 
         'HexNumericUpDown.Value = CDec(HSVtoRGBValue(TheHue, TheSat, TheVal))
-        'HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
+        HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
 
 
         Invalidate()
@@ -351,6 +350,8 @@ Public Class Form1
             ' Update the numeric up-down value for hue
             HueNumericUpDown.Value = TheHue
 
+            HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
+
             Invalidate()
 
             UpDatingColor = False
@@ -376,6 +377,9 @@ Public Class Form1
             ' Update the numeric up-down value for hue
             HueNumericUpDown.Value = CInt(TheHue)
 
+            'HexTextBox =
+            HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
+
             Invalidate()
 
             UpDatingColor = False
@@ -386,33 +390,6 @@ Public Class Form1
 
     Private Sub Form1_MouseWheel(sender As Object, e As MouseEventArgs) Handles Me.MouseWheel
 
-        '' Is the mouse over the Hue wheel?
-        'Dim centerX As Integer = HueWheel.Radius + HueWheel.Padding
-        'Dim centerY As Integer = HueWheel.Radius + HueWheel.Padding
-        'Dim dx As Integer = e.X - HueWheel.Location.X - centerX
-        'Dim dy As Integer = e.Y - HueWheel.Location.Y - centerY
-        'Dim dist As Double = Math.Sqrt(dx * dx + dy * dy)
-        'If dist <= HueWheel.Radius Then
-        '    ' Yes, the mouse is over the Hue wheel.
-
-        '    ' Check if the mouse wheel is scrolled
-        '    If e.Delta <> 0 Then
-        '        ' Adjust the hue based on the mouse wheel scroll direction
-        '        TheHue += If(e.Delta > 0, 10, -10) ' Increase or decrease hue by 10 degrees
-        '        ' Ensure the hue value wraps around within 0-360 degrees
-        '        If TheHue < 0 Then TheHue += 360
-        '        If TheHue >= 360 Then TheHue -= 360
-        '        ' Update the color based on the new hue
-        '        HueWheel.Color = ColorFromHSV(TheHue, TheSat, TheVal)
-        '        ' Update the trackbar and numeric up-down values
-        '        HueTrackBar.Value = CInt(TheHue)
-        '        HueNumericUpDown.Value = CInt(TheHue)
-        '        Invalidate() ' Redraw the form to reflect changes
-        '    End If
-
-        'End If
-
-
         ' Is the mouse over the Hue wheel?
         If IsPointInsideCircle(
                 e.X, e.Y, HueWheel.Location.X + HueWheel.Radius + HueWheel.Padding,
@@ -421,6 +398,9 @@ Public Class Form1
 
             ' Check if the mouse wheel is scrolled
             If e.Delta <> 0 Then
+                UpDatingColor = True
+
+
                 ' Adjust the hue based on the mouse wheel scroll direction
                 TheHue += If(e.Delta > 0, 10, -10) ' Increase or decrease hue by 10 degrees
                 ' Ensure the hue value wraps around within 0-360 degrees
@@ -431,44 +411,19 @@ Public Class Form1
                 ' Update the trackbar and numeric up-down values
                 HueTrackBar.Value = CInt(TheHue)
                 HueNumericUpDown.Value = CInt(TheHue)
+                HueWheel.SelectedHueAngle = TheHue
+                HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
+
                 Invalidate() ' Redraw the form to reflect changes
+
+                UpDatingColor = False
+
             End If
 
         End If
 
     End Sub
 
-    Function IsPointInsideCircle(pointX As Double, pointY As Double,
-             centerX As Double, centerY As Double, radius As Double) As Boolean
-        ' You can determine whether a point lies inside a circle by checking if
-        ' the distance between the point and the circle’s center is less than
-        ' or equal to the radius:
-
-        Dim dx As Double = pointX - centerX
-        Dim dy As Double = pointY - centerY
-        Dim distanceSquared As Double = dx * dx + dy * dy
-        Return distanceSquared <= radius * radius
-
-        ' The function is a direct application of the distance formula from
-        ' analytic geometry—streamlined for performance.
-
-        ' Distance Between Two Points
-        ' To find the distance between a point (x_1, y_1) and another point
-        ' (x_2, y_2), we use distance = sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}
-        ' In our case:
-        '  (x_1, y_1) Is the center of the circle.
-        '  (x_2, y_2) Is the test point.
-
-        ' Optimization: Squared Distance
-        ' To avoid calculating the square root (which Is relatively slow), we compare squared distances instead:
-        '  If (dx)^2 + (dy)^2 ≤ r^2, the point is inside or on the edge of the circle.
-        '  If greater, it's outside.
-        'This means
-        'distanceSquared = (pointX - centerX) ^ 2 + (pointY - centerY) ^ 2
-        'And we compare
-        'distanceSquared <= radius ^ 2
-
-    End Function
 
     Private Sub HueTrackBar_Scroll(sender As Object, e As EventArgs) Handles HueTrackBar.Scroll
 
@@ -487,6 +442,9 @@ Public Class Form1
         HueNumericUpDown.Value = TheHue
 
         HueWheel.SelectedHueAngle = TheHue
+
+        HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
+
 
         ' Redraw the form to reflect the changes
         Invalidate()
@@ -592,35 +550,6 @@ Public Class Form1
 
     End Sub
 
-
-    'Private Sub HueNumericUpDown_TextChanged(sender As Object, e As EventArgs) Handles HueNumericUpDown.TextChanged
-
-    '    ' Is the app changing the hue value?
-    '    If AppHueChange Then
-    '        AppHueChange = False ' Reset the flag
-    '        ' If so, do not update the hue value
-    '        Return
-    '    End If
-
-    '    ' Ensure the hue value is within the valid range (0-360)
-    '    If HueNumericUpDown.Value < 0 Then
-    '        HueNumericUpDown.Value = 0
-    '    ElseIf HueNumericUpDown.Value > 360 Then
-    '        HueNumericUpDown.Value = 360
-    '    End If
-
-
-    '    ' Update the hue based on the numeric up-down value
-    '    TheHue = HueNumericUpDown.Value
-    '    HueTrackBar.Value = TheHue
-    '    ' Update the color based on the new hue
-    '    'HueWheel.Color = ColorFromHSV(TheHue, TheSat, TheVal)
-    '    'HueWheel.SelectedHueAngle = TheHue
-    '    ' Redraw the form to reflect the changes
-    '    Invalidate()
-
-    'End Sub
-
     Private Sub HueNumericUpDown_ValueChanged(sender As Object, e As EventArgs) Handles HueNumericUpDown.ValueChanged
 
         If UpDatingColor Then
@@ -634,12 +563,13 @@ Public Class Form1
         ' Update the trackbar value for hue
         HueTrackBar.Value = CInt(TheHue)
         HueWheel.SelectedHueAngle = TheHue
+        HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
+
         ' Redraw the form to reflect the changes
         Invalidate()
         'UpDatingColor = False
 
     End Sub
-
 
     Private Sub HueNumericUpDown_KeyUp(sender As Object, e As KeyEventArgs) Handles HueNumericUpDown.KeyUp
 
@@ -648,40 +578,47 @@ Public Class Form1
 
 
 
-    'Private Sub HexTextBox_TextChanged(sender As Object, e As EventArgs) Handles HexTextBox.TextChanged
-    '    ' Check if the text is a valid hex color
-    '    If HexTextBox.Text.Length = 6 OrElse HexTextBox.Text.Length = 7 Then
-    '        Dim hexColor As String = HexTextBox.Text.TrimStart("#"c)
-    '        If System.Text.RegularExpressions.Regex.IsMatch(hexColor, "^[0-9A-Fa-f]{6}$") Then
-    '            ' Convert hex to RGB
-    '            Dim r As Integer = Convert.ToInt32(hexColor.Substring(0, 2), 16)
-    '            Dim g As Integer = Convert.ToInt32(hexColor.Substring(2, 2), 16)
-    '            Dim b As Integer = Convert.ToInt32(hexColor.Substring(4, 2), 16)
-    '            ' Update the color wheel with the new color
-    '            TheColor = Color.FromArgb(r, g, b)
-    '            Dim hsv = RGBtoHSV(TheColor)
-    '            TheHue = hsv.Hue
-    '            TheSat = hsv.Saturation
-    '            TheVal = hsv.Value
-    '            HueWheel.Color = TheColor
-    '            HueWheel.SelectedHueAngle = TheHue
-    '            ' Update the trackbars and numeric up-downs
-    '            HueTrackBar.Value = CInt(TheHue)
-    '            SaturationTrackBar.Value = CInt(TheSat * 100)
-    '            BrightnessTrackBar.Value = CInt(TheVal * 100)
-    '            HueNumericUpDown.Value = CInt(TheHue)
-    '            SaturationNumericUpDown.Value = CInt(TheSat * 100)
-    '            BrightnessNumericUpDown.Value = CInt(TheVal * 100)
+    Private Sub HexTextBox_TextChanged(sender As Object, e As EventArgs) Handles HexTextBox.TextChanged
 
-    '            HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
+        If UpDatingColor Then
+            Return
+        End If
 
-    '            Invalidate() ' Redraw the form to reflect changes
-    '        End If
-    '    End If
+        ' Check if the text is a valid hex color
+        If HexTextBox.Text.Length = 6 OrElse HexTextBox.Text.Length = 7 Then
+            Dim hexColor As String = HexTextBox.Text.TrimStart("#"c)
+            If System.Text.RegularExpressions.Regex.IsMatch(hexColor, "^[0-9A-Fa-f]{6}$") Then
+                UpDatingColor = True
+                ' Convert hex to RGB
+                Dim r As Integer = Convert.ToInt32(hexColor.Substring(0, 2), 16)
+                Dim g As Integer = Convert.ToInt32(hexColor.Substring(2, 2), 16)
+                Dim b As Integer = Convert.ToInt32(hexColor.Substring(4, 2), 16)
+                ' Update the color wheel with the new color
+                TheColor = Color.FromArgb(r, g, b)
+                Dim hsv = RGBtoHSV(TheColor)
+                TheHue = hsv.Hue
+                TheSat = hsv.Saturation
+                TheVal = hsv.Value
+                HueWheel.Color = TheColor
+                HueWheel.SelectedHueAngle = TheHue
+                ' Update the trackbars and numeric up-downs
+                HueTrackBar.Value = CInt(TheHue)
+                SaturationTrackBar.Value = CInt(TheSat * 100)
+                BrightnessTrackBar.Value = CInt(TheVal * 100)
+                HueNumericUpDown.Value = CInt(TheHue)
+                SaturationNumericUpDown.Value = CInt(TheSat * 100)
+                BrightnessNumericUpDown.Value = CInt(TheVal * 100)
+
+                HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
+
+                Invalidate() ' Redraw the form to reflect changes
+                UpDatingColor = False
+            End If
+        End If
 
 
 
-    'End Sub
+    End Sub
 
 
 
@@ -858,6 +795,26 @@ Public Class Form1
         Dim v As Double = max
 
         Return (h, s, v)
+    End Function
+
+    Function IsPointInsideCircle(pointX As Double, pointY As Double,
+             centerX As Double, centerY As Double, radius As Double) As Boolean
+        ' Note: This function is a simplified version of the distance check.
+        ' It is efficient and avoids unnecessary calculations by using squared distances.
+
+        Dim dx As Double = pointX - centerX
+        Dim dy As Double = pointY - centerY
+        Dim distanceSquared As Double = dx * dx + dy * dy
+        Return distanceSquared <= radius * radius
+
+        ' If the squared distance from the point to the center of the circle
+        ' (dx)^2 + (dy)^2 is less than or equal to the squared radius (radius^2),
+        ' then the point is inside or on the edge of the circle.
+
+        ' If the squared distance is greater than the squared radius, then the point is outside the circle.
+        ' This optimization is particularly useful in performance-critical applications
+        ' such as real-time graphics rendering or physics simulations.
+
     End Function
 
 End Class
