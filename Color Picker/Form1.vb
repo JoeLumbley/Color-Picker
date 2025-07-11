@@ -221,7 +221,7 @@ Public Class Form1
 
             If e.Button = MouseButtons.Left Then
 
-                If ActiveControl IsNot Nothing Then ActiveControl = Nothing ' Clear focus from any active control
+                ClearFocus()
 
                 'UpDatingColor = True
 
@@ -248,6 +248,10 @@ Public Class Form1
 
     End Sub
 
+    Private Sub ClearFocus()
+        If ActiveControl IsNot Nothing Then ActiveControl = Nothing ' Clear focus from any active control
+    End Sub
+
     Private Sub Form1_MouseMove(sender As Object, e As MouseEventArgs) Handles Me.MouseMove
 
         ' Is the mouse over the Hue wheel?
@@ -258,7 +262,7 @@ Public Class Form1
 
             If e.Button = MouseButtons.Left Then
 
-                If ActiveControl IsNot Nothing Then ActiveControl = Nothing ' Clear focus from any active control
+                'If ActiveControl IsNot Nothing Then ActiveControl = Nothing ' Clear focus from any active control
 
                 HueWheel.GetColorAtPoint(New Point(e.X, e.Y))
 
@@ -298,7 +302,8 @@ Public Class Form1
             ' Check if the mouse wheel is scrolled
             If e.Delta <> 0 Then
 
-                If ActiveControl IsNot Nothing Then ActiveControl = Nothing ' Clear focus from any active control
+                ClearFocus()
+                'If ActiveControl IsNot Nothing Then ActiveControl = Nothing ' Clear focus from any active control
 
 
                 ' Adjust the hue based on the mouse wheel scroll direction
