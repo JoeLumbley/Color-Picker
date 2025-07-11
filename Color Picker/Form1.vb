@@ -464,6 +464,7 @@ Public Class Form1
             ' Remove the '#' character if present
             Dim hexColor As String = HexTextBox.Text.TrimStart("#"c)
 
+            ' Validate the hex color format (6 hex digits)
             If System.Text.RegularExpressions.Regex.IsMatch(hexColor, "^[0-9A-Fa-f]{6}$") Then
 
                 UpDatingColor = True
@@ -493,13 +494,13 @@ Public Class Form1
 
                 ' Update the trackbars and numeric up-downs
                 HueTrackBar.Value = TheHue * 100
-                HueNumericUpDown.Value = CInt(TheHue)
+                HueNumericUpDown.Value = TheHue
 
                 SaturationTrackBar.Value = CInt(TheSat * 100)
-                SaturationNumericUpDown.Value = CInt(TheSat * 100)
+                SaturationNumericUpDown.Value = TheSat * 100
 
                 BrightnessTrackBar.Value = CInt(TheVal * 100)
-                BrightnessNumericUpDown.Value = CInt(TheVal * 100)
+                BrightnessNumericUpDown.Value = TheVal * 100
 
                 HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
 
