@@ -218,29 +218,15 @@ Public Class Form1
                 HueWheel.Location.Y + HueWheel.Radius + HueWheel.Padding, HueWheel.Radius) Then
             ' Yes, the mouse is over the Hue wheel.
 
-
             If e.Button = MouseButtons.Left Then
 
                 ClearFocus()
-
-                'UpDatingColor = True
 
                 HueWheel.GetColorAtPoint(New Point(e.X, e.Y))
 
                 TheHue = HueWheel.SelectedHueAngle
 
                 UpdateUIHueChange()
-
-                'HueTrackBar.Value = TheHue * 100 ' Convert hue to trackbar value (0-360 mapped to 0-10000)
-
-                ' Update the numeric up-down value for hue
-                'HueNumericUpDown.Value = TheHue
-
-                'HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
-
-                'Invalidate()
-
-                'UpDatingColor = False
 
             End If
 
@@ -262,28 +248,11 @@ Public Class Form1
 
             If e.Button = MouseButtons.Left Then
 
-                'If ActiveControl IsNot Nothing Then ActiveControl = Nothing ' Clear focus from any active control
-
                 HueWheel.GetColorAtPoint(New Point(e.X, e.Y))
-
-
-                'UpDatingColor = True
 
                 TheHue = HueWheel.SelectedHueAngle
 
                 UpdateUIHueChange()
-
-                'HueTrackBar.Value = TheHue * 100
-
-                'HueNumericUpDown.Value = TheHue
-
-                'HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
-
-                'Invalidate()
-
-                'UpDatingColor = False
-
-
 
             End If
 
@@ -303,8 +272,6 @@ Public Class Form1
             If e.Delta <> 0 Then
 
                 ClearFocus()
-                'If ActiveControl IsNot Nothing Then ActiveControl = Nothing ' Clear focus from any active control
-
 
                 ' Adjust the hue based on the mouse wheel scroll direction
                 TheHue += If(e.Delta > 0, 10, -10) ' Increase or decrease hue by 10 degrees
@@ -345,25 +312,9 @@ Public Class Form1
         ' Check if we are currently updating the color to avoid recursive calls or cascading updates
         If UpDatingColor Then Return
 
-        'UpDatingColor = True
-
         TheHue = HueTrackBar.Value / 100.0 ' Convert trackbar value (0-10000) to hue (0-360)
 
         UpdateUIHueChange()
-
-        'HueWheel.Color = ColorFromHSV(TheHue, TheSat, TheVal)
-
-        'HueNumericUpDown.Value = TheHue
-
-        'HueWheel.SelectedHueAngle = TheHue
-
-        'HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
-
-        'Invalidate()
-
-        'UpDatingColor = False
-
-
 
     End Sub
 
