@@ -197,9 +197,6 @@ Public Class Form1
         e.Graphics.DrawString("Hex: " & HsvToHex(TheHue, TheSat, TheVal),
                              Me.Font, Brushes.Black, 130, HexTextBox.Top + 2)
 
-        'e.Graphics.DrawString("Hue: " & ColorFromHSV(TheHue, TheSat, TheVal).GetHue.ToString("0.#") & "°",
-        '                     Me.Font, Brushes.Black, HueTrackBar.Left, HueTrackBar.Top - HueNumericUpDown.Height)
-
         e.Graphics.DrawString("Hue: " & RGBtoHSV(ColorFromHSV(TheHue, TheSat, TheVal)).Hue.ToString("0.###") & "°",
                              Me.Font, Brushes.Black, HueTrackBar.Left, HueTrackBar.Top - HueNumericUpDown.Height)
 
@@ -210,7 +207,6 @@ Public Class Form1
 
         e.Graphics.DrawString("Brightness: " & (RGBtoHSV(ColorFromHSV(TheHue, TheSat, TheVal)).Value * 100).ToString("0.#") & "%",
                       Me.Font, Brushes.Black, BrightnessTrackBar.Left, BrightnessTrackBar.Top - BrightnessNumericUpDown.Height)
-
 
     End Sub
 
@@ -324,26 +320,21 @@ Public Class Form1
 
     Private Sub HueTrackBar_Scroll(sender As Object, e As EventArgs) Handles HueTrackBar.Scroll
 
-        If UpDatingColor Then
-            Return
-        End If
+        ' Check if we are currently updating the color to avoid recursive calls or cascading updates
+        If UpDatingColor Then Return
 
         UpDatingColor = True
 
-        ' Update the hue based on the trackbar value
         TheHue = HueTrackBar.Value / 100.0 ' Convert trackbar value (0-10000) to hue (0-360)
 
-        ' Update the color based on the new hue
         HueWheel.Color = ColorFromHSV(TheHue, TheSat, TheVal)
 
-        ' Update the numeric up-down value for hue
         HueNumericUpDown.Value = TheHue
 
         HueWheel.SelectedHueAngle = TheHue
 
         HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
 
-        ' Redraw the form to reflect the changes
         Invalidate()
 
         UpDatingColor = False
@@ -352,9 +343,8 @@ Public Class Form1
 
     Private Sub BrightnessTrackBar_Scroll(sender As Object, e As EventArgs) Handles BrightnessTrackBar.Scroll
 
-        If UpDatingColor Then
-            Return
-        End If
+        ' Check if we are currently updating the color to avoid recursive calls or cascading updates
+        If UpDatingColor Then Return
 
         UpDatingColor = True
 
@@ -374,9 +364,8 @@ Public Class Form1
 
     Private Sub SaturationTrackBar_Scroll(sender As Object, e As EventArgs) Handles SaturationTrackBar.Scroll
 
-        If UpDatingColor Then
-            Return
-        End If
+        ' Check if we are currently updating the color to avoid recursive calls or cascading updates
+        If UpDatingColor Then Return
 
         UpDatingColor = True
 
@@ -400,21 +389,19 @@ Public Class Form1
 
     Private Sub BrightnessNumericUpDown_ValueChanged(sender As Object, e As EventArgs) Handles BrightnessNumericUpDown.ValueChanged
 
-        If UpDatingColor Then
-            Return
-        End If
+        ' Check if we are currently updating the color to avoid recursive calls or cascading updates
+        If UpDatingColor Then Return
 
         UpDatingColor = True
 
-        ' Update the brightness based on the numeric up-down value
         TheVal = BrightnessNumericUpDown.Value / 100.0
 
         BrightnessTrackBar.Value = TheVal * 100
 
-        ' Update the color based on the new brightness
         HueWheel.Color = ColorFromHSV(TheHue, TheSat, TheVal)
+
         HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
-        ' Redraw the form to reflect the changes
+
         Invalidate()
 
         UpDatingColor = False
@@ -423,21 +410,19 @@ Public Class Form1
 
     Private Sub SaturationNumericUpDown_ValueChanged(sender As Object, e As EventArgs) Handles SaturationNumericUpDown.ValueChanged
 
-        If UpDatingColor Then
-            Return
-        End If
+        ' Check if we are currently updating the color to avoid recursive calls or cascading updates
+        If UpDatingColor Then Return
 
         UpDatingColor = True
 
-        ' Update the saturation based on the numeric up-down value
         TheSat = SaturationNumericUpDown.Value / 100.0
+
         SaturationTrackBar.Value = TheSat * 100
-        ' Update the color based on the new saturation
+
         HueWheel.Color = ColorFromHSV(TheHue, TheSat, TheVal)
 
         HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
 
-        ' Redraw the form to reflect the changes
         Invalidate()
 
         UpDatingColor = False
@@ -446,22 +431,21 @@ Public Class Form1
 
     Private Sub HueNumericUpDown_ValueChanged(sender As Object, e As EventArgs) Handles HueNumericUpDown.ValueChanged
 
-        If UpDatingColor Then
-            Return
-        End If
+        ' Check if we are currently updating the color to avoid recursive calls or cascading updates
+        If UpDatingColor Then Return
 
         UpDatingColor = True
 
-        ' Update the hue based on the numeric up-down value
         TheHue = HueNumericUpDown.Value
-        ' Update the color based on the new hue
+
         HueWheel.Color = ColorFromHSV(TheHue, TheSat, TheVal)
-        ' Update the trackbar value for hue
+
         HueTrackBar.Value = TheHue * 100
+
         HueWheel.SelectedHueAngle = TheHue
+
         HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
 
-        ' Redraw the form to reflect the changes
         Invalidate()
 
         UpDatingColor = False
@@ -470,12 +454,13 @@ Public Class Form1
 
     Private Sub HexTextBox_TextChanged(sender As Object, e As EventArgs) Handles HexTextBox.TextChanged
 
-        If UpDatingColor Then
-            Return
-        End If
+        ' Check if we are currently updating the color to avoid recursive calls or cascading updates
+        If UpDatingColor Then Return
 
         ' Check if the text is a valid hex color
+        ' Ensure the text is in the correct format (6 hex digits, optionally prefixed with '#')
         If HexTextBox.Text.Length = 6 OrElse HexTextBox.Text.Length = 7 Then
+
             ' Remove the '#' character if present
             Dim hexColor As String = HexTextBox.Text.TrimStart("#"c)
 
@@ -487,20 +472,33 @@ Public Class Form1
                 Dim r As Integer = Convert.ToInt32(hexColor.Substring(0, 2), 16)
                 Dim g As Integer = Convert.ToInt32(hexColor.Substring(2, 2), 16)
                 Dim b As Integer = Convert.ToInt32(hexColor.Substring(4, 2), 16)
-                ' Update the color wheel with the new color
+
+                ' Ensure RGB values are within the valid range
+                r = Math.Max(0, Math.Min(255, r))
+                g = Math.Max(0, Math.Min(255, g))
+                b = Math.Max(0, Math.Min(255, b))
+
+                ' Create a new color from the RGB values
                 TheColor = Color.FromArgb(r, g, b)
+
+                ' Convert RGB to HSV
                 Dim hsv = RGBtoHSV(TheColor)
                 TheHue = hsv.Hue
                 TheSat = hsv.Saturation
                 TheVal = hsv.Value
+
+                ' Update the HueWheel with the new color and hue
                 HueWheel.Color = TheColor
                 HueWheel.SelectedHueAngle = TheHue
+
                 ' Update the trackbars and numeric up-downs
                 HueTrackBar.Value = TheHue * 100
-                SaturationTrackBar.Value = CInt(TheSat * 100)
-                BrightnessTrackBar.Value = CInt(TheVal * 100)
                 HueNumericUpDown.Value = CInt(TheHue)
+
+                SaturationTrackBar.Value = CInt(TheSat * 100)
                 SaturationNumericUpDown.Value = CInt(TheSat * 100)
+
+                BrightnessTrackBar.Value = CInt(TheVal * 100)
                 BrightnessNumericUpDown.Value = CInt(TheVal * 100)
 
                 HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
