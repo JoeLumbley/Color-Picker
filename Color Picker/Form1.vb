@@ -223,22 +223,24 @@ Public Class Form1
 
                 If ActiveControl IsNot Nothing Then ActiveControl = Nothing ' Clear focus from any active control
 
-                UpDatingColor = True
+                'UpDatingColor = True
 
                 HueWheel.GetColorAtPoint(New Point(e.X, e.Y))
 
-                If TheHue <> HueWheel.SelectedHueAngle Then TheHue = HueWheel.SelectedHueAngle
+                TheHue = HueWheel.SelectedHueAngle
 
-                HueTrackBar.Value = TheHue * 100 ' Convert hue to trackbar value (0-360 mapped to 0-10000)
+                UpdateUIHueChange()
+
+                'HueTrackBar.Value = TheHue * 100 ' Convert hue to trackbar value (0-360 mapped to 0-10000)
 
                 ' Update the numeric up-down value for hue
-                HueNumericUpDown.Value = TheHue
+                'HueNumericUpDown.Value = TheHue
 
-                HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
+                'HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
 
-                Invalidate()
+                'Invalidate()
 
-                UpDatingColor = False
+                'UpDatingColor = False
 
             End If
 
@@ -258,21 +260,26 @@ Public Class Form1
 
                 If ActiveControl IsNot Nothing Then ActiveControl = Nothing ' Clear focus from any active control
 
-                UpDatingColor = True
-
                 HueWheel.GetColorAtPoint(New Point(e.X, e.Y))
 
-                If TheHue <> HueWheel.SelectedHueAngle Then TheHue = HueWheel.SelectedHueAngle
 
-                HueTrackBar.Value = TheHue * 100
+                'UpDatingColor = True
 
-                HueNumericUpDown.Value = TheHue
+                TheHue = HueWheel.SelectedHueAngle
 
-                HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
+                UpdateUIHueChange()
 
-                Invalidate()
+                'HueTrackBar.Value = TheHue * 100
 
-                UpDatingColor = False
+                'HueNumericUpDown.Value = TheHue
+
+                'HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
+
+                'Invalidate()
+
+                'UpDatingColor = False
+
+
 
             End If
 
@@ -293,28 +300,38 @@ Public Class Form1
 
                 If ActiveControl IsNot Nothing Then ActiveControl = Nothing ' Clear focus from any active control
 
-                UpDatingColor = True
 
                 ' Adjust the hue based on the mouse wheel scroll direction
                 TheHue += If(e.Delta > 0, 10, -10) ' Increase or decrease hue by 10 degrees
                 ' Ensure the hue value wraps around within 0-360 degrees
                 If TheHue < 0 Then TheHue += 360
                 If TheHue >= 360 Then TheHue -= 360
-                ' Update the color based on the new hue
-                HueWheel.Color = ColorFromHSV(TheHue, TheSat, TheVal)
-                ' Update the trackbar and numeric up-down values
-                HueTrackBar.Value = TheHue * 100
-                HueNumericUpDown.Value = TheHue
-                HueWheel.SelectedHueAngle = TheHue
-                HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
 
-                Invalidate() ' Redraw the form to reflect changes
-
-                UpDatingColor = False
+                UpdateUIHueChange()
 
             End If
 
         End If
+
+    End Sub
+
+    Private Sub UpdateUIHueChange()
+
+        UpDatingColor = True
+
+        HueWheel.Color = ColorFromHSV(TheHue, TheSat, TheVal)
+
+        HueWheel.SelectedHueAngle = TheHue
+
+        HueTrackBar.Value = TheHue * 100
+
+        HueNumericUpDown.Value = TheHue
+
+        HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
+
+        Invalidate()
+
+        UpDatingColor = False
 
     End Sub
 
@@ -323,21 +340,25 @@ Public Class Form1
         ' Check if we are currently updating the color to avoid recursive calls or cascading updates
         If UpDatingColor Then Return
 
-        UpDatingColor = True
+        'UpDatingColor = True
 
         TheHue = HueTrackBar.Value / 100.0 ' Convert trackbar value (0-10000) to hue (0-360)
 
-        HueWheel.Color = ColorFromHSV(TheHue, TheSat, TheVal)
+        UpdateUIHueChange()
 
-        HueNumericUpDown.Value = TheHue
+        'HueWheel.Color = ColorFromHSV(TheHue, TheSat, TheVal)
 
-        HueWheel.SelectedHueAngle = TheHue
+        'HueNumericUpDown.Value = TheHue
 
-        HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
+        'HueWheel.SelectedHueAngle = TheHue
 
-        Invalidate()
+        'HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
 
-        UpDatingColor = False
+        'Invalidate()
+
+        'UpDatingColor = False
+
+
 
     End Sub
 
@@ -752,10 +773,10 @@ Public Class Form1
         Return distanceSquared <= radius * radius
 
         ' If the squared distance from the point to the center of the circle
-        ' (dx)^2 + (dy)^2 is less than or equal to the squared radius (radius^2),
+        ' (dx)^2 + (dy)^2 is less than or equal <= to the squared radius (radius^2),
         ' then the point is inside or on the edge of the circle.
 
-        ' If the squared distance is greater than the squared radius, then the point is outside the circle.
+        ' If the squared distance is greater than > the squared radius, then the point is outside the circle.
         ' This optimization is particularly useful in performance-critical applications
         ' such as real-time graphics rendering or physics simulations.
 
