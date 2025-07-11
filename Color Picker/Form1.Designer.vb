@@ -56,7 +56,7 @@ Partial Class Form1
         ' BrightnessNumericUpDown
         ' 
         BrightnessNumericUpDown.DecimalPlaces = 2
-        BrightnessNumericUpDown.Location = New Point(257, 361)
+        BrightnessNumericUpDown.Location = New Point(253, 361)
         BrightnessNumericUpDown.Name = "BrightnessNumericUpDown"
         BrightnessNumericUpDown.Size = New Size(101, 31)
         BrightnessNumericUpDown.TabIndex = 4
@@ -64,7 +64,7 @@ Partial Class Form1
         ' SaturationNumericUpDown
         ' 
         SaturationNumericUpDown.DecimalPlaces = 2
-        SaturationNumericUpDown.Location = New Point(257, 249)
+        SaturationNumericUpDown.Location = New Point(253, 249)
         SaturationNumericUpDown.Name = "SaturationNumericUpDown"
         SaturationNumericUpDown.Size = New Size(101, 31)
         SaturationNumericUpDown.TabIndex = 2
@@ -83,7 +83,7 @@ Partial Class Form1
         ' HueNumericUpDown
         ' 
         HueNumericUpDown.DecimalPlaces = 3
-        HueNumericUpDown.Location = New Point(257, 137)
+        HueNumericUpDown.Location = New Point(253, 137)
         HueNumericUpDown.Maximum = New Decimal(New Integer() {360, 0, 0, 0})
         HueNumericUpDown.Name = "HueNumericUpDown"
         HueNumericUpDown.Size = New Size(101, 31)
@@ -91,7 +91,7 @@ Partial Class Form1
         ' 
         ' HexTextBox
         ' 
-        HexTextBox.Location = New Point(257, 70)
+        HexTextBox.Location = New Point(253, 69)
         HexTextBox.Name = "HexTextBox"
         HexTextBox.Size = New Size(101, 31)
         HexTextBox.TabIndex = 6

@@ -207,8 +207,6 @@ Public Class Form1
         e.Graphics.DrawString("Saturation: " & (RGBtoHSV(ColorFromHSV(TheHue, TheSat, TheVal)).Saturation * 100).ToString("0.#") & "%",
                              Me.Font, Brushes.Black, SaturationTrackBar.Left, SaturationTrackBar.Top - SaturationNumericUpDown.Height)
 
-        'e.Graphics.DrawString("Brightness: " & (TheVal * 100).ToString("0.#") & "%",
-        '              Me.Font, Brushes.Black, BrightnessTrackBar.Left, BrightnessTrackBar.Top - BrightnessNumericUpDown.Height)
 
         e.Graphics.DrawString("Brightness: " & (RGBtoHSV(ColorFromHSV(TheHue, TheSat, TheVal)).Value * 100).ToString("0.#") & "%",
                       Me.Font, Brushes.Black, BrightnessTrackBar.Left, BrightnessTrackBar.Top - BrightnessNumericUpDown.Height)
@@ -218,24 +216,35 @@ Public Class Form1
 
     Private Sub Form1_MouseDown(sender As Object, e As MouseEventArgs) Handles Me.MouseDown
 
-        If e.Button = MouseButtons.Left Then
+        ' Is the mouse over the Hue wheel?
+        If IsPointInsideCircle(
+                e.X, e.Y, HueWheel.Location.X + HueWheel.Radius + HueWheel.Padding,
+                HueWheel.Location.Y + HueWheel.Radius + HueWheel.Padding, HueWheel.Radius) Then
+            ' Yes, the mouse is over the Hue wheel.
 
-            UpDatingColor = True
 
-            HueWheel.GetColorAtPoint(New Point(e.X, e.Y))
+            If e.Button = MouseButtons.Left Then
 
-            If TheHue <> HueWheel.SelectedHueAngle Then TheHue = HueWheel.SelectedHueAngle
+                If ActiveControl IsNot Nothing Then ActiveControl = Nothing ' Clear focus from any active control
 
-            HueTrackBar.Value = TheHue * 100 ' Convert hue to trackbar value (0-360 mapped to 0-10000)
+                UpDatingColor = True
 
-            ' Update the numeric up-down value for hue
-            HueNumericUpDown.Value = TheHue
+                HueWheel.GetColorAtPoint(New Point(e.X, e.Y))
 
-            HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
+                If TheHue <> HueWheel.SelectedHueAngle Then TheHue = HueWheel.SelectedHueAngle
 
-            Invalidate()
+                HueTrackBar.Value = TheHue * 100 ' Convert hue to trackbar value (0-360 mapped to 0-10000)
 
-            UpDatingColor = False
+                ' Update the numeric up-down value for hue
+                HueNumericUpDown.Value = TheHue
+
+                HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
+
+                Invalidate()
+
+                UpDatingColor = False
+
+            End If
 
         End If
 
@@ -243,25 +252,33 @@ Public Class Form1
 
     Private Sub Form1_MouseMove(sender As Object, e As MouseEventArgs) Handles Me.MouseMove
 
-        If ActiveControl IsNot Nothing Then ActiveControl = Nothing ' Clear focus from any active control
+        ' Is the mouse over the Hue wheel?
+        If IsPointInsideCircle(
+                e.X, e.Y, HueWheel.Location.X + HueWheel.Radius + HueWheel.Padding,
+                HueWheel.Location.Y + HueWheel.Radius + HueWheel.Padding, HueWheel.Radius) Then
+            ' Yes, the mouse is over the Hue wheel.
 
-        If e.Button = MouseButtons.Left Then
+            If e.Button = MouseButtons.Left Then
 
-            UpDatingColor = True
+                If ActiveControl IsNot Nothing Then ActiveControl = Nothing ' Clear focus from any active control
 
-            HueWheel.GetColorAtPoint(New Point(e.X, e.Y))
+                UpDatingColor = True
 
-            If TheHue <> HueWheel.SelectedHueAngle Then TheHue = HueWheel.SelectedHueAngle
+                HueWheel.GetColorAtPoint(New Point(e.X, e.Y))
 
-            HueTrackBar.Value = TheHue * 100
+                If TheHue <> HueWheel.SelectedHueAngle Then TheHue = HueWheel.SelectedHueAngle
 
-            HueNumericUpDown.Value = TheHue
+                HueTrackBar.Value = TheHue * 100
 
-            HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
+                HueNumericUpDown.Value = TheHue
 
-            Invalidate()
+                HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
 
-            UpDatingColor = False
+                Invalidate()
+
+                UpDatingColor = False
+
+            End If
 
         End If
 
@@ -277,8 +294,10 @@ Public Class Form1
 
             ' Check if the mouse wheel is scrolled
             If e.Delta <> 0 Then
-                UpDatingColor = True
 
+                If ActiveControl IsNot Nothing Then ActiveControl = Nothing ' Clear focus from any active control
+
+                UpDatingColor = True
 
                 ' Adjust the hue based on the mouse wheel scroll direction
                 TheHue += If(e.Delta > 0, 10, -10) ' Increase or decrease hue by 10 degrees
