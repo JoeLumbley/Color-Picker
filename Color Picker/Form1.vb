@@ -234,10 +234,6 @@ Public Class Form1
 
     End Sub
 
-    Private Sub ClearFocus()
-        If ActiveControl IsNot Nothing Then ActiveControl = Nothing ' Clear focus from any active control
-    End Sub
-
     Private Sub Form1_MouseMove(sender As Object, e As MouseEventArgs) Handles Me.MouseMove
 
         ' Is the mouse over the Hue wheel?
@@ -287,26 +283,6 @@ Public Class Form1
 
     End Sub
 
-    Private Sub UpdateUIHueChange()
-
-        UpDatingColor = True
-
-        HueWheel.Color = ColorFromHSV(TheHue, TheSat, TheVal)
-
-        HueWheel.SelectedHueAngle = TheHue
-
-        HueTrackBar.Value = TheHue * 100
-
-        HueNumericUpDown.Value = TheHue
-
-        HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
-
-        Invalidate()
-
-        UpDatingColor = False
-
-    End Sub
-
     Private Sub HueTrackBar_Scroll(sender As Object, e As EventArgs) Handles HueTrackBar.Scroll
 
         ' Check if we are currently updating the color to avoid recursive calls or cascading updates
@@ -344,23 +320,21 @@ Public Class Form1
         ' Check if we are currently updating the color to avoid recursive calls or cascading updates
         If UpDatingColor Then Return
 
-        UpDatingColor = True
-
-        ' Update the saturation based on the trackbar value
         TheSat = SaturationTrackBar.Value / 100.0
 
-        ' Update the color based on the new saturation
-        HueWheel.Color = ColorFromHSV(TheHue, TheSat, TheVal)
+        UpdateUISatChange()
 
-        ' Update the saturation numeric up-down value
-        SaturationNumericUpDown.Value = TheSat * 100
+        'UpDatingColor = True
 
-        HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
+        'HueWheel.Color = ColorFromHSV(TheHue, TheSat, TheVal)
 
-        ' Redraw the form to reflect the changes
-        Invalidate()
+        'SaturationNumericUpDown.Value = TheSat * 100
 
-        UpDatingColor = False
+        'HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
+
+        'Invalidate()
+
+        'UpDatingColor = False
 
     End Sub
 
@@ -390,11 +364,19 @@ Public Class Form1
         ' Check if we are currently updating the color to avoid recursive calls or cascading updates
         If UpDatingColor Then Return
 
-        UpDatingColor = True
-
         TheSat = SaturationNumericUpDown.Value / 100.0
 
+        UpdateUISatChange()
+
+    End Sub
+
+    Private Sub UpdateUISatChange()
+
+        UpDatingColor = True
+
         SaturationTrackBar.Value = TheSat * 100
+
+        SaturationNumericUpDown.Value = TheSat * 100
 
         HueWheel.Color = ColorFromHSV(TheHue, TheSat, TheVal)
 
@@ -761,6 +743,30 @@ Public Class Form1
 
         BrightnessTrackBar.Value = TheVal * 100
         BrightnessNumericUpDown.Value = TheVal * 100
+
+        HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
+
+        Invalidate()
+
+        UpDatingColor = False
+
+    End Sub
+
+    Private Sub ClearFocus()
+        If ActiveControl IsNot Nothing Then ActiveControl = Nothing ' Clear focus from any active control
+    End Sub
+
+    Private Sub UpdateUIHueChange()
+
+        UpDatingColor = True
+
+        HueWheel.Color = ColorFromHSV(TheHue, TheSat, TheVal)
+
+        HueWheel.SelectedHueAngle = TheHue
+
+        HueTrackBar.Value = TheHue * 100
+
+        HueNumericUpDown.Value = TheHue
 
         HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
 
