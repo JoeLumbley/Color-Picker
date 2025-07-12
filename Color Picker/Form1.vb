@@ -324,18 +324,6 @@ Public Class Form1
 
         UpdateUISatChange()
 
-        'UpDatingColor = True
-
-        'HueWheel.Color = ColorFromHSV(TheHue, TheSat, TheVal)
-
-        'SaturationNumericUpDown.Value = TheSat * 100
-
-        'HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
-
-        'Invalidate()
-
-        'UpDatingColor = False
-
     End Sub
 
     Private Sub BrightnessNumericUpDown_ValueChanged(sender As Object, e As EventArgs) Handles BrightnessNumericUpDown.ValueChanged
