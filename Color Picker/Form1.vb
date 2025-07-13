@@ -158,7 +158,188 @@ Public Class Form1
 
     End Structure
 
+
+
+
+    Private Structure SaturationWheelStruct
+
+        Public Location As Point
+        Public Size As Size
+        Public Radius As Integer
+        Public Center As Point
+        Public Bitmap As Bitmap
+        Public Graphics As Graphics
+        Public BackColor As Color
+        Public Color As Color
+        Public Padding As Integer
+        Public SelectedHueAngle As Double
+        Public Saturation As Double
+
+        Public Sub Draw(size As Integer, padding As Integer, hueAngle As Double, backcolor As Color)
+            If Bitmap Is Nothing OrElse Bitmap.Width <> size OrElse Bitmap.Height <> size Then
+                Bitmap?.Dispose()
+                Bitmap = New Bitmap(size + padding * 2, size + padding * 2)
+                Graphics = Graphics.FromImage(Bitmap)
+            End If
+
+            Graphics.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
+
+            Radius = size \ 2
+            Me.Size = New Size(size, size)
+            Me.Padding = padding
+            Me.BackColor = backcolor
+
+            Dim centerX As Integer = Radius + padding
+            Dim centerY As Integer = Radius + padding
+
+            For y As Integer = 0 To Bitmap.Height - 1
+                For x As Integer = 0 To Bitmap.Width - 1
+                    Dim dx As Integer = x - centerX
+                    Dim dy As Integer = y - centerY
+                    Dim dist As Double = Math.Sqrt(dx * dx + dy * dy)
+
+                    If dist <= Radius Then
+                        Dim angle As Double = (Math.Atan2(dy, dx) * 180.0 / Math.PI + 360) Mod 360
+                        Dim saturation As Double = Math.Min(angle / 360.0, 1.0)
+                        Dim color As Color = ColorFromHSV(hueAngle, saturation, 1.0)
+                        Bitmap.SetPixel(x, y, color)
+                    Else
+                        Bitmap.SetPixel(x, y, backcolor)
+                    End If
+                Next
+            Next
+
+            ' Optional border
+            Dim borderRect As New Rectangle(padding, padding, size, size)
+            Using pen As New Pen(Color.Black, 3)
+                Graphics.DrawEllipse(pen, borderRect)
+            End Using
+        End Sub
+
+        Public Sub GetSaturationFromAnglePoint(point As Point)
+            Dim centerX As Integer = Radius + Padding
+            Dim centerY As Integer = Radius + Padding
+            Dim dx As Integer = point.X - Location.X - centerX
+            Dim dy As Integer = point.Y - Location.Y - centerY
+            Dim dist As Double = Math.Sqrt(dx * dx + dy * dy)
+
+            If dist <= Radius Then
+                Dim angle As Double = (Math.Atan2(dy, dx) * 180.0 / Math.PI + 360) Mod 360
+                Saturation = Math.Min(angle / 360.0, 1.0)
+
+                'Color = ColorFromHSV(SelectedHueAngle, saturation, 1.0)
+            End If
+        End Sub
+
+        Public Sub GetColorAtPoint(point As Point)
+
+            If Bitmap Is Nothing Then Return
+
+            Dim centerX As Integer = Radius + Padding
+            Dim centerY As Integer = Radius + Padding
+            Dim dx As Integer = point.X - Location.X - centerX
+            Dim dy As Integer = point.Y - Location.Y - centerY
+            Dim dist As Double = Math.Sqrt(dx * dx + dy * dy)
+
+            If dist <= Radius Then
+                Dim angle As Double = (Math.Atan2(dy, dx) * 180.0 / Math.PI + 360) Mod 360
+
+                Color = ColorFromHSV(angle, RGBtoHSV(Color).Saturation, RGBtoHSV(Color).Value)
+                SelectedHueAngle = angle ' Save angle for rendering pointer
+
+            End If
+
+        End Sub
+
+        ' Function to convert HSV to RGB
+        Public Function ColorFromHSV(hue As Double, saturation As Double, brightness As Double) As Color
+
+            Dim r As Double = 0, g As Double = 0, b As Double = 0
+
+            If saturation = 0 Then
+                r = brightness
+                g = brightness
+                b = brightness
+            Else
+                Dim sector As Integer = CInt(Math.Floor(hue / 60)) Mod 6
+                Dim fractional As Double = (hue / 60) - Math.Floor(hue / 60)
+
+                Dim p As Double = brightness * (1 - saturation)
+                Dim q As Double = brightness * (1 - saturation * fractional)
+                Dim t As Double = brightness * (1 - saturation * (1 - fractional))
+
+                Select Case sector
+                    Case 0
+                        r = brightness
+                        g = t
+                        b = p
+                    Case 1
+                        r = q
+                        g = brightness
+                        b = p
+                    Case 2
+                        r = p
+                        g = brightness
+                        b = t
+                    Case 3
+                        r = p
+                        g = q
+                        b = brightness
+                    Case 4
+                        r = t
+                        g = p
+                        b = brightness
+                    Case 5
+                        r = brightness
+                        g = p
+                        b = q
+                End Select
+            End If
+
+            Return Color.FromArgb(CInt(r * 255), CInt(g * 255), CInt(b * 255))
+
+        End Function
+
+        Public Function RGBtoHSV(color As Color) As (Hue As Double, Saturation As Double, Value As Double)
+
+            Dim r As Double = color.R / 255.0
+            Dim g As Double = color.G / 255.0
+            Dim b As Double = color.B / 255.0
+
+            Dim max As Double = Math.Max(r, Math.Max(g, b))
+            Dim min As Double = Math.Min(r, Math.Min(g, b))
+            Dim delta As Double = max - min
+
+            Dim h As Double
+
+            If delta = 0 Then
+                h = 0
+            ElseIf max = r Then
+                h = 60 * (((g - b) / delta) Mod 6)
+            ElseIf max = g Then
+                h = 60 * (((b - r) / delta) + 2)
+            Else
+                h = 60 * (((r - g) / delta) + 4)
+            End If
+
+            If h < 0 Then h += 360
+
+            Dim s As Double = If(max = 0, 0, delta / max)
+            Dim v As Double = max
+
+            Return (h, s, v)
+
+        End Function
+
+    End Structure
+
+
+
+
+
     Private HueWheel As HueWheelStruct
+
+    Private SatWheel As SaturationWheelStruct
 
     Private TheColor As Color = Color.Chartreuse ' Default color
 
@@ -180,6 +361,8 @@ Public Class Form1
         MyBase.OnPaint(e)
 
         DrawColorWheel(e)
+
+        DrawSatWheel(e)
 
         DrawHuePointer(e)
 
@@ -212,6 +395,31 @@ Public Class Form1
 
     Private Sub Form1_MouseDown(sender As Object, e As MouseEventArgs) Handles Me.MouseDown
 
+        ' Is the mouse over the Sat wheel?
+        If IsPointInsideCircle(
+                e.X, e.Y, SatWheel.Location.X + SatWheel.Radius + SatWheel.Padding,
+                SatWheel.Location.Y + SatWheel.Radius + SatWheel.Padding, SatWheel.Radius) Then
+            ' Yes, the mouse is over the Sat wheel.
+
+            If e.Button = MouseButtons.Left Then
+
+                ClearFocus()
+
+                SatWheel.GetSaturationFromAnglePoint(New Point(e.X, e.Y))
+
+                TheSat = SatWheel.Saturation
+                'TheHue = HueWheel.SelectedHueAngle
+
+                'UpdateUIHueChange()
+
+                UpdateUISatChange()
+
+            End If
+
+            Return
+
+        End If
+
         ' Is the mouse over the Hue wheel?
         If IsPointInsideCircle(
                 e.X, e.Y, HueWheel.Location.X + HueWheel.Radius + HueWheel.Padding,
@@ -235,6 +443,31 @@ Public Class Form1
     End Sub
 
     Private Sub Form1_MouseMove(sender As Object, e As MouseEventArgs) Handles Me.MouseMove
+
+        ' Is the mouse over the Sat wheel?
+        If IsPointInsideCircle(
+                e.X, e.Y, SatWheel.Location.X + SatWheel.Radius + SatWheel.Padding,
+                SatWheel.Location.Y + SatWheel.Radius + SatWheel.Padding, SatWheel.Radius) Then
+            ' Yes, the mouse is over the Sat wheel.
+
+            If e.Button = MouseButtons.Left Then
+
+                ClearFocus()
+
+                SatWheel.GetSaturationFromAnglePoint(New Point(e.X, e.Y))
+
+                TheSat = SatWheel.Saturation
+                'TheHue = HueWheel.SelectedHueAngle
+
+                'UpdateUIHueChange()
+
+                UpdateUISatChange()
+
+            End If
+
+            Return
+
+        End If
 
         ' Is the mouse over the Hue wheel?
         If IsPointInsideCircle(
@@ -468,6 +701,20 @@ Public Class Form1
                              HueWheel.Bitmap.Width,
                              HueWheel.Bitmap.Height)
     End Sub
+
+    Private Sub DrawSatWheel(e As PaintEventArgs)
+
+        SatWheel.Draw(150, 20, TheHue, Color.Transparent)
+
+        e.Graphics.DrawImage(SatWheel.Bitmap,
+                             SatWheel.Location.X,
+                             SatWheel.Location.Y,
+                             SatWheel.Bitmap.Width,
+                             SatWheel.Bitmap.Height)
+    End Sub
+
+
+
 
     Private Sub DrawSelectedColor(e As PaintEventArgs)
         ' Draw the selected color rectangle
@@ -725,6 +972,13 @@ Public Class Form1
 
         HueTrackBar.Value = TheHue * 100
         HueNumericUpDown.Value = TheHue
+
+        ' Initialize the HueWheel with default values
+        SatWheel.Color = TheColor
+        SatWheel.SelectedHueAngle = TheHue
+        SatWheel.Location.X = 480
+        SatWheel.Location.Y = 95
+        SatWheel.Draw(300, 20, TheHue, BackColor)
 
         SaturationTrackBar.Value = TheSat * 100
         SaturationNumericUpDown.Value = TheSat * 100
