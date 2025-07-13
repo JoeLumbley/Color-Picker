@@ -1,5 +1,5 @@
 # Color Picker
 
-<img width="1920" height="1080" alt="004" src="https://github.com/user-attachments/assets/ebea5348-c427-45a1-87a5-aa6ddd42628b" />
 
+<img width="1920" height="1080" alt="005" src="https://github.com/user-attachments/assets/0737d026-8aec-4139-8e60-4e03e8729811" />
 
