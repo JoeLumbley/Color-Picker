@@ -158,9 +158,6 @@ Public Class Form1
 
     End Structure
 
-
-
-
     Private Structure SaturationWheelStruct
 
         Public Location As Point
@@ -209,11 +206,11 @@ Public Class Form1
                 Next
             Next
 
-            ' Optional border
             Dim borderRect As New Rectangle(padding, padding, size, size)
             Using pen As New Pen(Color.Black, 3)
                 Graphics.DrawEllipse(pen, borderRect)
             End Using
+
         End Sub
 
         Public Sub GetSaturationFromAnglePoint(point As Point)
@@ -713,9 +710,6 @@ Public Class Form1
                              SatWheel.Bitmap.Height)
     End Sub
 
-
-
-
     Private Sub DrawSelectedColor(e As PaintEventArgs)
         ' Draw the selected color rectangle
         Dim selectedColorRect As New Rectangle(20, 20, 100, 100)
@@ -966,7 +960,7 @@ Public Class Form1
         ' Initialize the HueWheel with default values
         HueWheel.Color = TheColor
         HueWheel.SelectedHueAngle = TheHue
-        HueWheel.Location.X = 400
+        HueWheel.Location.X = 500
         HueWheel.Location.Y = 20
         HueWheel.Draw(300, 20, BackColor)
 
@@ -976,7 +970,7 @@ Public Class Form1
         ' Initialize the HueWheel with default values
         SatWheel.Color = TheColor
         SatWheel.SelectedHueAngle = TheHue
-        SatWheel.Location.X = 480
+        SatWheel.Location.X = 580
         SatWheel.Location.Y = 95
         SatWheel.Draw(300, 20, TheHue, BackColor)
 
