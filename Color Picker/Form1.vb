@@ -970,9 +970,15 @@ Public Class Form1
         ' Initialize the HueWheel with default values
         SatWheel.Color = TheColor
         SatWheel.SelectedHueAngle = TheHue
-        SatWheel.Location.X = 580
+        'SatWheel.Location.X = 580
+        SatWheel.Draw(150, 20, TheHue, BackColor)
+
+        SatWheel.Location.X = HueWheel.Location.X + (HueWheel.Size.Width - SatWheel.Size.Width) \ 2
+
+
+
+
         SatWheel.Location.Y = 95
-        SatWheel.Draw(300, 20, TheHue, BackColor)
 
         SaturationTrackBar.Value = TheSat * 100
         SaturationNumericUpDown.Value = TheSat * 100
