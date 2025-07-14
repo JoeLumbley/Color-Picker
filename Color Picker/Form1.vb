@@ -401,9 +401,6 @@ Public Class Form1
                 SatWheel.GetSaturationFromAnglePoint(New Point(e.X, e.Y))
 
                 TheSat = SatWheel.Saturation
-                'TheHue = HueWheel.SelectedHueAngle
-
-                'UpdateUIHueChange()
 
                 UpdateUISatChange()
 
@@ -450,9 +447,6 @@ Public Class Form1
                 SatWheel.GetSaturationFromAnglePoint(New Point(e.X, e.Y))
 
                 TheSat = SatWheel.Saturation
-                'TheHue = HueWheel.SelectedHueAngle
-
-                'UpdateUIHueChange()
 
                 UpdateUISatChange()
 
@@ -705,14 +699,18 @@ Public Class Form1
     End Sub
 
     Private Sub DrawSelectedColor(e As PaintEventArgs)
+
         ' Draw the selected color rectangle
         Dim selectedColorRect As New Rectangle(20, 20, 100, 100)
+
         Using brush As New SolidBrush(ColorFromHSV(TheHue, TheSat, TheVal))
             e.Graphics.FillRectangle(brush, selectedColorRect)
         End Using
+
         Using pen As New Pen(Color.Black, 3)
             e.Graphics.DrawRectangle(pen, selectedColorRect)
         End Using
+
     End Sub
 
     Private Sub DrawHuePointer(e As PaintEventArgs)
@@ -765,16 +763,17 @@ Public Class Form1
     End Sub
 
     Public Shared Function GetColorName(color As Color) As String
-        ' Method to get the color name
 
         ' Check if the color is a known color
         Dim knownColorName As String = GetKnownColorName(color)
+
+        ' If the color is known, return its name
         If knownColorName IsNot Nothing Then
             Return knownColorName
         End If
 
-        ' If not known, return a custom message
-        Return ""
+        ' If not known, return an empty string
+        Return String.Empty
 
     End Function
 
@@ -802,8 +801,8 @@ Public Class Form1
 
     End Function
 
-    ' Function to convert HSV to RGB
     Public Function ColorFromHSV(hue As Double, saturation As Double, brightness As Double) As Color
+        ' Function to convert HSV to RGB
 
         Dim r As Double = 0, g As Double = 0, b As Double = 0
 
@@ -991,7 +990,10 @@ Public Class Form1
     End Sub
 
     Private Sub ClearFocus()
-        If ActiveControl IsNot Nothing Then ActiveControl = Nothing ' Clear focus from any active control
+
+        ' Clear focus from any active control
+        If ActiveControl IsNot Nothing Then ActiveControl = Nothing
+
     End Sub
 
     Private Sub UpdateUIHueChange()
@@ -1031,6 +1033,5 @@ Public Class Form1
         UpDatingColor = False
 
     End Sub
-
 
 End Class
