@@ -524,6 +524,17 @@ Public Class Form1
 
     End Sub
 
+    Private Sub SaturationTrackBar_Scroll(sender As Object, e As EventArgs) Handles SaturationTrackBar.Scroll
+
+        ' Check if we are currently updating the color to avoid recursive calls or cascading updates
+        If UpDatingColor Then Return
+
+        TheSat = SaturationTrackBar.Value / 100.0
+
+        UpdateUISatChange()
+
+    End Sub
+
     Private Sub BrightnessTrackBar_Scroll(sender As Object, e As EventArgs) Handles BrightnessTrackBar.Scroll
 
         ' Check if we are currently updating the color to avoid recursive calls or cascading updates
@@ -545,12 +556,23 @@ Public Class Form1
 
     End Sub
 
-    Private Sub SaturationTrackBar_Scroll(sender As Object, e As EventArgs) Handles SaturationTrackBar.Scroll
+    Private Sub HueNumericUpDown_ValueChanged(sender As Object, e As EventArgs) Handles HueNumericUpDown.ValueChanged
 
         ' Check if we are currently updating the color to avoid recursive calls or cascading updates
         If UpDatingColor Then Return
 
-        TheSat = SaturationTrackBar.Value / 100.0
+        TheHue = HueNumericUpDown.Value
+
+        UpdateUIHueChange()
+
+    End Sub
+
+    Private Sub SaturationNumericUpDown_ValueChanged(sender As Object, e As EventArgs) Handles SaturationNumericUpDown.ValueChanged
+
+        ' Check if we are currently updating the color to avoid recursive calls or cascading updates
+        If UpDatingColor Then Return
+
+        TheSat = SaturationNumericUpDown.Value / 100.0
 
         UpdateUISatChange()
 
@@ -574,28 +596,6 @@ Public Class Form1
         Invalidate()
 
         UpDatingColor = False
-
-    End Sub
-
-    Private Sub SaturationNumericUpDown_ValueChanged(sender As Object, e As EventArgs) Handles SaturationNumericUpDown.ValueChanged
-
-        ' Check if we are currently updating the color to avoid recursive calls or cascading updates
-        If UpDatingColor Then Return
-
-        TheSat = SaturationNumericUpDown.Value / 100.0
-
-        UpdateUISatChange()
-
-    End Sub
-
-    Private Sub HueNumericUpDown_ValueChanged(sender As Object, e As EventArgs) Handles HueNumericUpDown.ValueChanged
-
-        ' Check if we are currently updating the color to avoid recursive calls or cascading updates
-        If UpDatingColor Then Return
-
-        TheHue = HueNumericUpDown.Value
-
-        UpdateUIHueChange()
 
     End Sub
 
