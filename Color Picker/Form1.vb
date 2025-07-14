@@ -498,8 +498,8 @@ Public Class Form1
 
                 ClearFocus()
 
-                ' Adjust the hue based on the mouse wheel scroll direction
-                TheSat += If(e.Delta > 0, 0.01, -0.01) ' Increase or decrease sat by 1
+                ' Adjust the sat based on the mouse wheel scroll direction
+                TheSat += If(e.Delta > 0, 0.01, -0.01) ' Increase or decrease sat by 1 percent
 
                 ' Ensure the sat value wraps around within 0-1 
                 If TheSat < 0 Then TheSat = 1
@@ -509,6 +509,7 @@ Public Class Form1
 
             End If
 
+            ' Return to avoid further processing
             Return
 
         End If
