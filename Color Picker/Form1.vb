@@ -588,44 +588,28 @@ Public Class Form1
 
     End Sub
 
-    Private Sub UpdateUISatChange()
-
-        UpDatingColor = True
-
-        SaturationTrackBar.Value = TheSat * 100
-
-        SaturationNumericUpDown.Value = TheSat * 100
-
-        HueWheel.Color = ColorFromHSV(TheHue, TheSat, TheVal)
-
-        HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
-
-        Invalidate()
-
-        UpDatingColor = False
-
-    End Sub
-
     Private Sub HueNumericUpDown_ValueChanged(sender As Object, e As EventArgs) Handles HueNumericUpDown.ValueChanged
 
         ' Check if we are currently updating the color to avoid recursive calls or cascading updates
         If UpDatingColor Then Return
 
-        UpDatingColor = True
-
         TheHue = HueNumericUpDown.Value
 
-        HueWheel.Color = ColorFromHSV(TheHue, TheSat, TheVal)
+        UpdateUIHueChange()
 
-        HueTrackBar.Value = TheHue * 100
+        'UpDatingColor = True
 
-        HueWheel.SelectedHueAngle = TheHue
+        'HueWheel.Color = ColorFromHSV(TheHue, TheSat, TheVal)
 
-        HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
+        'HueTrackBar.Value = TheHue * 100
 
-        Invalidate()
+        'HueWheel.SelectedHueAngle = TheHue
 
-        UpDatingColor = False
+        'HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
+
+        'Invalidate()
+
+        'UpDatingColor = False
 
     End Sub
 
@@ -692,11 +676,13 @@ Public Class Form1
     End Sub
 
     Private Sub DrawColorWheel(e As PaintEventArgs)
+
         e.Graphics.DrawImage(HueWheel.Bitmap,
                              HueWheel.Location.X,
                              HueWheel.Location.Y,
                              HueWheel.Bitmap.Width,
                              HueWheel.Bitmap.Height)
+
     End Sub
 
     Private Sub DrawSatWheel(e As PaintEventArgs)
@@ -770,8 +756,9 @@ Public Class Form1
 
     End Sub
 
-    ' Method to get the color name
     Public Shared Function GetColorName(color As Color) As String
+        ' Method to get the color name
+
         ' Check if the color is a known color
         Dim knownColorName As String = GetKnownColorName(color)
         If knownColorName IsNot Nothing Then
@@ -853,9 +840,12 @@ Public Class Form1
         End If
 
         Return Color.FromArgb(CInt(r * 255), CInt(g * 255), CInt(b * 255))
+
     End Function
 
     Public Function RGBtoHSV(color As Color) As (Hue As Double, Saturation As Double, Value As Double)
+        ' This function converts RGB color to HSV (Hue, Saturation, Value) format.
+
         Dim r As Double = color.R / 255.0
         Dim g As Double = color.G / 255.0
         Dim b As Double = color.B / 255.0
@@ -881,9 +871,12 @@ Public Class Form1
         Dim v As Double = max
 
         Return (h, s, v)
+
     End Function
 
     Public Function HsvToHex(hue As Double, saturation As Double, value As Double) As String
+
+        ' Convert HSV to RGB and then to hex
         Dim r As Integer, g As Integer, b As Integer
 
         If saturation = 0 Then
@@ -1012,5 +1005,24 @@ Public Class Form1
         UpDatingColor = False
 
     End Sub
+
+    Private Sub UpdateUISatChange()
+
+        UpDatingColor = True
+
+        SaturationTrackBar.Value = TheSat * 100
+
+        SaturationNumericUpDown.Value = TheSat * 100
+
+        HueWheel.Color = ColorFromHSV(TheHue, TheSat, TheVal)
+
+        HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
+
+        Invalidate()
+
+        UpDatingColor = False
+
+    End Sub
+
 
 End Class
