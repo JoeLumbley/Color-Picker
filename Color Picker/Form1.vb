@@ -597,20 +597,6 @@ Public Class Form1
 
         UpdateUIHueChange()
 
-        'UpDatingColor = True
-
-        'HueWheel.Color = ColorFromHSV(TheHue, TheSat, TheVal)
-
-        'HueTrackBar.Value = TheHue * 100
-
-        'HueWheel.SelectedHueAngle = TheHue
-
-        'HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
-
-        'Invalidate()
-
-        'UpDatingColor = False
-
     End Sub
 
     Private Sub HexTextBox_TextChanged(sender As Object, e As EventArgs) Handles HexTextBox.TextChanged
