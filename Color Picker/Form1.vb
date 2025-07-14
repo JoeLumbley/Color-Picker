@@ -488,6 +488,31 @@ Public Class Form1
 
     Private Sub Form1_MouseWheel(sender As Object, e As MouseEventArgs) Handles Me.MouseWheel
 
+        ' Is the mouse over the Sat wheel?
+        If IsPointInsideCircle(
+                e.X, e.Y, SatWheel.Location.X + SatWheel.Radius + SatWheel.Padding,
+                SatWheel.Location.Y + SatWheel.Radius + SatWheel.Padding, SatWheel.Radius) Then
+            ' Yes, the mouse is over the Sat wheel.
+
+            If e.Delta <> 0 Then
+
+                ClearFocus()
+
+                ' Adjust the hue based on the mouse wheel scroll direction
+                TheSat += If(e.Delta > 0, 0.01, -0.01) ' Increase or decrease sat by 1
+
+                ' Ensure the sat value wraps around within 0-1 
+                If TheSat < 0 Then TheSat = 1
+                If TheSat > 1 Then TheSat = 0
+
+                UpdateUISatChange()
+
+            End If
+
+            Return
+
+        End If
+
         ' Is the mouse over the Hue wheel?
         If IsPointInsideCircle(
                 e.X, e.Y, HueWheel.Location.X + HueWheel.Radius + HueWheel.Padding,
