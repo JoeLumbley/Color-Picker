@@ -334,9 +334,9 @@ Public Class Form1
 
     Private SatWheel As SaturationWheelStruct
 
-    Private TheColor As Color = Color.Chartreuse ' Default color
+    Private TheColor As Color = Color.Chartreuse
 
-    Private UpDatingColor As Boolean = False ' Flag to indicate if the app is changing the color values
+    Private UpDatingColor As Boolean = False
 
     Private TheHue As Double = RGBtoHSV(TheColor).Hue
 
@@ -353,7 +353,7 @@ Public Class Form1
     Protected Overrides Sub OnPaint(e As PaintEventArgs)
         MyBase.OnPaint(e)
 
-        DrawColorWheel(e)
+        DrawHueWheel(e)
 
         DrawSatWheel(e)
 
@@ -362,27 +362,6 @@ Public Class Form1
         DrawSelectedColor(e)
 
         DrawLables(e)
-
-    End Sub
-
-    Private Sub DrawLables(e As PaintEventArgs)
-
-        e.Graphics.DrawString("Name: " & GetColorName(ColorFromHSV(TheHue, TheSat, TheVal)),
-                             Me.Font, Brushes.Black, 130, 20)
-
-        e.Graphics.DrawString("Hex: " & HsvToHex(TheHue, TheSat, TheVal),
-                             Me.Font, Brushes.Black, 130, HexTextBox.Top + 2)
-
-        e.Graphics.DrawString("Hue: " & RGBtoHSV(ColorFromHSV(TheHue, TheSat, TheVal)).Hue.ToString("0.###") & "°",
-                             Me.Font, Brushes.Black, HueTrackBar.Left, HueTrackBar.Top - HueNumericUpDown.Height)
-
-
-        e.Graphics.DrawString("Saturation: " & (RGBtoHSV(ColorFromHSV(TheHue, TheSat, TheVal)).Saturation * 100).ToString("0.#") & "%",
-                             Me.Font, Brushes.Black, SaturationTrackBar.Left, SaturationTrackBar.Top - SaturationNumericUpDown.Height)
-
-
-        e.Graphics.DrawString("Brightness: " & (RGBtoHSV(ColorFromHSV(TheHue, TheSat, TheVal)).Value * 100).ToString("0.#") & "%",
-                      Me.Font, Brushes.Black, BrightnessTrackBar.Left, BrightnessTrackBar.Top - BrightnessNumericUpDown.Height)
 
     End Sub
 
@@ -517,6 +496,7 @@ Public Class Form1
 
                 ' Adjust the hue based on the mouse wheel scroll direction
                 TheHue += If(e.Delta > 0, 10, -10) ' Increase or decrease hue by 10 degrees
+
                 ' Ensure the hue value wraps around within 0-360 degrees
                 If TheHue < 0 Then TheHue += 360
                 If TheHue >= 360 Then TheHue -= 360
@@ -677,7 +657,28 @@ Public Class Form1
 
     End Sub
 
-    Private Sub DrawColorWheel(e As PaintEventArgs)
+    Private Sub DrawLables(e As PaintEventArgs)
+
+        e.Graphics.DrawString("Name: " & GetColorName(ColorFromHSV(TheHue, TheSat, TheVal)),
+                             Me.Font, Brushes.Black, 130, 20)
+
+        e.Graphics.DrawString("Hex: " & HsvToHex(TheHue, TheSat, TheVal),
+                             Me.Font, Brushes.Black, 130, HexTextBox.Top + 2)
+
+        e.Graphics.DrawString("Hue: " & RGBtoHSV(ColorFromHSV(TheHue, TheSat, TheVal)).Hue.ToString("0.###") & "°",
+                             Me.Font, Brushes.Black, HueTrackBar.Left, HueTrackBar.Top - HueNumericUpDown.Height)
+
+
+        e.Graphics.DrawString("Saturation: " & (RGBtoHSV(ColorFromHSV(TheHue, TheSat, TheVal)).Saturation * 100).ToString("0.#") & "%",
+                             Me.Font, Brushes.Black, SaturationTrackBar.Left, SaturationTrackBar.Top - SaturationNumericUpDown.Height)
+
+
+        e.Graphics.DrawString("Brightness: " & (RGBtoHSV(ColorFromHSV(TheHue, TheSat, TheVal)).Value * 100).ToString("0.#") & "%",
+                      Me.Font, Brushes.Black, BrightnessTrackBar.Left, BrightnessTrackBar.Top - BrightnessNumericUpDown.Height)
+
+    End Sub
+
+    Private Sub DrawHueWheel(e As PaintEventArgs)
 
         e.Graphics.DrawImage(HueWheel.Bitmap,
                              HueWheel.Location.X,
@@ -696,6 +697,7 @@ Public Class Form1
                              SatWheel.Location.Y,
                              SatWheel.Bitmap.Width,
                              SatWheel.Bitmap.Height)
+
     End Sub
 
     Private Sub DrawSelectedColor(e As PaintEventArgs)
