@@ -330,10 +330,6 @@ Public Class Form1
 
     End Structure
 
-
-
-
-
     Private HueWheel As HueWheelStruct
 
     Private SatWheel As SaturationWheelStruct
