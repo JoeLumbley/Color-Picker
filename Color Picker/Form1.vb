@@ -330,6 +330,7 @@ Public Class Form1
 
     End Structure
 
+
     Private HueWheel As HueWheelStruct
 
     Private SatWheel As SaturationWheelStruct
@@ -690,7 +691,7 @@ Public Class Form1
 
     Private Sub DrawSatWheel(e As PaintEventArgs)
 
-        SatWheel.Draw(150, 20, TheHue, Color.Transparent)
+        SatWheel.Draw(200, 20, TheHue, Color.Transparent)
 
         e.Graphics.DrawImage(SatWheel.Bitmap,
                              SatWheel.Location.X,
@@ -962,7 +963,7 @@ Public Class Form1
         ' Initialize the HueWheel with default values
         HueWheel.Color = TheColor
         HueWheel.SelectedHueAngle = TheHue
-        HueWheel.Location.X = 450
+        HueWheel.Location.X = 500
         HueWheel.Location.Y = 20
         HueWheel.Draw(300, 20, BackColor)
 
@@ -972,7 +973,7 @@ Public Class Form1
         ' Initialize the HueWheel with default values
         SatWheel.Color = TheColor
         SatWheel.SelectedHueAngle = TheHue
-        SatWheel.Draw(150, 20, TheHue, BackColor)
+        SatWheel.Draw(200, 20, TheHue, BackColor)
 
         SatWheel.Location.X = HueWheel.Location.X + (HueWheel.Size.Width - SatWheel.Size.Width) \ 2
         SatWheel.Location.Y = HueWheel.Location.Y + (HueWheel.Size.Width - SatWheel.Size.Width) \ 2
