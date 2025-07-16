@@ -366,21 +366,35 @@ Public Class Form1
             Dim centerY As Integer = Radius + padding
             Dim center As New Point(centerX, centerY)
 
-            ' 12 Wedges at 30° each
+            '12 Wedges at 30° each
             Dim wedgeColors As Color() = {
-        ColorFromHSV(0, 1, 1),       ' Red
-        ColorFromHSV(30, 1, 1),      ' Orange
-        ColorFromHSV(60, 1, 1),      ' Yellow
-        ColorFromHSV(90, 1, 1),      ' Chartreuse Green
-        ColorFromHSV(120, 1, 1),     ' Green
-        ColorFromHSV(150, 1, 1),     ' Spring Green
-        ColorFromHSV(180, 1, 1),     ' Cyan
-        ColorFromHSV(210, 1, 1),     ' Azure
-        ColorFromHSV(240, 1, 1),     ' Blue
-        ColorFromHSV(270, 1, 1),     ' Violet
-        ColorFromHSV(300, 1, 1),     ' Magenta
-        ColorFromHSV(330, 1, 1)      ' Rose
-    }
+                ColorFromHSV(0, 1, 1),       ' Red
+                ColorFromHSV(30, 1, 1),      ' Orange
+                ColorFromHSV(60, 1, 1),      ' Yellow
+                ColorFromHSV(90, 1, 1),      ' Chartreuse Green
+                ColorFromHSV(120, 1, 1),     ' Green
+                ColorFromHSV(150, 1, 1),     ' Spring Green
+                ColorFromHSV(180, 1, 1),     ' Cyan
+                ColorFromHSV(210, 1, 1),     ' Azure
+                ColorFromHSV(240, 1, 1),     ' Blue
+                ColorFromHSV(270, 1, 1),     ' Violet
+                ColorFromHSV(300, 1, 1),     ' Magenta
+                ColorFromHSV(330, 1, 1)      ' Rose
+            }
+            '        Dim wedgeColors As Color() = {
+            '    Color.Red,       ' Red
+            '    Color.Orange,      ' Orange
+            '    Color.Yellow,      ' Yellow
+            '    Color.Chartreuse,      ' Chartreuse Green
+            '    Color.Green,     ' Green
+            '    Color.SpringGreen,     ' Spring Green
+            '    Color.Cyan,     ' Cyan
+            '    Color.Azure,     ' Azure
+            '    Color.Blue,     ' Blue
+            '    Color.Violet,     ' Violet
+            '    Color.Magenta,     ' Magenta
+            '    Color.MistyRose      ' Rose
+            '}
 
 
             Dim rotationOffset As Single = -15 ' Counterclockwise rotation
@@ -393,16 +407,6 @@ Public Class Form1
                     Graphics.FillPath(brush, path)
                 End Using
             Next
-
-            'For i As Integer = 0 To 11
-            '    Dim startAngle As Single = i * 30
-            '    Dim path As New Drawing2D.GraphicsPath()
-            '    path.AddPie(New Rectangle(padding, padding, size, size), startAngle, 30)
-
-            '    Using brush As New SolidBrush(wedgeColors(i))
-            '        Graphics.FillPath(brush, path)
-            '    End Using
-            'Next
 
             ' Border
             Dim borderRect As New Rectangle(padding, padding, size, size)
@@ -479,14 +483,66 @@ Public Class Form1
             Dim dist As Double = Math.Sqrt(dx * dx + dy * dy)
 
             If dist <= Radius Then
-                Dim angle As Double = (Math.Atan2(dy, dx) * 180.0 / Math.PI + 360) Mod 360
+                Dim rawAngle As Double = (Math.Atan2(dy, dx) * 180.0 / Math.PI + 360) Mod 360
+                SelectedHueAngle = rawAngle
 
-                Color = ColorFromHSV(angle, RGBtoHSV(Color).Saturation, RGBtoHSV(Color).Value)
-                SelectedHueAngle = angle ' Save angle for rendering pointer
+                ' Apply inverse rotation offset
+                Dim adjustedAngle As Double = (rawAngle - (-15) + 360) Mod 360
 
+                ' Determine which of the 12 wedges the angle belongs to
+                Dim wedgeIndex As Integer = CInt(Math.Floor(adjustedAngle / 30)) Mod 12
+
+                ' Optional: Store color directly from wedge
+                '        Dim wedgeColors As Color() = {
+                '    ColorFromHSV(0, 1, 1), ColorFromHSV(30, 1, 1), ColorFromHSV(60, 1, 1),
+                '    ColorFromHSV(90, 1, 1), ColorFromHSV(120, 1, 1), ColorFromHSV(150, 1, 1),
+                '    ColorFromHSV(180, 1, 1), ColorFromHSV(210, 1, 1), ColorFromHSV(240, 1, 1),
+                '    ColorFromHSV(270, 1, 1), ColorFromHSV(300, 1, 1), ColorFromHSV(330, 1, 1)
+                '}
+
+
+                Dim wedgeColors As Color() = {
+            Color.Red,       ' Red
+            ColorFromHSV(30, 1, 1),      ' Orange
+            Color.Yellow,      ' Yellow
+            Color.Chartreuse,      ' Chartreuse Green
+            Color.Lime,     ' Green
+            Color.SpringGreen,     ' Spring Green
+            Color.Cyan,     ' Cyan
+            ColorFromHSV(210, 1, 1),     ' Azure
+            Color.Blue,     ' Blue
+            ColorFromHSV(270, 1, 1),     ' Violet
+            Color.Magenta,     ' Magenta
+            ColorFromHSV(330, 1, 1)      ' Rose
+        }
+
+
+                Color = wedgeColors(wedgeIndex)
             End If
 
         End Sub
+
+
+
+        'Public Sub GetColorAtPoint(point As Point)
+
+        '    If Bitmap Is Nothing Then Return
+
+        '    Dim centerX As Integer = Radius + Padding
+        '    Dim centerY As Integer = Radius + Padding
+        '    Dim dx As Integer = point.X - Location.X - centerX
+        '    Dim dy As Integer = point.Y - Location.Y - centerY
+        '    Dim dist As Double = Math.Sqrt(dx * dx + dy * dy)
+
+        '    If dist <= Radius Then
+        '        Dim angle As Double = (Math.Atan2(dy, dx) * 180.0 / Math.PI + 360) Mod 360
+
+        '        Color = ColorFromHSV(angle, RGBtoHSV(Color).Saturation, RGBtoHSV(Color).Value)
+        '        SelectedHueAngle = angle ' Save angle for rendering pointer
+
+        '    End If
+
+        'End Sub
 
         ' Function to convert HSV to RGB
         Public Function ColorFromHSV(hue As Double, saturation As Double, brightness As Double) As Color
@@ -652,7 +708,57 @@ Public Class Form1
 
             End If
 
+            Return
+
         End If
+
+        ' Is the mouse over the Wedges wheel?
+        If IsPointInsideCircle(
+                e.X, e.Y, WedgesWheel.Location.X + WedgesWheel.Radius + WedgesWheel.Padding,
+                WedgesWheel.Location.Y + WedgesWheel.Radius + WedgesWheel.Padding, WedgesWheel.Radius) Then
+            ' Yes, the mouse is over the Wedges wheel.
+
+            If e.Button = MouseButtons.Left Then
+
+                ClearFocus()
+
+                WedgesWheel.GetColorAtPoint(New Point(e.X, e.Y))
+
+                TheColor = WedgesWheel.Color
+
+                ' Convert RGB to HSV
+                Dim hsv = RGBtoHSV(TheColor)
+                TheHue = hsv.Hue
+                TheSat = hsv.Saturation
+                TheVal = hsv.Value
+
+                ' Update the HueWheel with the new color and hue
+                HueWheel.Color = TheColor
+                HueWheel.SelectedHueAngle = TheHue
+                ' Update the trackbars and numeric up-downs
+                HueTrackBar.Value = TheHue * 100
+                HueNumericUpDown.Value = TheHue
+                SaturationTrackBar.Value = TheSat * 100
+                SaturationNumericUpDown.Value = TheSat * 100
+                BrightnessTrackBar.Value = TheVal * 10000
+                BrightnessNumericUpDown.Value = TheVal * 100
+                HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
+                ' Invalidate the form to redraw with the new color
+                Invalidate() ' Redraw the form to reflect changes
+                UpDatingColor = False
+
+
+
+                'TheHue = HueWheel.SelectedHueAngle
+
+                'UpdateUIHueChange()
+
+            End If
+
+            Return
+
+        End If
+
 
     End Sub
 
@@ -1027,19 +1133,66 @@ Public Class Form1
 
     End Sub
 
-    Public Shared Function GetColorName(color As Color) As String
+    'Public Shared Function GetColorName(color As Color) As String
 
-        ' Check if the color is a known color
+    '    ' Check if the color is a known color
+    '    Dim knownColorName As String = GetKnownColorName(color)
+
+    '    ' If the color is known, return its name
+    '    If knownColorName IsNot Nothing Then
+    '        Return knownColorName
+    '    End If
+
+    '    ' If not known, return an empty string
+    '    Return String.Empty
+
+    'End Function
+
+    Public Function GetColorName(color As Color) As String
+
+        ' Custom color-name pairs
+        Dim customColors As Dictionary(Of Color, String) = New Dictionary(Of Color, String) From {
+        {ColorFromHSV(0, 1, 1), "Red"},
+        {ColorFromHSV(30, 1, 1), "Orange"},
+        {ColorFromHSV(60, 1, 1), "Yellow"},
+        {ColorFromHSV(90, 1, 1), "Chartreuse"},
+        {ColorFromHSV(120, 1, 1), "Green or Lime"},
+        {ColorFromHSV(150, 1, 1), "Spring Green or Guppie"},
+        {ColorFromHSV(180, 1, 1), "Aqua or Cyan"},
+        {ColorFromHSV(210, 1, 1), "Azure"},
+        {ColorFromHSV(240, 1, 1), "Blue"},
+        {ColorFromHSV(270, 1, 1), "Violet or Electric Violet"},
+        {ColorFromHSV(300, 1, 1), "Magenta or Fuchsia"},
+        {ColorFromHSV(330, 1, 1), "Bright Pink or Rose"}
+    }
+
+        ' Try to match with custom colors
+        For Each kvp In customColors
+            If ColorsAreEqual(kvp.Key, color) Then
+                Return kvp.Value
+            End If
+        Next
+
+        ' Fallback to known system colors
         Dim knownColorName As String = GetKnownColorName(color)
-
-        ' If the color is known, return its name
         If knownColorName IsNot Nothing Then
             Return knownColorName
         End If
 
-        ' If not known, return an empty string
         Return String.Empty
 
+    End Function
+
+    'Private Shared Function ColorsAreEqual(c1 As Color, c2 As Color, Optional tolerance As Integer = 2) As Boolean
+    '    Return Math.Abs(c1.R - c2.R) <= tolerance AndAlso
+    '       Math.Abs(c1.G - c2.G) <= tolerance AndAlso
+    '       Math.Abs(c1.B - c2.B) <= tolerance
+    'End Function
+
+    Private Shared Function ColorsAreEqual(c1 As Color, c2 As Color, Optional tolerance As Integer = 2) As Boolean
+        Return Math.Abs(CInt(c1.R) - CInt(c2.R)) <= tolerance AndAlso
+           Math.Abs(CInt(c1.G) - CInt(c2.G)) <= tolerance AndAlso
+           Math.Abs(CInt(c1.B) - CInt(c2.B)) <= tolerance
     End Function
 
     Private Shared Function GetKnownColorName(color As Color) As String
