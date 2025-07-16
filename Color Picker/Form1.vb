@@ -42,7 +42,9 @@ Public Class Form1
                         Dim angle As Double = (Math.Atan2(dy, dx) * 180.0 / Math.PI + 360) Mod 360
                         Bitmap.SetPixel(x, y, ColorFromHSV(angle, 1, 1))
                     Else
-                        Bitmap.SetPixel(x, y, backcolor)
+                        'Bitmap.SetPixel(x, y, backcolor)
+                        Bitmap.SetPixel(x, y, Color.Transparent)
+
                     End If
                 Next
             Next
@@ -331,9 +333,237 @@ Public Class Form1
     End Structure
 
 
+    Private Structure WedgesWheelStruct
+
+        Public Location As Point
+        Public Size As Size
+        Public Radius As Integer
+        Public Center As Point
+        Public Bitmap As Bitmap
+        Public Graphics As Graphics
+        Public BackColor As Color
+        Public Color As Color
+        Public Padding As Integer
+        Public SelectedHueAngle As Double
+        Public Saturation As Double
+
+        Public Sub DrawWedges(size As Integer, padding As Integer, backcolor As Color)
+
+            If Bitmap Is Nothing OrElse Bitmap.Width <> size OrElse Bitmap.Height <> size Then
+                Bitmap?.Dispose()
+                Bitmap = New Bitmap(size + padding * 2, size + padding * 2)
+                Graphics = Graphics.FromImage(Bitmap)
+            End If
+
+            Graphics.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
+
+            Radius = size \ 2
+            Me.Padding = padding
+            Me.Size = New Size(size, size)
+            Me.BackColor = backcolor
+
+            Dim centerX As Integer = Radius + padding
+            Dim centerY As Integer = Radius + padding
+            Dim center As New Point(centerX, centerY)
+
+            ' 12 Wedges at 30° each
+            Dim wedgeColors As Color() = {
+        ColorFromHSV(0, 1, 1),       ' Red
+        ColorFromHSV(30, 1, 1),      ' Orange
+        ColorFromHSV(60, 1, 1),      ' Yellow
+        ColorFromHSV(90, 1, 1),      ' Chartreuse Green
+        ColorFromHSV(120, 1, 1),     ' Green
+        ColorFromHSV(150, 1, 1),     ' Spring Green
+        ColorFromHSV(180, 1, 1),     ' Cyan
+        ColorFromHSV(210, 1, 1),     ' Azure
+        ColorFromHSV(240, 1, 1),     ' Blue
+        ColorFromHSV(270, 1, 1),     ' Violet
+        ColorFromHSV(300, 1, 1),     ' Magenta
+        ColorFromHSV(330, 1, 1)      ' Rose
+    }
+
+            For i As Integer = 0 To 11
+                Dim startAngle As Single = i * 30
+                Dim path As New Drawing2D.GraphicsPath()
+                path.AddPie(New Rectangle(padding, padding, size, size), startAngle, 30)
+
+                Using brush As New SolidBrush(wedgeColors(i))
+                    Graphics.FillPath(brush, path)
+                End Using
+            Next
+
+            ' Border
+            Dim borderRect As New Rectangle(padding, padding, size, size)
+            Using pen As New Pen(Color.Black, 3)
+                Graphics.DrawEllipse(pen, borderRect)
+            End Using
+
+        End Sub
+
+        Public Sub Draw(size As Integer, padding As Integer, hueAngle As Double, backcolor As Color)
+            If Bitmap Is Nothing OrElse Bitmap.Width <> size OrElse Bitmap.Height <> size Then
+                Bitmap?.Dispose()
+                Bitmap = New Bitmap(size + padding * 2, size + padding * 2)
+                Graphics = Graphics.FromImage(Bitmap)
+            End If
+
+            Graphics.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
+
+            Radius = size \ 2
+            Me.Size = New Size(size, size)
+            Me.Padding = padding
+            Me.BackColor = backcolor
+
+            Dim centerX As Integer = Radius + padding
+            Dim centerY As Integer = Radius + padding
+
+            For y As Integer = 0 To Bitmap.Height - 1
+                For x As Integer = 0 To Bitmap.Width - 1
+                    Dim dx As Integer = x - centerX
+                    Dim dy As Integer = y - centerY
+                    Dim dist As Double = Math.Sqrt(dx * dx + dy * dy)
+
+                    If dist <= Radius Then
+                        Dim angle As Double = (Math.Atan2(dy, dx) * 180.0 / Math.PI + 360) Mod 360
+                        Dim saturation As Double = Math.Min(angle / 360.0, 1.0)
+                        Dim color As Color = ColorFromHSV(hueAngle, saturation, 1.0)
+                        Bitmap.SetPixel(x, y, color)
+                    Else
+                        Bitmap.SetPixel(x, y, backcolor)
+                    End If
+                Next
+            Next
+
+            Dim borderRect As New Rectangle(padding, padding, size, size)
+            Using pen As New Pen(Color.Black, 3)
+                Graphics.DrawEllipse(pen, borderRect)
+            End Using
+
+        End Sub
+
+        Public Sub GetSaturationFromAnglePoint(point As Point)
+            Dim centerX As Integer = Radius + Padding
+            Dim centerY As Integer = Radius + Padding
+            Dim dx As Integer = point.X - Location.X - centerX
+            Dim dy As Integer = point.Y - Location.Y - centerY
+            Dim dist As Double = Math.Sqrt(dx * dx + dy * dy)
+
+            If dist <= Radius Then
+                Dim angle As Double = (Math.Atan2(dy, dx) * 180.0 / Math.PI + 360) Mod 360
+                Saturation = Math.Min(angle / 360.0, 1.0)
+
+                'Color = ColorFromHSV(SelectedHueAngle, saturation, 1.0)
+            End If
+        End Sub
+
+        Public Sub GetColorAtPoint(point As Point)
+
+            If Bitmap Is Nothing Then Return
+
+            Dim centerX As Integer = Radius + Padding
+            Dim centerY As Integer = Radius + Padding
+            Dim dx As Integer = point.X - Location.X - centerX
+            Dim dy As Integer = point.Y - Location.Y - centerY
+            Dim dist As Double = Math.Sqrt(dx * dx + dy * dy)
+
+            If dist <= Radius Then
+                Dim angle As Double = (Math.Atan2(dy, dx) * 180.0 / Math.PI + 360) Mod 360
+
+                Color = ColorFromHSV(angle, RGBtoHSV(Color).Saturation, RGBtoHSV(Color).Value)
+                SelectedHueAngle = angle ' Save angle for rendering pointer
+
+            End If
+
+        End Sub
+
+        ' Function to convert HSV to RGB
+        Public Function ColorFromHSV(hue As Double, saturation As Double, brightness As Double) As Color
+
+            Dim r As Double = 0, g As Double = 0, b As Double = 0
+
+            If saturation = 0 Then
+                r = brightness
+                g = brightness
+                b = brightness
+            Else
+                Dim sector As Integer = CInt(Math.Floor(hue / 60)) Mod 6
+                Dim fractional As Double = (hue / 60) - Math.Floor(hue / 60)
+
+                Dim p As Double = brightness * (1 - saturation)
+                Dim q As Double = brightness * (1 - saturation * fractional)
+                Dim t As Double = brightness * (1 - saturation * (1 - fractional))
+
+                Select Case sector
+                    Case 0
+                        r = brightness
+                        g = t
+                        b = p
+                    Case 1
+                        r = q
+                        g = brightness
+                        b = p
+                    Case 2
+                        r = p
+                        g = brightness
+                        b = t
+                    Case 3
+                        r = p
+                        g = q
+                        b = brightness
+                    Case 4
+                        r = t
+                        g = p
+                        b = brightness
+                    Case 5
+                        r = brightness
+                        g = p
+                        b = q
+                End Select
+            End If
+
+            Return Color.FromArgb(CInt(r * 255), CInt(g * 255), CInt(b * 255))
+
+        End Function
+
+        Public Function RGBtoHSV(color As Color) As (Hue As Double, Saturation As Double, Value As Double)
+
+            Dim r As Double = color.R / 255.0
+            Dim g As Double = color.G / 255.0
+            Dim b As Double = color.B / 255.0
+
+            Dim max As Double = Math.Max(r, Math.Max(g, b))
+            Dim min As Double = Math.Min(r, Math.Min(g, b))
+            Dim delta As Double = max - min
+
+            Dim h As Double
+
+            If delta = 0 Then
+                h = 0
+            ElseIf max = r Then
+                h = 60 * (((g - b) / delta) Mod 6)
+            ElseIf max = g Then
+                h = 60 * (((b - r) / delta) + 2)
+            Else
+                h = 60 * (((r - g) / delta) + 4)
+            End If
+
+            If h < 0 Then h += 360
+
+            Dim s As Double = If(max = 0, 0, delta / max)
+            Dim v As Double = max
+
+            Return (h, s, v)
+
+        End Function
+
+    End Structure
+
     Private HueWheel As HueWheelStruct
 
     Private SatWheel As SaturationWheelStruct
+
+    Private WedgesWheel As WedgesWheelStruct
+
 
     Private TheColor As Color = Color.Chartreuse
 
@@ -353,6 +583,8 @@ Public Class Form1
 
     Protected Overrides Sub OnPaint(e As PaintEventArgs)
         MyBase.OnPaint(e)
+
+        DrawWedgesWheel(e)
 
         DrawHueWheel(e)
 
@@ -686,6 +918,17 @@ Public Class Form1
 
     End Sub
 
+
+    Private Sub DrawWedgesWheel(e As PaintEventArgs)
+
+        e.Graphics.DrawImage(WedgesWheel.Bitmap,
+                             WedgesWheel.Location.X,
+                             WedgesWheel.Location.Y,
+                             WedgesWheel.Bitmap.Width,
+                             WedgesWheel.Bitmap.Height)
+
+    End Sub
+
     Private Sub DrawHueWheel(e As PaintEventArgs)
 
         e.Graphics.DrawImage(HueWheel.Bitmap,
@@ -967,15 +1210,40 @@ Public Class Form1
 
         UpDatingColor = True
 
+
         ' Initialize the HueWheel with default values
         HueWheel.Color = TheColor
         HueWheel.SelectedHueAngle = TheHue
         HueWheel.Location.X = 350
         HueWheel.Location.Y = 20
-        HueWheel.Draw(300, 20, BackColor)
+        HueWheel.Draw(250, 20, BackColor)
 
         HueTrackBar.Value = TheHue * 100
         HueNumericUpDown.Value = TheHue
+
+
+
+        WedgesWheel.Location.X = HueWheel.Location.X - 25
+        WedgesWheel.Location.Y = HueWheel.Location.Y - 25
+
+        'WedgesWheel.Location = New Point(350, 20)
+        WedgesWheel.Size = New Size(300, 300)
+        'WedgesWheel.Radius = 75
+        'WedgesWheel.Center = New Point(WedgesWheel.Radius + WedgesWheel.Padding, WedgesWheel.Radius + WedgesWheel.Padding)
+        WedgesWheel.DrawWedges(300, 20, BackColor)
+        'WedgesWheel.BackColor = BackColor
+        'WedgesWheel.Color = Color.Transparent ' Set initial color to transparent
+        'WedgesWheel.Padding = 20
+        'WedgesWheel.SelectedHueAngle = 0 ' Initial hue angle
+        'WedgesWheel.Saturation = 0 ' Initial saturation
+
+
+
+
+
+
+
+
 
         ' Initialize the HueWheel with default values
         SatWheel.Color = TheColor

@@ -103,7 +103,7 @@ Partial Class Form1
         ' Form1
         ' 
         AutoScaleMode = AutoScaleMode.None
-        ClientSize = New Size(705, 477)
+        ClientSize = New Size(653, 477)
         Controls.Add(HexTextBox)
         Controls.Add(HueNumericUpDown)
         Controls.Add(HueTrackBar)
