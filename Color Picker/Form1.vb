@@ -1157,13 +1157,13 @@ Public Class Form1
         {ColorFromHSV(60, 1, 1), "Yellow"},
         {ColorFromHSV(90, 1, 1), "Chartreuse"},
         {ColorFromHSV(120, 1, 1), "Green or Lime"},
-        {ColorFromHSV(150, 1, 1), "Spring Green or Guppie"},
+        {ColorFromHSV(150, 1, 1), "Spring Green"},
         {ColorFromHSV(180, 1, 1), "Aqua or Cyan"},
         {ColorFromHSV(210, 1, 1), "Azure"},
         {ColorFromHSV(240, 1, 1), "Blue"},
-        {ColorFromHSV(270, 1, 1), "Violet or Electric Violet"},
+        {ColorFromHSV(270, 1, 1), "Violet"},
         {ColorFromHSV(300, 1, 1), "Magenta or Fuchsia"},
-        {ColorFromHSV(330, 1, 1), "Bright Pink or Rose"}
+        {ColorFromHSV(330, 1, 1), "Rose or Bright Pink"}
     }
 
         ' Try to match with custom colors
