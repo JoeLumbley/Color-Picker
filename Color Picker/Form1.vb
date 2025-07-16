@@ -539,7 +539,7 @@ Public Class Form1
 
         UpDatingColor = True
 
-        TheVal = BrightnessTrackBar.Value / 100.0
+        TheVal = BrightnessTrackBar.Value / 10000
 
         HueWheel.Color = ColorFromHSV(TheHue, TheSat, TheVal)
 
@@ -584,7 +584,7 @@ Public Class Form1
 
         TheVal = BrightnessNumericUpDown.Value / 100.0
 
-        BrightnessTrackBar.Value = TheVal * 100
+        BrightnessTrackBar.Value = TheVal * 10000
 
         HueWheel.Color = ColorFromHSV(TheHue, TheSat, TheVal)
 
@@ -640,10 +640,10 @@ Public Class Form1
                 HueTrackBar.Value = TheHue * 100
                 HueNumericUpDown.Value = TheHue
 
-                SaturationTrackBar.Value = CInt(TheSat * 100)
+                SaturationTrackBar.Value = TheSat * 100
                 SaturationNumericUpDown.Value = TheSat * 100
 
-                BrightnessTrackBar.Value = CInt(TheVal * 100)
+                BrightnessTrackBar.Value = TheVal * 10000
                 BrightnessNumericUpDown.Value = TheVal * 100
 
                 HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
@@ -674,8 +674,15 @@ Public Class Form1
                              Me.Font, Brushes.Black, SaturationTrackBar.Left, SaturationTrackBar.Top - SaturationNumericUpDown.Height)
 
 
-        e.Graphics.DrawString("Brightness: " & (RGBtoHSV(ColorFromHSV(TheHue, TheSat, TheVal)).Value * 100).ToString("0.#") & "%",
+        e.Graphics.DrawString("Value: " & (RGBtoHSV(ColorFromHSV(TheHue, TheSat, TheVal)).Value * 100).ToString("0.##") & "%",
                       Me.Font, Brushes.Black, BrightnessTrackBar.Left, BrightnessTrackBar.Top - BrightnessNumericUpDown.Height)
+
+
+        'e.Graphics.DrawString("Value: " & (TheVal * 100).ToString("0.###") & "%",
+        '                     Me.Font, Brushes.Black, BrightnessTrackBar.Left, BrightnessTrackBar.Top - BrightnessNumericUpDown.Height)
+
+
+
 
     End Sub
 
@@ -963,7 +970,7 @@ Public Class Form1
         ' Initialize the HueWheel with default values
         HueWheel.Color = TheColor
         HueWheel.SelectedHueAngle = TheHue
-        HueWheel.Location.X = 500
+        HueWheel.Location.X = 320
         HueWheel.Location.Y = 20
         HueWheel.Draw(300, 20, BackColor)
 
@@ -981,7 +988,7 @@ Public Class Form1
         SaturationTrackBar.Value = TheSat * 100
         SaturationNumericUpDown.Value = TheSat * 100
 
-        BrightnessTrackBar.Value = TheVal * 100
+        BrightnessTrackBar.Value = TheVal * 10000
         BrightnessNumericUpDown.Value = TheVal * 100
 
         HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
