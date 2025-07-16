@@ -1174,7 +1174,7 @@ Public Class Form1
         {ColorFromHSV(190, 1, 1), "Vivid Sky Blue"},
         {ColorFromHSV(200, 1, 1), "Blue Bolt"},
         {ColorFromHSV(210, 1, 1), "Azure"},
-        {ColorFromHSV(220, 1, 1), "Nīlā blue"},
+        {ColorFromHSV(220, 1, 1), "Nīlā Blue"},
         {ColorFromHSV(230, 1, 1), "Vibrant Blue"},
         {ColorFromHSV(240, 1, 1), "Blue"},
         {ColorFromHSV(250, 1, 1), "Deep Indigo"},
