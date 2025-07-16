@@ -382,8 +382,10 @@ Public Class Form1
         ColorFromHSV(330, 1, 1)      ' Rose
     }
 
+
+            Dim rotationOffset As Single = -15 ' Counterclockwise rotation
             For i As Integer = 0 To 11
-                Dim startAngle As Single = i * 30
+                Dim startAngle As Single = i * 30 + rotationOffset
                 Dim path As New Drawing2D.GraphicsPath()
                 path.AddPie(New Rectangle(padding, padding, size, size), startAngle, 30)
 
@@ -391,6 +393,16 @@ Public Class Form1
                     Graphics.FillPath(brush, path)
                 End Using
             Next
+
+            'For i As Integer = 0 To 11
+            '    Dim startAngle As Single = i * 30
+            '    Dim path As New Drawing2D.GraphicsPath()
+            '    path.AddPie(New Rectangle(padding, padding, size, size), startAngle, 30)
+
+            '    Using brush As New SolidBrush(wedgeColors(i))
+            '        Graphics.FillPath(brush, path)
+            '    End Using
+            'Next
 
             ' Border
             Dim borderRect As New Rectangle(padding, padding, size, size)
