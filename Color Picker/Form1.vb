@@ -1153,9 +1153,12 @@ Public Class Form1
         ' Custom color-name pairs
         Dim customColors As Dictionary(Of Color, String) = New Dictionary(Of Color, String) From {
         {ColorFromHSV(0, 1, 1), "Red"},
+        {ColorFromHSV(10, 1, 1), "Scarlet"},
+        {ColorFromHSV(20, 1, 1), "International Orange"},
         {ColorFromHSV(30, 1, 1), "Orange"},
-        {ColorFromHSV(60, 1, 1), "Yellow"},
+        {ColorFromHSV(40, 1, 1), "Neon Carrot"},
         {ColorFromHSV(50, 1, 1), "Cyber Yellow"},
+        {ColorFromHSV(60, 1, 1), "Yellow"},
         {ColorFromHSV(70, 1, 1), "Volt"},
         {ColorFromHSV(80, 1, 1), "Lemon Green"},
         {ColorFromHSV(90, 1, 1), "Chartreuse"},
@@ -1180,7 +1183,11 @@ Public Class Form1
         {ColorFromHSV(280, 1, 1), "Vivid Purple"},
         {ColorFromHSV(290, 1, 1), "Purple"},
         {ColorFromHSV(300, 1, 1), "Magenta or Fuchsia"},
-        {ColorFromHSV(330, 1, 1), "Rose or Bright Pink"}
+        {ColorFromHSV(310, 1, 1), "Hot Magenta"},
+        {ColorFromHSV(320, 1, 1), "Fashion Fuchsia"},
+        {ColorFromHSV(330, 1, 1), "Rose or Bright Pink"},
+        {ColorFromHSV(340, 1, 1), "Red Light Neon"},
+        {ColorFromHSV(350, 1, 1), "Torch Red"}
     }
 
         ' Try to match with custom colors
