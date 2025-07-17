@@ -908,6 +908,20 @@ Public Class Form1
                 If TheHue < 0 Then TheHue += 360
                 If TheHue >= 360 Then TheHue -= 360
 
+                '' Adjust the selected hue angle
+                'HueWheel.SelectedHueAngle += If(e.Delta > 0, 10, -10)
+
+                '' Wrap around 0–360
+                'If HueWheel.SelectedHueAngle < 0 Then HueWheel.SelectedHueAngle += 360
+                'If HueWheel.SelectedHueAngle >= 360 Then HueWheel.SelectedHueAngle -= 360
+
+                ' Snap to nearest 10° increment
+                Dim snappedHue As Double = Math.Round(TheHue / 10) * 10
+
+                If snappedHue >= 360 Then snappedHue -= 360
+                TheHue = snappedHue
+
+
                 UpdateUIHueChange()
 
             End If
