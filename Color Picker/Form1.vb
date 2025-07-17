@@ -581,16 +581,15 @@ Public Class Form1
 
     Private WedgesWheel As WedgesWheelStruct
 
-
-    Private TheColor As Color = Color.Chartreuse
-
     Private UpDatingColor As Boolean = False
 
-    Private TheHue As Double = RGBtoHSV(TheColor).Hue
+    Private TheHue As Double = 90
 
-    Private TheSat As Double = RGBtoHSV(TheColor).Saturation
+    Private TheSat As Double = 1
 
-    Private TheVal As Double = RGBtoHSV(TheColor).Value
+    Private TheVal As Double = 1
+
+    Private TheColor As Color = ColorFromHSV(TheHue, TheSat, TheVal)
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
@@ -878,16 +877,8 @@ Public Class Form1
                 ' Snap to nearest wedge center (every 30°)
                 Dim snappedHue As Double = Math.Round(HueWheel.SelectedHueAngle / 30) * 30
                 If snappedHue >= 360 Then snappedHue -= 360
-                HueWheel.SelectedHueAngle = snappedHue
+                'HueWheel.SelectedHueAngle = snappedHue
 
-                ' Update color based on snapped hue
-                'HueWheel.Color = ColorFromHSV(snappedHue, 1, 1)
-                ' Update global color and HSV values
-                'TheColor = HueWheel.Color
-
-
-                Dim hsv = RGBtoHSV(TheColor)
-                'TheHue = hsv.Hue
                 TheHue = snappedHue
                 TheSat = 1
                 TheVal = 1
