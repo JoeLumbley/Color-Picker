@@ -81,7 +81,7 @@ Partial Class Form1
         HueTrackBar.Size = New Size(310, 45)
         HueTrackBar.SmallChange = 1000
         HueTrackBar.TabIndex = 1
-        HueTrackBar.TickFrequency = 5
+        HueTrackBar.TickFrequency = 13
         ' 
         ' HueNumericUpDown
         ' 

@@ -881,22 +881,43 @@ Public Class Form1
                 HueWheel.SelectedHueAngle = snappedHue
 
                 ' Update color based on snapped hue
-                HueWheel.Color = ColorFromHSV(snappedHue, 1, 1)
+                'HueWheel.Color = ColorFromHSV(snappedHue, 1, 1)
                 ' Update global color and HSV values
-                TheColor = HueWheel.Color
+                'TheColor = HueWheel.Color
+
+
                 Dim hsv = RGBtoHSV(TheColor)
-                TheHue = hsv.Hue
-                TheSat = hsv.Saturation
-                TheVal = hsv.Value
+                'TheHue = hsv.Hue
+                TheHue = snappedHue
+                TheSat = 1
+                TheVal = 1
+
+                TheColor = ColorFromHSV(TheHue, TheSat, TheVal)
 
                 ' Update UI controls
+                HueWheel.Color = TheColor
+
+                HueWheel.SelectedHueAngle = TheHue
                 HueTrackBar.Value = TheHue * 100
+
                 HueNumericUpDown.Value = TheHue
                 SaturationTrackBar.Value = TheSat * 100
                 SaturationNumericUpDown.Value = TheSat * 100
+
                 BrightnessTrackBar.Value = TheVal * 10000
                 BrightnessNumericUpDown.Value = TheVal * 100
+
                 HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
+
+
+                ' Update UI controls
+                'HueTrackBar.Value = TheHue * 100
+                'HueNumericUpDown.Value = TheHue
+                'SaturationTrackBar.Value = TheSat * 100
+                'SaturationNumericUpDown.Value = TheSat * 100
+                'BrightnessTrackBar.Value = TheVal * 10000
+                'BrightnessNumericUpDown.Value = TheVal * 100
+                'HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
 
                 ' Optional: Tooltip
                 'ToolTip1.SetToolTip(Me, WedgesWheel.SelectedColorName)
