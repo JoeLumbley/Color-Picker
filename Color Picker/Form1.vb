@@ -802,7 +802,57 @@ Public Class Form1
 
             End If
 
+            Return
+
         End If
+
+        ' Is the mouse over the Wedges wheel?
+        If IsPointInsideCircle(
+                e.X, e.Y, WedgesWheel.Location.X + WedgesWheel.Radius + WedgesWheel.Padding,
+                WedgesWheel.Location.Y + WedgesWheel.Radius + WedgesWheel.Padding, WedgesWheel.Radius) Then
+            ' Yes, the mouse is over the Wedges wheel.
+
+            If e.Button = MouseButtons.Left Then
+
+                ClearFocus()
+
+                WedgesWheel.GetColorAtPoint(New Point(e.X, e.Y))
+
+                TheColor = WedgesWheel.Color
+
+                ' Convert RGB to HSV
+                Dim hsv = RGBtoHSV(TheColor)
+                TheHue = hsv.Hue
+                TheSat = hsv.Saturation
+                TheVal = hsv.Value
+
+                ' Update the HueWheel with the new color and hue
+                HueWheel.Color = TheColor
+                HueWheel.SelectedHueAngle = TheHue
+                ' Update the trackbars and numeric up-downs
+                HueTrackBar.Value = TheHue * 100
+                HueNumericUpDown.Value = TheHue
+                SaturationTrackBar.Value = TheSat * 100
+                SaturationNumericUpDown.Value = TheSat * 100
+                BrightnessTrackBar.Value = TheVal * 10000
+                BrightnessNumericUpDown.Value = TheVal * 100
+                HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
+                ' Invalidate the form to redraw with the new color
+                Invalidate() ' Redraw the form to reflect changes
+                UpDatingColor = False
+
+
+
+                'TheHue = HueWheel.SelectedHueAngle
+
+                'UpdateUIHueChange()
+
+            End If
+
+            Return
+
+        End If
+
 
     End Sub
 
@@ -854,6 +904,51 @@ Public Class Form1
 
                 UpdateUIHueChange()
 
+            End If
+
+            Return
+
+        End If
+
+
+        ' Is the mouse over the Wedges wheel?
+        If IsPointInsideCircle(
+                e.X, e.Y, WedgesWheel.Location.X + WedgesWheel.Radius + WedgesWheel.Padding,
+                WedgesWheel.Location.Y + WedgesWheel.Radius + WedgesWheel.Padding, WedgesWheel.Radius) Then
+
+            If e.Delta <> 0 Then
+                ClearFocus()
+
+                ' Adjust the selected hue angle
+                HueWheel.SelectedHueAngle += If(e.Delta > 0, 10, -10)
+
+                ' Wrap around 0–360
+                If HueWheel.SelectedHueAngle < 0 Then HueWheel.SelectedHueAngle += 360
+                If HueWheel.SelectedHueAngle >= 360 Then HueWheel.SelectedHueAngle -= 360
+
+                ' Update color based on new angle
+                HueWheel.Color = ColorFromHSV(HueWheel.SelectedHueAngle, 1, 1)
+
+                ' Update global color and HSV values
+                TheColor = HueWheel.Color
+                Dim hsv = RGBtoHSV(TheColor)
+                TheHue = hsv.Hue
+                TheSat = hsv.Saturation
+                TheVal = hsv.Value
+
+                ' Update HueWheel and UI controls
+                'HueWheel.Color = TheColor
+                'HueWheel.SelectedHueAngle = TheHue
+                HueTrackBar.Value = TheHue * 100
+                HueNumericUpDown.Value = TheHue
+                SaturationTrackBar.Value = TheSat * 100
+                SaturationNumericUpDown.Value = TheSat * 100
+                BrightnessTrackBar.Value = TheVal * 10000
+                BrightnessNumericUpDown.Value = TheVal * 100
+                HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
+
+                Invalidate()
+                UpDatingColor = False
             End If
 
         End If
