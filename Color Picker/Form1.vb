@@ -73,8 +73,8 @@ Public Class Form1
             If dist <= Radius Then
                 Dim angle As Double = (Math.Atan2(dy, dx) * 180.0 / Math.PI + 360) Mod 360
 
-                Color = ColorFromHSV(angle, RGBtoHSV(Color).Saturation, RGBtoHSV(Color).Value)
-                SelectedHueAngle = angle ' Save angle for rendering pointer
+                Color = ColorFromHSV(CInt(angle), RGBtoHSV(Color).Saturation, RGBtoHSV(Color).Value)
+                SelectedHueAngle = CInt(angle) ' Save angle for rendering pointer
 
             End If
 
@@ -900,19 +900,6 @@ Public Class Form1
 
                 HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
 
-
-                ' Update UI controls
-                'HueTrackBar.Value = TheHue * 100
-                'HueNumericUpDown.Value = TheHue
-                'SaturationTrackBar.Value = TheSat * 100
-                'SaturationNumericUpDown.Value = TheSat * 100
-                'BrightnessTrackBar.Value = TheVal * 10000
-                'BrightnessNumericUpDown.Value = TheVal * 100
-                'HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
-
-                ' Optional: Tooltip
-                'ToolTip1.SetToolTip(Me, WedgesWheel.SelectedColorName)
-
                 Invalidate()
 
                 UpDatingColor = False
@@ -928,7 +915,7 @@ Public Class Form1
         ' Check if we are currently updating the color to avoid recursive calls or cascading updates
         If UpDatingColor Then Return
 
-        TheHue = CInt(HueTrackBar.Value / 100) ' Convert trackbar value (0-10000) to hue (0-360)
+        TheHue = HueTrackBar.Value / 100
 
         UpdateUIHueChange()
 
