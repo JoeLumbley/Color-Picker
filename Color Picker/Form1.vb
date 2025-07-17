@@ -676,7 +676,7 @@ Public Class Form1
 
                 ' Convert RGB to HSV
                 Dim hsv = RGBtoHSV(TheColor)
-                TheHue = hsv.Hue
+                TheHue = CInt(hsv.Hue)
                 TheSat = hsv.Saturation
                 TheVal = hsv.Value
 
@@ -765,7 +765,7 @@ Public Class Form1
 
                 ' Convert RGB to HSV
                 Dim hsv = RGBtoHSV(TheColor)
-                TheHue = hsv.Hue
+                TheHue = CInt(hsv.Hue)
                 TheSat = hsv.Saturation
                 TheVal = hsv.Value
 
