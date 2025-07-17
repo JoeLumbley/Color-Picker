@@ -928,7 +928,7 @@ Public Class Form1
         ' Check if we are currently updating the color to avoid recursive calls or cascading updates
         If UpDatingColor Then Return
 
-        TheHue = HueTrackBar.Value / 100.0 ' Convert trackbar value (0-10000) to hue (0-360)
+        TheHue = CInt(HueTrackBar.Value / 100) ' Convert trackbar value (0-10000) to hue (0-360)
 
         UpdateUIHueChange()
 
