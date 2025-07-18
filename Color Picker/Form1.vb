@@ -305,7 +305,6 @@ Public Class Form1
 
     End Structure
 
-
     Private Structure WedgesWheelStruct
 
         Public Location As Point
