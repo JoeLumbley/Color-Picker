@@ -613,6 +613,8 @@ Public Class Form1
 
         DrawSatWheel(e)
 
+        DrawValWheel(e)
+
 
         DrawHuePointer(e)
 
@@ -620,7 +622,6 @@ Public Class Form1
 
         DrawLables(e)
 
-        DrawValWheel(e)
 
     End Sub
 
@@ -736,6 +737,32 @@ Public Class Form1
     End Sub
 
     Private Sub Form1_MouseMove(sender As Object, e As MouseEventArgs) Handles Me.MouseMove
+
+        ' Is the mouse over the Value wheel?
+        If IsPointInsideCircle(
+        e.X, e.Y, ValWheel.Location.X + ValWheel.Radius + ValWheel.Padding,
+        ValWheel.Location.Y + ValWheel.Radius + ValWheel.Padding, ValWheel.Radius) Then
+            ' Yes, it's over the Value wheel.
+
+            ' Check if the left mouse button is pressed
+            If e.Button = MouseButtons.Left Then
+                ' The mouse is over the Value wheel and the left button is pressed.
+
+                ClearFocus()
+
+                ValWheel.GetValueFromAnglePoint(New Point(e.X, e.Y))
+
+                ' Round the value to 2 decimal places
+                TheVal = Math.Round(ValWheel.Value, 2)
+
+                UpdateUIValChange()
+
+            End If
+
+            Return
+
+        End If
+
 
         ' Is the mouse over the Sat wheel?
         If IsPointInsideCircle(
@@ -1157,14 +1184,18 @@ Public Class Form1
     Private Sub DrawSelectedColor(e As PaintEventArgs)
 
         ' Draw the selected color rectangle
-        Dim selectedColorRect As New Rectangle(20, 20, 75, 75)
+        Dim selectedColorRect As New Rectangle(
+            HueWheel.Location.X + 20 + (HueWheel.Size.Width - 100) \ 2,
+            HueWheel.Location.Y + 20 + (HueWheel.Size.Width - 100) \ 2,
+            100,
+            100)
 
         Using brush As New SolidBrush(ColorFromHSV(TheHue, TheSat, TheVal))
-            e.Graphics.FillRectangle(brush, selectedColorRect)
+            e.Graphics.FillEllipse(brush, selectedColorRect)
         End Using
 
         Using pen As New Pen(Color.Black, 3)
-            e.Graphics.DrawRectangle(pen, selectedColorRect)
+            e.Graphics.DrawEllipse(pen, selectedColorRect)
         End Using
 
     End Sub
@@ -1565,7 +1596,7 @@ Public Class Form1
 
         UpDatingColor = True
 
-        BrightnessTrackBar.Value = TheVal * 100
+        BrightnessTrackBar.Value = TheVal * 10000
 
         BrightnessNumericUpDown.Value = TheVal * 100
 
