@@ -238,6 +238,7 @@ Public Class Form1
         End Sub
 
         Public Sub GetSaturationFromAnglePoint(point As Point)
+
             Dim centerX As Integer = Radius + Padding
             Dim centerY As Integer = Radius + Padding
             Dim dx As Integer = point.X - Location.X - centerX
@@ -245,34 +246,15 @@ Public Class Form1
             Dim dist As Double = Math.Sqrt(dx * dx + dy * dy)
 
             If dist <= Radius Then
+
                 Dim angle As Double = (Math.Atan2(dy, dx) * 180.0 / Math.PI + 360) Mod 360
+
                 Saturation = Math.Min(angle / 360.0, 1.0)
 
-                'Color = ColorFromHSV(SelectedHueAngle, saturation, 1.0)
-            End If
-        End Sub
-
-        Public Sub GetColorAtPoint(point As Point)
-
-            If Bitmap Is Nothing Then Return
-
-            Dim centerX As Integer = Radius + Padding
-            Dim centerY As Integer = Radius + Padding
-            Dim dx As Integer = point.X - Location.X - centerX
-            Dim dy As Integer = point.Y - Location.Y - centerY
-            Dim dist As Double = Math.Sqrt(dx * dx + dy * dy)
-
-            If dist <= Radius Then
-                Dim angle As Double = (Math.Atan2(dy, dx) * 180.0 / Math.PI + 360) Mod 360
-
-                Color = ColorFromHSV(angle, RGBtoHSV(Color).Saturation, RGBtoHSV(Color).Value)
-                SelectedHueAngle = angle ' Save angle for rendering pointer
-
             End If
 
         End Sub
 
-        ' Function to convert HSV to RGB
         Public Function ColorFromHSV(hue As Double, saturation As Double, brightness As Double) As Color
 
             Dim r As Double = 0, g As Double = 0, b As Double = 0
@@ -318,37 +300,6 @@ Public Class Form1
             End If
 
             Return Color.FromArgb(CInt(r * 255), CInt(g * 255), CInt(b * 255))
-
-        End Function
-
-        Public Function RGBtoHSV(color As Color) As (Hue As Double, Saturation As Double, Value As Double)
-
-            Dim r As Double = color.R / 255.0
-            Dim g As Double = color.G / 255.0
-            Dim b As Double = color.B / 255.0
-
-            Dim max As Double = Math.Max(r, Math.Max(g, b))
-            Dim min As Double = Math.Min(r, Math.Min(g, b))
-            Dim delta As Double = max - min
-
-            Dim h As Double
-
-            If delta = 0 Then
-                h = 0
-            ElseIf max = r Then
-                h = 60 * (((g - b) / delta) Mod 6)
-            ElseIf max = g Then
-                h = 60 * (((b - r) / delta) + 2)
-            Else
-                h = 60 * (((r - g) / delta) + 4)
-            End If
-
-            If h < 0 Then h += 360
-
-            Dim s As Double = If(max = 0, 0, delta / max)
-            Dim v As Double = max
-
-            Return (h, s, v)
 
         End Function
 
@@ -421,62 +372,6 @@ Public Class Form1
                 Graphics.DrawEllipse(pen, borderRect)
             End Using
 
-        End Sub
-
-        Public Sub Draw(size As Integer, padding As Integer, hueAngle As Double, backcolor As Color)
-            If Bitmap Is Nothing OrElse Bitmap.Width <> size OrElse Bitmap.Height <> size Then
-                Bitmap?.Dispose()
-                Bitmap = New Bitmap(size + padding * 2, size + padding * 2)
-                Graphics = Graphics.FromImage(Bitmap)
-            End If
-
-            Graphics.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
-
-            Radius = size \ 2
-            Me.Size = New Size(size, size)
-            Me.Padding = padding
-            Me.BackColor = backcolor
-
-            Dim centerX As Integer = Radius + padding
-            Dim centerY As Integer = Radius + padding
-
-            For y As Integer = 0 To Bitmap.Height - 1
-                For x As Integer = 0 To Bitmap.Width - 1
-                    Dim dx As Integer = x - centerX
-                    Dim dy As Integer = y - centerY
-                    Dim dist As Double = Math.Sqrt(dx * dx + dy * dy)
-
-                    If dist <= Radius Then
-                        Dim angle As Double = (Math.Atan2(dy, dx) * 180.0 / Math.PI + 360) Mod 360
-                        Dim saturation As Double = Math.Min(angle / 360.0, 1.0)
-                        Dim color As Color = ColorFromHSV(hueAngle, saturation, 1.0)
-                        Bitmap.SetPixel(x, y, color)
-                    Else
-                        Bitmap.SetPixel(x, y, backcolor)
-                    End If
-                Next
-            Next
-
-            Dim borderRect As New Rectangle(padding, padding, size, size)
-            Using pen As New Pen(Color.Black, 3)
-                Graphics.DrawEllipse(pen, borderRect)
-            End Using
-
-        End Sub
-
-        Public Sub GetSaturationFromAnglePoint(point As Point)
-            Dim centerX As Integer = Radius + Padding
-            Dim centerY As Integer = Radius + Padding
-            Dim dx As Integer = point.X - Location.X - centerX
-            Dim dy As Integer = point.Y - Location.Y - centerY
-            Dim dist As Double = Math.Sqrt(dx * dx + dy * dy)
-
-            If dist <= Radius Then
-                Dim angle As Double = (Math.Atan2(dy, dx) * 180.0 / Math.PI + 360) Mod 360
-                Saturation = Math.Min(angle / 360.0, 1.0)
-
-                'Color = ColorFromHSV(SelectedHueAngle, saturation, 1.0)
-            End If
         End Sub
 
         Public Sub GetColorAtPoint(point As Point)
@@ -559,37 +454,6 @@ Public Class Form1
             End If
 
             Return Color.FromArgb(CInt(r * 255), CInt(g * 255), CInt(b * 255))
-
-        End Function
-
-        Public Function RGBtoHSV(color As Color) As (Hue As Double, Saturation As Double, Value As Double)
-
-            Dim r As Double = color.R / 255.0
-            Dim g As Double = color.G / 255.0
-            Dim b As Double = color.B / 255.0
-
-            Dim max As Double = Math.Max(r, Math.Max(g, b))
-            Dim min As Double = Math.Min(r, Math.Min(g, b))
-            Dim delta As Double = max - min
-
-            Dim h As Double
-
-            If delta = 0 Then
-                h = 0
-            ElseIf max = r Then
-                h = 60 * (((g - b) / delta) Mod 6)
-            ElseIf max = g Then
-                h = 60 * (((b - r) / delta) + 2)
-            Else
-                h = 60 * (((r - g) / delta) + 4)
-            End If
-
-            If h < 0 Then h += 360
-
-            Dim s As Double = If(max = 0, 0, delta / max)
-            Dim v As Double = max
-
-            Return (h, s, v)
 
         End Function
 
@@ -1098,7 +962,6 @@ Public Class Form1
                       Me.Font, Brushes.Black, BrightnessTrackBar.Left, BrightnessTrackBar.Top - BrightnessNumericUpDown.Height)
 
     End Sub
-
 
     Private Sub DrawWedgesWheel(e As PaintEventArgs)
 
