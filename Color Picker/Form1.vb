@@ -636,7 +636,7 @@ Public Class Form1
                 ClearFocus()
 
                 ValWheel.GetValueFromAnglePoint(New Point(e.X, e.Y))
-                TheVal = ValWheel.Value
+                TheVal = Math.Round(ValWheel.Value, 2)
 
                 UpdateUIValChange()
 
@@ -658,7 +658,7 @@ Public Class Form1
 
                 SatWheel.GetSaturationFromAnglePoint(New Point(e.X, e.Y))
 
-                TheSat = SatWheel.Saturation
+                TheSat = Math.Round(SatWheel.Saturation, 2)
 
                 UpdateUISatChange()
 
