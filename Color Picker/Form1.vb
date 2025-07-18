@@ -1309,9 +1309,11 @@ Public Class Form1
     End Function
 
     Private Shared Function ColorsAreEqual(c1 As Color, c2 As Color, Optional tolerance As Integer = 2) As Boolean
+
         Return Math.Abs(CInt(c1.R) - CInt(c2.R)) <= tolerance AndAlso
            Math.Abs(CInt(c1.G) - CInt(c2.G)) <= tolerance AndAlso
            Math.Abs(CInt(c1.B) - CInt(c2.B)) <= tolerance
+
     End Function
 
     Private Shared Function GetKnownColorName(color As Color) As String
