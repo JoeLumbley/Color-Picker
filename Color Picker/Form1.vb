@@ -615,13 +615,11 @@ Public Class Form1
 
         DrawValWheel(e)
 
-
         DrawHuePointer(e)
 
         DrawSelectedColor(e)
 
         DrawLables(e)
-
 
     End Sub
 
@@ -634,6 +632,7 @@ Public Class Form1
             ' Yes, it's over the Value wheel.
 
             If e.Button = MouseButtons.Left Then
+
                 ClearFocus()
 
                 ValWheel.GetValueFromAnglePoint(New Point(e.X, e.Y))
@@ -763,7 +762,6 @@ Public Class Form1
 
         End If
 
-
         ' Is the mouse over the Sat wheel?
         If IsPointInsideCircle(
                 e.X, e.Y, SatWheel.Location.X + SatWheel.Radius + SatWheel.Padding,
@@ -793,6 +791,8 @@ Public Class Form1
             ' Yes, the mouse is over the Hue wheel.
 
             If e.Button = MouseButtons.Left Then
+
+                ClearFocus()
 
                 HueWheel.GetColorAtPoint(New Point(e.X, e.Y))
 
@@ -853,23 +853,32 @@ Public Class Form1
 
     Private Sub Form1_MouseWheel(sender As Object, e As MouseEventArgs) Handles Me.MouseWheel
 
-
-        ' is the mouse over the Value wheel?
+        ' Is the mouse over the Value wheel?
         If IsPointInsideCircle(
                 e.X, e.Y, ValWheel.Location.X + ValWheel.Radius + ValWheel.Padding,
                 ValWheel.Location.Y + ValWheel.Radius + ValWheel.Padding, ValWheel.Radius) Then
             ' Yes, the mouse is over the Value wheel.
+
+            ' Check if the mouse wheel is scrolled
             If e.Delta <> 0 Then
+                ' mouse wheel scrolled, adjust the value
+
                 ClearFocus()
+
                 ' Adjust the value based on the mouse wheel scroll direction
                 TheVal += If(e.Delta > 0, 0.01, -0.01) ' Increase or decrease value by 1 percent
+
                 ' Ensure the value wraps around within 0-1 
                 If TheVal < 0 Then TheVal = 1
                 If TheVal > 1 Then TheVal = 0
+
                 UpdateUIValChange()
+
             End If
+
             ' Return to avoid further processing
             Return
+
         End If
 
         ' Is the mouse over the Sat wheel?
