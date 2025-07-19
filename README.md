@@ -1,7 +1,7 @@
 # Color Picker
 
 
-<img width="1920" height="1080" alt="011" src="https://github.com/user-attachments/assets/7c5d1a96-6726-4366-a7b5-043dff2b4c3b" />
+<img width="1920" height="1080" alt="012" src="https://github.com/user-attachments/assets/a39e1fef-7851-4d9d-9c94-6442c42c9516" />
 
 
 
