@@ -625,6 +625,16 @@ Public Class Form1
 
     Private Sub Form1_MouseDown(sender As Object, e As MouseEventArgs) Handles Me.MouseDown
 
+        ' Is the mouse over the selected color ellipse?
+        If IsPointInsideCircle(
+                e.X, e.Y, HueWheel.Location.X + HueWheel.Radius + HueWheel.Padding,
+                HueWheel.Location.Y + HueWheel.Radius + HueWheel.Padding,
+                50) Then
+
+            Return
+
+        End If
+
         ' Is the mouse over the Value wheel?
         If IsPointInsideCircle(
         e.X, e.Y, ValWheel.Location.X + ValWheel.Radius + ValWheel.Padding,
@@ -736,6 +746,16 @@ Public Class Form1
     End Sub
 
     Private Sub Form1_MouseMove(sender As Object, e As MouseEventArgs) Handles Me.MouseMove
+
+        ' Is the mouse over the selected color ellipse?
+        If IsPointInsideCircle(
+                e.X, e.Y, HueWheel.Location.X + HueWheel.Radius + HueWheel.Padding,
+                HueWheel.Location.Y + HueWheel.Radius + HueWheel.Padding,
+                50) Then
+
+            Return
+
+        End If
 
         ' Is the mouse over the Value wheel?
         If IsPointInsideCircle(
