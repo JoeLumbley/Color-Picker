@@ -40,7 +40,7 @@ Partial Class Form1
         ' BrightnessTrackBar
         ' 
         BrightnessTrackBar.LargeChange = 1000
-        BrightnessTrackBar.Location = New Point(12, 379)
+        BrightnessTrackBar.Location = New Point(323, 382)
         BrightnessTrackBar.Maximum = 10000
         BrightnessTrackBar.Name = "BrightnessTrackBar"
         BrightnessTrackBar.Size = New Size(312, 45)
@@ -50,7 +50,7 @@ Partial Class Form1
         ' 
         ' SaturationTrackBar
         ' 
-        SaturationTrackBar.Location = New Point(12, 262)
+        SaturationTrackBar.Location = New Point(323, 265)
         SaturationTrackBar.Maximum = 100
         SaturationTrackBar.Name = "SaturationTrackBar"
         SaturationTrackBar.Size = New Size(312, 45)
@@ -59,7 +59,7 @@ Partial Class Form1
         ' BrightnessNumericUpDown
         ' 
         BrightnessNumericUpDown.DecimalPlaces = 2
-        BrightnessNumericUpDown.Location = New Point(221, 338)
+        BrightnessNumericUpDown.Location = New Point(532, 341)
         BrightnessNumericUpDown.Name = "BrightnessNumericUpDown"
         BrightnessNumericUpDown.Size = New Size(101, 23)
         BrightnessNumericUpDown.TabIndex = 4
@@ -67,7 +67,7 @@ Partial Class Form1
         ' SaturationNumericUpDown
         ' 
         SaturationNumericUpDown.DecimalPlaces = 2
-        SaturationNumericUpDown.Location = New Point(221, 222)
+        SaturationNumericUpDown.Location = New Point(532, 225)
         SaturationNumericUpDown.Name = "SaturationNumericUpDown"
         SaturationNumericUpDown.Size = New Size(101, 23)
         SaturationNumericUpDown.TabIndex = 2
@@ -76,7 +76,7 @@ Partial Class Form1
         ' 
         HueNumericUpDown.DecimalPlaces = 3
         HueNumericUpDown.Font = New Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        HueNumericUpDown.Location = New Point(221, 108)
+        HueNumericUpDown.Location = New Point(532, 111)
         HueNumericUpDown.Maximum = New Decimal(New Integer() {360, 0, 0, 0})
         HueNumericUpDown.Name = "HueNumericUpDown"
         HueNumericUpDown.Size = New Size(101, 23)
@@ -84,7 +84,7 @@ Partial Class Form1
         ' 
         ' HexTextBox
         ' 
-        HexTextBox.Location = New Point(221, 55)
+        HexTextBox.Location = New Point(532, 58)
         HexTextBox.Name = "HexTextBox"
         HexTextBox.Size = New Size(101, 23)
         HexTextBox.TabIndex = 6
@@ -92,7 +92,7 @@ Partial Class Form1
         ' HueTrackBar
         ' 
         HueTrackBar.LargeChange = 3000
-        HueTrackBar.Location = New Point(12, 148)
+        HueTrackBar.Location = New Point(323, 151)
         HueTrackBar.Maximum = 36000
         HueTrackBar.Name = "HueTrackBar"
         HueTrackBar.Size = New Size(312, 45)
@@ -103,7 +103,7 @@ Partial Class Form1
         ' Form1
         ' 
         AutoScaleMode = AutoScaleMode.None
-        ClientSize = New Size(665, 477)
+        ClientSize = New Size(649, 477)
         Controls.Add(HueTrackBar)
         Controls.Add(HexTextBox)
         Controls.Add(HueNumericUpDown)

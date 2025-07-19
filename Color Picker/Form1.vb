@@ -1118,10 +1118,10 @@ Public Class Form1
     Private Sub DrawLables(e As PaintEventArgs)
 
         e.Graphics.DrawString("Name: " & GetColorName(ColorFromHSV(TheHue, TheSat, TheVal)),
-                             Me.Font, Brushes.Black, 110, 20)
+                             Me.Font, Brushes.Black, HueWheel.Location.X + HueWheel.Size.Width + HueWheel.Padding + 30, 20)
 
         e.Graphics.DrawString("Hex: " & HsvToHex(TheHue, TheSat, TheVal),
-                             Me.Font, Brushes.Black, 110, HexTextBox.Top + 2)
+                             Me.Font, Brushes.Black, HueWheel.Location.X + HueWheel.Size.Width + HueWheel.Padding + 30, HexTextBox.Top + 2)
 
         e.Graphics.DrawString("Hue: " & RGBtoHSV(ColorFromHSV(TheHue, TheSat, TheVal)).Hue.ToString("0.###") & "°",
                              Me.Font, Brushes.Black, HueTrackBar.Left, HueTrackBar.Top - HueNumericUpDown.Height)
@@ -1500,7 +1500,7 @@ Public Class Form1
         ' Initialize the HueWheel with default values
         HueWheel.Color = TheColor
         HueWheel.SelectedHueAngle = TheHue
-        HueWheel.Location.X = 350
+        HueWheel.Location.X = 20
         HueWheel.Location.Y = 20
         HueWheel.Draw(250, 20, BackColor)
 
