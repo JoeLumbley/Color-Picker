@@ -57,14 +57,24 @@ Public Class Form1
 
             For y As Integer = 0 To Bitmap.Height - 1
                 For x As Integer = 0 To Bitmap.Width - 1
+
+                    ' Calculate distance from center
                     Dim dx As Integer = x - centerX
                     Dim dy As Integer = y - centerY
                     Dim dist As Double = Math.Sqrt(dx * dx + dy * dy)
+
+                    ' If the pixel is within the radius of the circle
                     If dist <= Radius Then
+
+                        ' Calculate angle in degrees
                         Dim angle As Double = (Math.Atan2(dy, dx) * 180.0 / Math.PI + 360) Mod 360
+
+                        ' Set pixel color based on angle
                         Bitmap.SetPixel(x, y, ColorFromHSV(angle, 1, 1))
+                        ' Note: Saturation and Value are set to 1 for full color saturation and brightness
+
                     Else
-                        'Bitmap.SetPixel(x, y, backcolor)
+                        ' Outside the circle, set pixel to transparent
                         Bitmap.SetPixel(x, y, Color.Transparent)
 
                     End If
