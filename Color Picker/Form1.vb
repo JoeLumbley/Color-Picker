@@ -1356,7 +1356,16 @@ Public Class Form1
         {ColorFromHSV(320, 1, 1), "Fashion Fuchsia"},
         {ColorFromHSV(330, 1, 1), "Rose or Bright Pink"},
         {ColorFromHSV(340, 1, 1), "Red Light Neon"},
-        {ColorFromHSV(350, 1, 1), "Torch Red"}
+        {ColorFromHSV(350, 1, 1), "Torch Red"},
+        {ColorFromHSV(0, 0, 0.1), "Eerie Black or Gray 10"},
+        {ColorFromHSV(0, 0, 0.2), "Dark Charcoal or Gray 20"},
+        {ColorFromHSV(0, 0, 0.3), "Quartz or Gray 30"},
+        {ColorFromHSV(0, 0, 0.4), "Granite or Gray 40"},
+        {ColorFromHSV(0, 0, 0.5), "Gray or Gray 50"},
+        {ColorFromHSV(0, 0, 0.6), "Basalt or Gray 60"},
+        {ColorFromHSV(0, 0, 0.7), "Palladium or Gray 70"},
+        {ColorFromHSV(0, 0, 0.8), "Cerebral or Gray 80"},
+        {ColorFromHSV(0, 0, 0.9), "Platinum​​ or Gray 90"}
     }
 
         ' Try to match with custom colors
