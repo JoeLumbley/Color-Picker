@@ -1478,7 +1478,7 @@ Public Class Form1
         {ColorFromHSV(330, 1, 1), "Rose or Bright Pink"},
         {ColorFromHSV(340, 1, 1), "Red Light Neon"},
         {ColorFromHSV(350, 1, 1), "Torch Red"},
-        {ColorFromHSV(0, 0, 0.1), "Eerie Black or Gray 10"},
+        {ColorFromHSV(0, 0, 0.1), "Eerie Black or Gray 10"}, '0°, 0%, 10%
         {ColorFromHSV(0, 0, 0.2), "Dark Charcoal or Gray 20"},
         {ColorFromHSV(0, 0, 0.3), "Quartz or Gray 30"},
         {ColorFromHSV(0, 0, 0.4), "Granite or Gray 40"},
