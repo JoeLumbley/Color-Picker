@@ -1486,7 +1486,10 @@ Public Class Form1
         {ColorFromHSV(0, 0, 0.6), "Basalt or Gray 60"},
         {ColorFromHSV(0, 0, 0.7), "Palladium or Gray 70"},
         {ColorFromHSV(0, 0, 0.8), "Cerebral or Gray 80"},
-        {ColorFromHSV(0, 0, 0.9), "Platinum​​ or Gray 90"}
+        {ColorFromHSV(0, 0, 0.9), "Platinum​​ or Gray 90"},
+        {ColorFromHSV(222.857, 0.0583, 0.4706), "Space Gray"},
+        {ColorFromHSV(217.5, 0.1013, 0.3098), "Cyberspace Gray"}, '217.5°, 10.13%, 30.98%
+        {ColorFromHSV(210, 0.0584, 0.5373), "Gunmetal Gray"} '210°, 5.84%, 53.73%
     }
 
         ' Try to match with custom colors
