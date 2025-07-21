@@ -600,11 +600,11 @@ Public Class Form1
 
     Private UpDatingColor As Boolean = False
 
-    Private TheHue As Double = 240
+    Private TheHue As Double = 280
 
-    Private TheSat As Double = 0.15 ' 50%
+    Private TheSat As Double = 1 ' 100%
 
-    Private TheVal As Double = 0.5 ' 50%
+    Private TheVal As Double = 1 ' 100%
 
     Private TheColor As Color = ColorFromHSV(TheHue, TheSat, TheVal)
 
@@ -1103,6 +1103,8 @@ Public Class Form1
 
         TheSat = SaturationNumericUpDown.Value / 100.0
 
+        SatWheel.Saturation = TheSat
+
         UpdateUISatChange()
 
     End Sub
@@ -1356,7 +1358,9 @@ Public Class Form1
                 New Point(2 * tip.X - leftBase.X, 2 * tip.Y - leftBase.Y)}
             e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
             ' Draw triangle with theme-adaptive outline
-            Dim fillColor = SatWheel.Color
+            'Dim fillColor = SatWheel.Color
+            Dim fillColor = Color.Black
+
             'Dim outlineColor = If(fillColor.GetBrightness() < 0.5, Color.White, Color.Black)
             Using brush As New SolidBrush(fillColor),
                   pen As New Pen(Color.Black, 3)
