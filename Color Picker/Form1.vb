@@ -629,6 +629,7 @@ Public Class Form1
 
         DrawSaturationPointer(e)
 
+        DrawValuePointer(e)
 
         DrawSelectedColor(e)
 
@@ -659,7 +660,9 @@ Public Class Form1
                 ClearFocus()
 
                 ValWheel.GetValueFromAnglePoint(New Point(e.X, e.Y))
+
                 TheVal = Math.Round(ValWheel.Value, 2)
+
 
                 UpdateUIValChange()
 
@@ -744,8 +747,13 @@ Public Class Form1
                 HueNumericUpDown.Value = TheHue
                 SaturationTrackBar.Value = TheSat * 100
                 SaturationNumericUpDown.Value = TheSat * 100
+                SatWheel.Saturation = TheSat
+
+
                 BrightnessTrackBar.Value = TheVal * 10000
                 BrightnessNumericUpDown.Value = TheVal * 100
+                ValWheel.Value = TheVal
+
                 HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
 
                 Invalidate()
@@ -870,8 +878,10 @@ Public Class Form1
                 HueNumericUpDown.Value = TheHue
                 SaturationTrackBar.Value = TheSat * 100
                 SaturationNumericUpDown.Value = TheSat * 100
+                SatWheel.Saturation = TheSat
                 BrightnessTrackBar.Value = TheVal * 10000
                 BrightnessNumericUpDown.Value = TheVal * 100
+                ValWheel.Value = TheVal
                 HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
 
                 Invalidate()
@@ -915,6 +925,8 @@ Public Class Form1
                 If TheVal < 0 Then TheVal = 1
                 If TheVal > 1 Then TheVal = 0
 
+                'ValWheel.Value = TheVal
+                ValWheel.Value = Math.Round(TheVal, 2)
                 UpdateUIValChange()
 
             End If
@@ -1073,6 +1085,9 @@ Public Class Form1
 
         TheVal = BrightnessTrackBar.Value / 10000
 
+        ValWheel.Value = TheVal
+
+
         HueWheel.Color = ColorFromHSV(TheHue, TheSat, TheVal)
 
         BrightnessNumericUpDown.Value = TheVal * 100
@@ -1117,6 +1132,9 @@ Public Class Form1
         UpDatingColor = True
 
         TheVal = BrightnessNumericUpDown.Value / 100.0
+
+        ValWheel.Value = TheVal
+
 
         BrightnessTrackBar.Value = TheVal * 10000
 
@@ -1177,8 +1195,10 @@ Public Class Form1
                 SaturationTrackBar.Value = TheSat * 100
                 SaturationNumericUpDown.Value = TheSat * 100
 
+
                 BrightnessTrackBar.Value = TheVal * 10000
                 BrightnessNumericUpDown.Value = TheVal * 100
+                ValWheel.Value = TheVal
 
                 HexTextBox.Text = HsvToHex(TheHue, TheSat, TheVal)
 
@@ -1372,6 +1392,50 @@ Public Class Form1
             End Using
         End If
 
+    End Sub
+
+    Private Sub DrawValuePointer(e As PaintEventArgs)
+        ' Draw the value pointer triangle
+        If ValWheel.Bitmap IsNot Nothing Then
+            Dim centerX = ValWheel.Location.X + ValWheel.Radius + ValWheel.Padding
+            Dim centerY = ValWheel.Location.Y + ValWheel.Radius + ValWheel.Padding
+            ' Calculate the angle for the pointer based on the value
+            'Dim angleRad = (ValWheel.Value * 360) * Math.PI / 180 ' Convert value to angle
+            Dim angleRad = (ValWheel.Value * 360) * Math.PI / 180 ' Convert value to angle
+
+
+
+
+
+            ' Tip of the pointer
+            Dim pointerLength = ValWheel.Radius + 6 'Pointer gap from the edge
+            Dim tip = New Point(
+                CInt(centerX + pointerLength * Math.Cos(angleRad)),
+                CInt(centerY + pointerLength * Math.Sin(angleRad)))
+            ' Base angles
+            Dim baseOffset = 150 * Math.PI / 180
+            Dim triangleSize = 15
+            ' Base points before reflection
+            Dim leftBase = New Point(
+                CInt(tip.X + triangleSize * Math.Cos(angleRad + baseOffset)),
+                CInt(tip.Y + triangleSize * Math.Sin(angleRad + baseOffset)))
+            Dim rightBase = New Point(
+                CInt(tip.X + triangleSize * Math.Cos(angleRad - baseOffset)),
+                CInt(tip.Y + triangleSize * Math.Sin(angleRad - baseOffset)))
+            ' Reflect base to position triangle tip-forward
+            Dim points = {
+                tip,
+                New Point(2 * tip.X - rightBase.X, 2 * tip.Y - rightBase.Y),
+                New Point(2 * tip.X - leftBase.X, 2 * tip.Y - leftBase.Y)}
+            e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
+            ' Draw triangle with theme-adaptive outline
+            Dim fillColor = Color.Black
+            Using brush As New SolidBrush(fillColor),
+                  pen As New Pen(Color.Black, 3)
+                e.Graphics.FillPolygon(brush, points)
+                e.Graphics.DrawPolygon(pen, points)
+            End Using
+        End If
     End Sub
 
     Public Function GetColorName(color As Color) As String
