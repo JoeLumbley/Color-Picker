@@ -1357,11 +1357,14 @@ Public Class Form1
                 New Point(2 * tip.X - rightBase.X, 2 * tip.Y - rightBase.Y),
                 New Point(2 * tip.X - leftBase.X, 2 * tip.Y - leftBase.Y)}
             e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
+
             ' Draw triangle with theme-adaptive outline
             'Dim fillColor = SatWheel.Color
+
             Dim fillColor = Color.Black
 
             'Dim outlineColor = If(fillColor.GetBrightness() < 0.5, Color.White, Color.Black)
+
             Using brush As New SolidBrush(fillColor),
                   pen As New Pen(Color.Black, 3)
                 e.Graphics.FillPolygon(brush, points)
