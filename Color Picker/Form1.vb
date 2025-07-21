@@ -600,11 +600,11 @@ Public Class Form1
 
     Private UpDatingColor As Boolean = False
 
-    Private TheHue As Double = 90
+    Private TheHue As Double = 240
 
-    Private TheSat As Double = 1
+    Private TheSat As Double = 0.15 ' 50%
 
-    Private TheVal As Double = 1
+    Private TheVal As Double = 0.5 ' 50%
 
     Private TheColor As Color = ColorFromHSV(TheHue, TheSat, TheVal)
 
@@ -626,6 +626,9 @@ Public Class Form1
         DrawValWheel(e)
 
         DrawHuePointer(e)
+
+        DrawSaturationPointer(e)
+
 
         DrawSelectedColor(e)
 
@@ -938,6 +941,8 @@ Public Class Form1
                 If TheSat < 0 Then TheSat = 1
                 If TheSat > 1 Then TheSat = 0
 
+                SatWheel.Saturation = TheSat
+
                 UpdateUISatChange()
 
             End If
@@ -1052,6 +1057,8 @@ Public Class Form1
         If UpDatingColor Then Return
 
         TheSat = SaturationTrackBar.Value / 100.0
+
+        SatWheel.Saturation = TheSat
 
         UpdateUISatChange()
 
@@ -1313,6 +1320,49 @@ Public Class Form1
                 e.Graphics.DrawPolygon(pen, points)
             End Using
 
+        End If
+
+    End Sub
+
+    Private Sub DrawSaturationPointer(e As PaintEventArgs)
+        ' Draw the saturation pointer triangle
+        If SatWheel.Bitmap IsNot Nothing Then
+            Dim centerX = SatWheel.Location.X + SatWheel.Radius + SatWheel.Padding
+            Dim centerY = SatWheel.Location.Y + SatWheel.Radius + SatWheel.Padding
+            'Dim angleRad = SatWheel.SelectedHueAngle * Math.PI / 180
+            ' Calculate the angle for the pointer based on the saturation
+            Dim angleRad = (SatWheel.Saturation * 360) * Math.PI / 180 ' Convert saturation to angle
+
+
+            ' Tip of the pointer
+            Dim pointerLength = SatWheel.Radius + 6 'Pointer gap from the edge
+            Dim tip = New Point(
+                CInt(centerX + pointerLength * Math.Cos(angleRad)),
+                CInt(centerY + pointerLength * Math.Sin(angleRad)))
+            ' Base angles
+            Dim baseOffset = 150 * Math.PI / 180
+            Dim triangleSize = 15
+            ' Base points before reflection
+            Dim leftBase = New Point(
+                CInt(tip.X + triangleSize * Math.Cos(angleRad + baseOffset)),
+                CInt(tip.Y + triangleSize * Math.Sin(angleRad + baseOffset)))
+            Dim rightBase = New Point(
+                CInt(tip.X + triangleSize * Math.Cos(angleRad - baseOffset)),
+                CInt(tip.Y + triangleSize * Math.Sin(angleRad - baseOffset)))
+            ' Reflect base to position triangle tip-forward
+            Dim points = {
+                tip,
+                New Point(2 * tip.X - rightBase.X, 2 * tip.Y - rightBase.Y),
+                New Point(2 * tip.X - leftBase.X, 2 * tip.Y - leftBase.Y)}
+            e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
+            ' Draw triangle with theme-adaptive outline
+            Dim fillColor = SatWheel.Color
+            'Dim outlineColor = If(fillColor.GetBrightness() < 0.5, Color.White, Color.Black)
+            Using brush As New SolidBrush(fillColor),
+                  pen As New Pen(Color.Black, 3)
+                e.Graphics.FillPolygon(brush, points)
+                e.Graphics.DrawPolygon(pen, points)
+            End Using
         End If
 
     End Sub
@@ -1592,7 +1642,8 @@ Public Class Form1
 
         ' Initialize the SatWheel with default values
         SatWheel.Color = TheColor
-        SatWheel.SelectedHueAngle = TheHue
+        'SatWheel.SelectedHueAngle = TheHue
+        SatWheel.Saturation = TheSat
         SatWheel.Draw(200, 20, TheHue, BackColor)
 
         SatWheel.Location.X = HueWheel.Location.X + (HueWheel.Size.Width - SatWheel.Size.Width) \ 2
