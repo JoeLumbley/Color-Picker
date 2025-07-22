@@ -107,18 +107,18 @@ Partial Class Form1
         ' 
         ' Button1
         ' 
-        Button1.Location = New Point(19, 394)
+        Button1.Location = New Point(19, 382)
         Button1.Name = "Button1"
-        Button1.Size = New Size(75, 23)
+        Button1.Size = New Size(75, 35)
         Button1.TabIndex = 8
         Button1.Text = "OK"
         Button1.UseVisualStyleBackColor = True
         ' 
         ' Button2
         ' 
-        Button2.Location = New Point(108, 394)
+        Button2.Location = New Point(108, 382)
         Button2.Name = "Button2"
-        Button2.Size = New Size(75, 23)
+        Button2.Size = New Size(75, 35)
         Button2.TabIndex = 9
         Button2.Text = "Cancel"
         Button2.UseVisualStyleBackColor = True
