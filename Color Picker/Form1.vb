@@ -116,10 +116,14 @@ Public Class Form1
             Dim r As Double = 0, g As Double = 0, b As Double = 0
 
             If saturation = 0 Then
+
+                ' If saturation is 0, the color is a shade of gray
                 r = brightness
                 g = brightness
                 b = brightness
+
             Else
+
                 Dim sector As Integer = CInt(Math.Floor(hue / 60)) Mod 6
                 Dim fractional As Double = (hue / 60) - Math.Floor(hue / 60)
 
@@ -128,6 +132,7 @@ Public Class Form1
                 Dim t As Double = brightness * (1 - saturation * (1 - fractional))
 
                 Select Case sector
+
                     Case 0
                         r = brightness
                         g = t
@@ -153,6 +158,7 @@ Public Class Form1
                         g = p
                         b = q
                 End Select
+
             End If
 
             Return Color.FromArgb(CInt(r * 255), CInt(g * 255), CInt(b * 255))
