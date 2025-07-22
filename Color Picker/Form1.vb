@@ -468,7 +468,6 @@ Public Class Form1
 
     End Structure
 
-
     Private Structure ValueWheelStruct
 
         Public Location As Point
@@ -1734,8 +1733,7 @@ Public Class Form1
         ValWheel.Location.X = HueWheel.Location.X + (HueWheel.Size.Width - ValWheel.Size.Width) \ 2
         ValWheel.Location.Y = HueWheel.Location.Y + (HueWheel.Size.Width - ValWheel.Size.Width) \ 2
 
-
-
+        ValWheel.Value = TheVal
 
         SaturationTrackBar.Value = TheSat * 100
         SaturationNumericUpDown.Value = TheSat * 100
