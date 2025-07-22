@@ -1213,6 +1213,8 @@ Public Class Form1
                 SaturationTrackBar.Value = TheSat * 10000
                 SaturationNumericUpDown.Value = TheSat * 100
 
+                SatWheel.Saturation = TheSat
+
 
                 BrightnessTrackBar.Value = TheVal * 10000
                 BrightnessNumericUpDown.Value = TheVal * 100
@@ -1508,7 +1510,13 @@ Public Class Form1
         {ColorFromHSV(222.857, 0.0583, 0.4706), "Space Gray"},
         {ColorFromHSV(217.5, 0.1013, 0.3098), "Cyberspace Gray"}, '217.5°, 10.13%, 30.98%
         {ColorFromHSV(210, 0.0584, 0.5373), "Gunmetal Gray"}, '210°, 5.84%, 53.73%
-        {ColorFromHSV(0, 0.7455, 0.6471), "Brown"} '0°, 74.55%, 64.71%
+        {ColorFromHSV(0, 0.7455, 0.6471), "Brown"}, '0°, 74.55%, 64.71%
+        {ColorFromHSV(23.514, 0.2948, 0.9843), "Apricot"}, '23.514°, 29.48%, 98.43%
+        {ColorFromHSV(336.404, 0.349, 1), "Carnation Pink"}, '336.404°, 34.9%, 100%
+        {ColorFromHSV(195.808, 1, 0.6549), "Cerulean"}, '336.404°, 34.9%, 100%
+        {ColorFromHSV(5, 0.8, 1), "Red Orange"}, '336.404°, 34.9%, 100%
+        {ColorFromHSV(336.22, 0.664, 0.9686), "Violet Red"}, '336.404°, 34.9%, 100%
+        {ColorFromHSV(34.286, 0.7412, 1), "Yellow Orange"} '336.404°, 34.9%, 100%
     }
 
         ' Try to match with custom colors
