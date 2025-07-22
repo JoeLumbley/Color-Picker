@@ -762,7 +762,7 @@ Public Class Form1
                 ' Update the trackbars and numeric up-downs
                 HueTrackBar.Value = TheHue * 100
                 HueNumericUpDown.Value = TheHue
-                SaturationTrackBar.Value = TheSat * 100
+                SaturationTrackBar.Value = TheSat * 10000
                 SaturationNumericUpDown.Value = TheSat * 100
                 SatWheel.Saturation = TheSat
 
@@ -893,7 +893,7 @@ Public Class Form1
                 ' Update the trackbars and numeric up-downs
                 HueTrackBar.Value = TheHue * 100
                 HueNumericUpDown.Value = TheHue
-                SaturationTrackBar.Value = TheSat * 100
+                SaturationTrackBar.Value = TheSat * 10000
                 SaturationNumericUpDown.Value = TheSat * 100
                 SatWheel.Saturation = TheSat
                 BrightnessTrackBar.Value = TheVal * 10000
@@ -964,7 +964,8 @@ Public Class Form1
                 ClearFocus()
 
                 ' Adjust the sat based on the mouse wheel scroll direction
-                TheSat += If(e.Delta > 0, 0.01, -0.01) ' Increase or decrease sat by 1 percent
+                'TheSat += If(e.Delta > 0, 0.01, -0.01) ' Increase or decrease sat by 1 percent
+                TheSat += If(e.Delta > 0, 0.1, -0.1) ' Increase or decrease sat by 10 percent
 
                 ' Ensure the sat value wraps around within 0-1 
                 If TheSat < 0 Then TheSat = 1
@@ -1051,7 +1052,7 @@ Public Class Form1
                 HueTrackBar.Value = TheHue * 100
 
                 HueNumericUpDown.Value = TheHue
-                SaturationTrackBar.Value = TheSat * 100
+                SaturationTrackBar.Value = TheSat * 10000
                 SaturationNumericUpDown.Value = TheSat * 100
 
                 BrightnessTrackBar.Value = TheVal * 10000
@@ -1085,7 +1086,7 @@ Public Class Form1
         ' Check if we are currently updating the color to avoid recursive calls or cascading updates
         If UpDatingColor Then Return
 
-        TheSat = SaturationTrackBar.Value / 100.0
+        TheSat = SaturationTrackBar.Value / 10000
 
         SatWheel.Saturation = TheSat
 
@@ -1209,7 +1210,7 @@ Public Class Form1
                 HueTrackBar.Value = TheHue * 100
                 HueNumericUpDown.Value = TheHue
 
-                SaturationTrackBar.Value = TheSat * 100
+                SaturationTrackBar.Value = TheSat * 10000
                 SaturationNumericUpDown.Value = TheSat * 100
 
 
@@ -1241,7 +1242,7 @@ Public Class Form1
                              Me.Font, Brushes.Black, HueTrackBar.Left, HueTrackBar.Top - HueNumericUpDown.Height)
 
 
-        e.Graphics.DrawString("Saturation: " & (RGBtoHSV(ColorFromHSV(TheHue, TheSat, TheVal)).Saturation * 100).ToString("0.#") & "%",
+        e.Graphics.DrawString("Saturation: " & (RGBtoHSV(ColorFromHSV(TheHue, TheSat, TheVal)).Saturation * 100).ToString("0.##") & "%",
                              Me.Font, Brushes.Black, SaturationTrackBar.Left, SaturationTrackBar.Top - SaturationNumericUpDown.Height)
 
 
@@ -1398,7 +1399,7 @@ Public Class Form1
             ' Draw triangle with theme-adaptive outline
             'Dim fillColor = SatWheel.Color
 
-            Dim fillColor = Color.Black
+            Dim fillColor = Color.White
 
             'Dim outlineColor = If(fillColor.GetBrightness() < 0.5, Color.White, Color.Black)
 
@@ -1753,7 +1754,7 @@ Public Class Form1
 
         ValWheel.Value = TheVal
 
-        SaturationTrackBar.Value = TheSat * 100
+        SaturationTrackBar.Value = TheSat * 10000
         SaturationNumericUpDown.Value = TheSat * 100
 
         BrightnessTrackBar.Value = TheVal * 10000
@@ -1798,7 +1799,7 @@ Public Class Form1
 
         UpDatingColor = True
 
-        SaturationTrackBar.Value = TheSat * 100
+        SaturationTrackBar.Value = TheSat * 10000
 
         SaturationNumericUpDown.Value = TheSat * 100
 

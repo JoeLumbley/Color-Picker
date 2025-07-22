@@ -50,11 +50,14 @@ Partial Class Form1
         ' 
         ' SaturationTrackBar
         ' 
+        SaturationTrackBar.LargeChange = 2500
         SaturationTrackBar.Location = New Point(323, 265)
-        SaturationTrackBar.Maximum = 100
+        SaturationTrackBar.Maximum = 10000
         SaturationTrackBar.Name = "SaturationTrackBar"
         SaturationTrackBar.Size = New Size(312, 45)
+        SaturationTrackBar.SmallChange = 100
         SaturationTrackBar.TabIndex = 3
+        SaturationTrackBar.TickFrequency = 39
         ' 
         ' BrightnessNumericUpDown
         ' 
