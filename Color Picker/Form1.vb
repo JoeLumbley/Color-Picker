@@ -157,6 +157,7 @@ Public Class Form1
                         r = brightness
                         g = p
                         b = q
+
                 End Select
 
             End If
@@ -213,6 +214,8 @@ Public Class Form1
         Public Saturation As Double
 
         Public Sub Draw(size As Integer, padding As Integer, hueAngle As Double, backcolor As Color)
+
+            ' Ensure the bitmap is created or resized if necessary
             If Bitmap Is Nothing OrElse Bitmap.Width <> size OrElse Bitmap.Height <> size Then
                 Bitmap?.Dispose()
                 Bitmap = New Bitmap(size + padding * 2, size + padding * 2)
@@ -231,17 +234,26 @@ Public Class Form1
 
             For y As Integer = 0 To Bitmap.Height - 1
                 For x As Integer = 0 To Bitmap.Width - 1
+
+                    ' Calculate distance from center
                     Dim dx As Integer = x - centerX
                     Dim dy As Integer = y - centerY
                     Dim dist As Double = Math.Sqrt(dx * dx + dy * dy)
 
                     If dist <= Radius Then
+
                         Dim angle As Double = (Math.Atan2(dy, dx) * 180.0 / Math.PI + 360) Mod 360
                         Dim saturation As Double = Math.Min(angle / 360.0, 1.0)
                         Dim color As Color = ColorFromHSV(hueAngle, saturation, 1.0)
+
+                        ' Set pixel color based on angle and saturation
                         Bitmap.SetPixel(x, y, color)
+
                     Else
+
+                        ' Outside the circle, set pixel to transparent
                         Bitmap.SetPixel(x, y, Color.Transparent)
+
                     End If
                 Next
             Next
