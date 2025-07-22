@@ -625,6 +625,8 @@ Public Class Form1
 
     Private TheColor As Color = ColorFromHSV(TheHue, TheSat, TheVal)
 
+    Private SelectedColorEllipseSize As Integer = 75
+
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
         InitializeApplication()
@@ -660,7 +662,7 @@ Public Class Form1
         If IsPointInsideCircle(
                 e.X, e.Y, HueWheel.Location.X + HueWheel.Radius + HueWheel.Padding,
                 HueWheel.Location.Y + HueWheel.Radius + HueWheel.Padding,
-                50) Then
+                SelectedColorEllipseSize \ 2) Then
 
             Return
 
@@ -789,7 +791,7 @@ Public Class Form1
         If IsPointInsideCircle(
                 e.X, e.Y, HueWheel.Location.X + HueWheel.Radius + HueWheel.Padding,
                 HueWheel.Location.Y + HueWheel.Radius + HueWheel.Padding,
-                50) Then
+                SelectedColorEllipseSize \ 2) Then
 
             Return
 
@@ -917,7 +919,7 @@ Public Class Form1
         If IsPointInsideCircle(
                 e.X, e.Y, HueWheel.Location.X + HueWheel.Radius + HueWheel.Padding,
                 HueWheel.Location.Y + HueWheel.Radius + HueWheel.Padding,
-                50) Then
+                SelectedColorEllipseSize \ 2) Then
 
             Return
 
@@ -1297,16 +1299,15 @@ Public Class Form1
 
     End Sub
 
-
     Private Sub DrawSelectedColor(e As PaintEventArgs)
 
         ' Draw the selected color rectangle
         Dim selectedColorRect As New Rectangle(
-            HueWheel.Location.X + 20 + (HueWheel.Size.Width - 100) \ 2,
-            HueWheel.Location.Y + 20 + (HueWheel.Size.Width - 100) \ 2,
-            100,
-            100)
-
+            HueWheel.Location.X + 20 + (HueWheel.Size.Width - SelectedColorEllipseSize) \ 2,
+            HueWheel.Location.Y + 20 + (HueWheel.Size.Width - SelectedColorEllipseSize) \ 2,
+            SelectedColorEllipseSize,
+            SelectedColorEllipseSize)
+        'SelectedColorEllipseSize
         Using brush As New SolidBrush(ColorFromHSV(TheHue, TheSat, TheVal))
             e.Graphics.FillEllipse(brush, selectedColorRect)
         End Using
@@ -1730,7 +1731,7 @@ Public Class Form1
         HueWheel.SelectedHueAngle = TheHue
         HueWheel.Location.X = 20
         HueWheel.Location.Y = 20
-        HueWheel.Draw(250, 20, BackColor)
+        HueWheel.Draw(225, 20, BackColor)
 
         HueTrackBar.Value = TheHue * 100
         HueNumericUpDown.Value = TheHue
@@ -1738,14 +1739,14 @@ Public Class Form1
         WedgesWheel.Location.X = HueWheel.Location.X - 25
         WedgesWheel.Location.Y = HueWheel.Location.Y - 25
 
-        WedgesWheel.Size = New Size(300, 300)
-        WedgesWheel.DrawWedges(300, 20, BackColor)
+        WedgesWheel.Size = New Size(275, 275)
+        WedgesWheel.DrawWedges(275, 20, BackColor)
 
         ' Initialize the SatWheel with default values
         SatWheel.Color = TheColor
         'SatWheel.SelectedHueAngle = TheHue
         SatWheel.Saturation = TheSat
-        SatWheel.Draw(200, 20, TheHue, BackColor)
+        SatWheel.Draw(175, 20, TheHue, BackColor)
 
         SatWheel.Location.X = HueWheel.Location.X + (HueWheel.Size.Width - SatWheel.Size.Width) \ 2
         SatWheel.Location.Y = HueWheel.Location.Y + (HueWheel.Size.Width - SatWheel.Size.Width) \ 2
@@ -1753,8 +1754,8 @@ Public Class Form1
         ' Initialize the ValWheel with default values
         ValWheel.Color = TheColor
         ValWheel.SelectedHueAngle = TheHue
-        ValWheel.Size.Width = 150
-        ValWheel.Size.Height = 150
+        ValWheel.Size.Width = 125
+        ValWheel.Size.Height = 125
 
         'ValWheel.Draw(100, 20, TheHue, BackColor)
 

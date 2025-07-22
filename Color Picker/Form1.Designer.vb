@@ -29,6 +29,8 @@ Partial Class Form1
         HueNumericUpDown = New NumericUpDown()
         HexTextBox = New TextBox()
         HueTrackBar = New TrackBar()
+        Button1 = New Button()
+        Button2 = New Button()
         CType(BrightnessTrackBar, ComponentModel.ISupportInitialize).BeginInit()
         CType(SaturationTrackBar, ComponentModel.ISupportInitialize).BeginInit()
         CType(BrightnessNumericUpDown, ComponentModel.ISupportInitialize).BeginInit()
@@ -103,10 +105,30 @@ Partial Class Form1
         HueTrackBar.TabIndex = 7
         HueTrackBar.TickFrequency = 13
         ' 
+        ' Button1
+        ' 
+        Button1.Location = New Point(19, 394)
+        Button1.Name = "Button1"
+        Button1.Size = New Size(75, 23)
+        Button1.TabIndex = 8
+        Button1.Text = "OK"
+        Button1.UseVisualStyleBackColor = True
+        ' 
+        ' Button2
+        ' 
+        Button2.Location = New Point(108, 394)
+        Button2.Name = "Button2"
+        Button2.Size = New Size(75, 23)
+        Button2.TabIndex = 9
+        Button2.Text = "Cancel"
+        Button2.UseVisualStyleBackColor = True
+        ' 
         ' Form1
         ' 
         AutoScaleMode = AutoScaleMode.None
-        ClientSize = New Size(649, 477)
+        ClientSize = New Size(649, 436)
+        Controls.Add(Button2)
+        Controls.Add(Button1)
         Controls.Add(HueTrackBar)
         Controls.Add(HexTextBox)
         Controls.Add(HueNumericUpDown)
@@ -134,5 +156,7 @@ Partial Class Form1
     Friend WithEvents HueNumericUpDown As NumericUpDown
     Friend WithEvents HexTextBox As TextBox
     Friend WithEvents HueTrackBar As TrackBar
+    Friend WithEvents Button1 As Button
+    Friend WithEvents Button2 As Button
 
 End Class
