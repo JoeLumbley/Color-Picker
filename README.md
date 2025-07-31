@@ -1,4 +1,4 @@
-# Color Picker
+# 🎨 Color Picker
 
 The **Color Picker** repository is a simple and intuitive application designed to help users select and manipulate colors. The primary focus of this project is to provide a user-friendly interface for color selection, making it ideal for developers, designers, and anyone interested in color theory.
 
