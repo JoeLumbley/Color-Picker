@@ -966,8 +966,7 @@ Public Class Form1
                 ClearFocus()
 
                 ' Adjust the sat based on the mouse wheel scroll direction
-                'TheSat += If(e.Delta > 0, 0.01, -0.01) ' Increase or decrease sat by 1 percent
-                TheSat += If(e.Delta > 0, 0.1, -0.1) ' Increase or decrease sat by 10 percent
+                TheSat += If(e.Delta > 0, 0.01, -0.01) ' Increase or decrease sat by 1 percent
 
                 ' Ensure the sat value wraps around within 0-1 
                 If TheSat < 0 Then TheSat = 1
